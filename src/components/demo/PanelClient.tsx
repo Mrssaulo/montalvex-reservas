@@ -45,10 +45,10 @@ const feedbackCopy: Partial<Record<ReservationStatus, string>> = {
 };
 
 const staffAiAnswers: Record<string, string> = {
-  "Resumo do dia": "Resumo do jantar: 4 reservas e 16 pessoas previstas. Há reservas pendentes que ainda precisam de confirmação da equipe.",
-  "Horário de pico": "Pico previsto: 20h às 21h. Vale deixar recepção e cozinha alinhadas antes desse intervalo.",
-  "Observações importantes": "Atenção: há 1 aniversário e 1 grupo maior. Essas observações ajudam a preparar melhor a experiência.",
-  "Sugestão para o salão": "Sugestão: preparar mesa reservada antes das 20h30 e confirmar os grupos pendentes com antecedência.",
+  "Resumo do dia": "Hoje há 4 reservas simuladas e 16 pessoas previstas. A equipe deve priorizar confirmações pendentes.",
+  "Horário de pico": "O pico demonstrativo está entre 20h e 21h, com maior concentração de grupos.",
+  "Observações importantes": "Existe uma reserva com aniversário e preferência por mesa mais reservada.",
+  "Sugestão para o salão": "Prepare uma mesa reservada antes das 20h30 e confirme grupos maiores com antecedência.",
 };
 
 export default function PanelClient() {
@@ -244,7 +244,7 @@ function StaffAiAssistant({
                 </span>
               </div>
               <p className="mt-1 text-xs leading-5 text-slate-600">
-                Apoio inteligente para a equipe nos planos com IA. Respostas simuladas, sem automação ativa.
+                Apoio inteligente disponível nos planos com IA. Respostas simuladas, sem automação ativa.
               </p>
             </div>
           </div>
@@ -271,7 +271,7 @@ function StaffAiAssistant({
           <div className="mb-3 flex items-center justify-between gap-3">
             <p className="inline-flex items-center gap-2 rounded-full bg-violet-50 px-3 py-1 text-[11px] font-black uppercase tracking-wide text-violet-700">
               <span className="pulse-dot" />
-              resumo simulado
+              Prévia da IA
             </p>
             <p className="text-xs font-bold text-slate-500">{pendentes} pendentes</p>
           </div>
@@ -280,7 +280,7 @@ function StaffAiAssistant({
             <PanelBubble>Pico previsto: 20h às 21h.</PanelBubble>
             <PanelBubble>Atenção: há 1 aniversário e 1 grupo maior.</PanelBubble>
             <PanelBubble>Sugestão: preparar mesa reservada antes das 20h30.</PanelBubble>
-            <PanelBubble>Há {pendentes} reservas aguardando confirmação.</PanelBubble>
+            <PanelBubble>Há 3 reservas aguardando confirmação.</PanelBubble>
             <PanelBubble highlight>{staffAiAnswers[activePrompt]}</PanelBubble>
           </div>
         </div>

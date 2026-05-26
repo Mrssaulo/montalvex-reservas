@@ -201,9 +201,9 @@ function PhonePreview() {
             <p className="font-black">20:00 · 4 pessoas</p>
           </div>
           <div className="grid grid-cols-3 gap-2 text-center text-xs font-black">
-            <span className="rounded-lg border p-2">19:30</span>
+            <span className="rounded-lg border p-2">18:30</span>
             <span className="rounded-lg bg-[#1B4332] p-2 text-white">20:00</span>
-            <span className="rounded-lg border p-2">20:30</span>
+            <span className="rounded-lg border p-2">22:30</span>
           </div>
           <div className="rounded-lg bg-[#C06C58] py-3 text-center text-xs font-black text-white">
             Enviar solicitação
@@ -237,7 +237,7 @@ function PanelPreview() {
           Recebida agora · 20:00
         </div>
         <div className="rounded-lg bg-white p-3 text-sm font-black text-slate-950">
-          Lucas Martins · 19:30
+          Lucas Martins · 18:30
         </div>
       </div>
     </div>

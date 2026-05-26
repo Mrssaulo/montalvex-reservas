@@ -30,7 +30,7 @@ const quickAnswers: Record<string, string> = {
   "Preferência de mesa":
     "Você pode escrever sua preferência no campo de observações. A equipe verá essa informação no painel.",
   "Horários disponíveis":
-    "Escolha um dos horários exibidos na tela. A equipe confirma a reserva pelo painel.",
+    "As reservas estão disponíveis das 18h às 22h30. O restaurante funciona até 00h.",
 };
 
 export default function ReservationClient() {
@@ -70,7 +70,7 @@ export default function ReservationClient() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden px-4 py-6 sm:py-8" style={{ background: `linear-gradient(135deg, ${bistroTheme.colors.primary} 0%, ${bistroTheme.colors.primaryLight} 100%)` }}>
+    <main className="relative min-h-screen overflow-hidden px-4 pb-28 pt-6 sm:py-8" style={{ background: `linear-gradient(135deg, ${bistroTheme.colors.primary} 0%, ${bistroTheme.colors.primaryLight} 100%)` }}>
       <div className="absolute left-1/2 top-10 h-72 w-72 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
       <div className="reveal-up relative mx-auto max-w-md overflow-hidden rounded-[28px] border border-white/20 shadow-2xl shadow-black/35" style={{ background: bistroTheme.colors.bg, color: bistroTheme.colors.text }}>
         <header className="relative overflow-hidden" style={{ background: bistroTheme.colors.primary, color: bistroTheme.colors.bg }}>
@@ -121,14 +121,17 @@ export default function ReservationClient() {
             </div>
 
             <Field label="Horário" icon={Clock}>
-              <div className="grid grid-cols-3 gap-2">
+              <p className="mb-3 text-xs font-semibold normal-case leading-5 tracking-normal" style={{ color: bistroTheme.colors.muted }}>
+                Reservas disponíveis das 18h às 22h30. O restaurante funciona até 00h.
+              </p>
+              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
                 {timeSlots.map((time) => (
                   <button
                     key={time}
                     type="button"
                     aria-pressed={selectedTime === time}
                     onClick={() => setSelectedTime(time)}
-                    className={`time-slot min-h-12 rounded-lg border px-2 text-sm font-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${selectedTime === time ? "selected shadow-lg" : "bg-white hover:-translate-y-0.5 hover:bg-stone-50"}`}
+                    className={`time-slot min-h-13 rounded-lg border px-3 text-base font-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${selectedTime === time ? "selected shadow-lg" : "bg-white hover:-translate-y-0.5 hover:bg-stone-50"}`}
                     style={{ borderColor: selectedTime === time ? bistroTheme.colors.primary : bistroTheme.colors.border }}
                   >
                     {time}
@@ -195,8 +198,7 @@ export default function ReservationClient() {
         </footer>
       </div>
 
-      {step === "success" ? (
-        <div className="fixed bottom-24 right-4 z-[60] flex flex-col items-end gap-3 sm:right-6">
+      <div className="fixed bottom-20 left-4 z-[60] flex flex-col items-start gap-3 sm:bottom-6 sm:left-6">
           {aiOpen ? (
             <ClientAiPreview selectedPrompt={selectedPrompt} onSelect={setSelectedPrompt} onClose={() => setAiOpen(false)} />
           ) : null}
@@ -210,7 +212,6 @@ export default function ReservationClient() {
             IA do restaurante
           </button>
         </div>
-      ) : null}
 
       <Link href="/demo" className="fab-back focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">
         <ArrowLeft className="h-4 w-4" />
@@ -238,6 +239,7 @@ function ClientAiPreview({
             IA demonstrativa
           </p>
           <h3 className="mt-2 text-sm font-black">Prévia da IA</h3>
+          <p className="mt-1 text-[11px] font-semibold text-slate-400">Disponível nos planos com IA · respostas simuladas</p>
         </div>
         <button type="button" onClick={onClose} className="rounded-full p-1 text-slate-300 transition hover:bg-white/10 hover:text-white" aria-label="Fechar prévia da IA">
           <X className="h-4 w-4" />
@@ -270,7 +272,7 @@ function ClientAiPreview({
       </div>
 
       <p className="mt-4 border-t border-white/10 pt-3 text-[11px] leading-5 text-slate-400">
-        Nos planos com IA, a conversa acontece de forma natural e contextual, sem botões rápidos.
+        Nos planos com IA real, a conversa pode acontecer de forma natural e contextual.
       </p>
     </aside>
   );

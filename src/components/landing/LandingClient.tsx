@@ -354,7 +354,7 @@ function HeroMockup() {
         </div>
         <div className="mt-4 space-y-3">
           {[
-            ["19:30", "Lucas Martins", "2 pessoas", "confirmada"],
+            ["18:30", "Lucas Martins", "2 pessoas", "confirmada"],
             ["20:00", "Juliana Alves", "4 pessoas", "pendente"],
             ["21:00", "Grupo Ferreira", "8 pessoas", "confirmada"],
           ].map(([time, name, people, status]) => (
@@ -389,7 +389,7 @@ function HeroMockup() {
               </div>
             ))}
             <div className="grid grid-cols-3 gap-2">
-              {["19:30", "20:00", "20:30"].map((time, index) => (
+              {["18:30", "20:00", "22:30"].map((time, index) => (
                 <span key={time} className={`rounded-lg border px-2 py-2 text-center text-xs font-black ${index === 1 ? "bg-[var(--bi-primary)] text-white" : "bg-white"}`}>
                   {time}
                 </span>
