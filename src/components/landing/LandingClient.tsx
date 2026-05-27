@@ -17,25 +17,25 @@ import { plans } from "@/lib/mock-data";
 import type { PricingMode } from "@/lib/types";
 
 const heroBullets = [
-  "Cliente reserva pelo link",
-  "Equipe confirma no painel",
-  "Cliente acompanha por protocolo",
+  "Link próprio para reservas",
+  "Protocolo para o cliente acompanhar",
+  "Painel para confirmar, recusar e organizar",
 ];
 
 const problemCards = [
-  [MessageSquareText, "WhatsApp lotado", "Pedidos chegam junto com dúvidas, prints e conversas antigas."],
-  [Clock, "Cliente sem resposta", "Quem pediu reserva fica inseguro até alguém confirmar."],
-  [Users, "Equipe sem visão", "Recepção, salão e cozinha não enxergam o mesmo cenário."],
-  [History, "Histórico perdido", "Depois do atendimento, fica difícil saber o que foi confirmado, recusado ou finalizado."],
+  [MessageSquareText, "WhatsApp não é painel", "No horário de pico, conversa importante some entre dúvidas, prints e pedidos antigos."],
+  [Clock, "Cliente quer resposta", "Quem pediu mesa precisa saber se foi recebido, confirmado ou recusado."],
+  [Users, "Equipe precisa enxergar o salão", "Pendentes, confirmadas e histórico precisam estar em um lugar só."],
+  [History, "Histórico evita retrabalho", "O que foi recusado, finalizado ou confirmado não deve desaparecer da operação."],
 ] satisfies Array<[LucideIcon, string, string]>;
 
 const flowSteps = [
-  ["1", "Cliente acessa o link do restaurante", "A reserva começa em um canal próprio, sem depender de conversa solta."],
-  ["2", "Escolhe data, horário e quantidade de pessoas", "As informações chegam padronizadas para a equipe."],
-  ["3", "Recebe protocolo", "O cliente guarda o código para acompanhar a solicitação."],
-  ["4", "Equipe recebe no painel", "A solicitação entra como pendente, com horário e observações."],
-  ["5", "Equipe confirma ou recusa", "A operação decide com controle, sem promessa automática."],
-  ["6", "Cliente acompanha o status", "A mudança fica clara para os dois lados."],
+  ["1", "Cliente abre o link", "A experiência começa no canal próprio do restaurante."],
+  ["2", "Escolhe data e horário", "Pessoas, horário e observação chegam padronizados."],
+  ["3", "Recebe protocolo", "O cliente guarda o código para consultar o andamento."],
+  ["4", "Equipe recebe no painel", "A solicitação entra como pendente, com contexto para decidir."],
+  ["5", "Equipe confirma ou recusa", "A operação segue no controle, sem automação exagerada."],
+  ["6", "Cliente acompanha o status", "A informação fica clara sem nova mensagem no WhatsApp."],
 ];
 
 const aiCards = [
@@ -55,25 +55,25 @@ const faqs = [
 
 const planBullets: Record<string, string[]> = {
   "Reservas Online": [
-    "Página própria de reserva",
+    "Página própria de reservas",
     "Painel da equipe",
-    "Status e histórico",
-    "Protocolo para acompanhamento",
+    "Status, histórico e protocolo",
     "Base publicada e acompanhada",
+    "Ideal para tirar reservas do improviso",
   ],
   "IA Operacional": [
     "Tudo do Reservas Online",
     "Apoio com resumo do jantar",
     "Destaque de horários de pico",
     "Observações importantes",
-    "Sugestões operacionais",
+    "Sugestões para preparar o salão",
   ],
   "IA Completa": [
     "Tudo dos planos anteriores",
     "Relatórios mensais",
-    "Análise de operação",
-    "Apoio avançado de gestão",
-    "Consultoria para evolução",
+    "Análise da operação",
+    "Apoio avançado para gestão",
+    "Consultoria para evolução comercial",
   ],
 };
 
@@ -90,12 +90,7 @@ export default function LandingClient() {
       <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <Link href="/" className="flex min-w-0 items-center gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#FEF3C7] text-emerald-950 shadow-lg">
-              <Calendar className="h-5 w-5" strokeWidth={2.5} />
-            </span>
-            <span className="truncate font-black">
-              Montalvex <span className="text-emerald-200">Reservas</span>
-            </span>
+            <BrandMark />
           </Link>
 
           <div className="flex shrink-0 items-center gap-3">
@@ -113,22 +108,22 @@ export default function LandingClient() {
       </header>
 
       <section className="relative overflow-hidden bg-gradient-to-b from-slate-950 via-[#0F172A] to-[#10251d]">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(16,185,129,0.18),transparent_28%),radial-gradient(circle_at_82%_34%,rgba(194,65,12,0.13),transparent_24%)]" />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.13] [background-image:radial-gradient(rgba(254,243,199,0.8)_1px,transparent_1px)] [background-size:24px_24px]" />
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="grid min-w-0 grid-cols-1 items-center gap-12 lg:grid-cols-2">
             <div className="relative z-10 min-w-0">
-              <p className="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border border-emerald-200/20 bg-emerald-200/10 px-4 py-2 text-xs font-black uppercase text-emerald-100">
+              <p className="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border border-emerald-200/20 bg-emerald-200/10 px-4 py-2 text-xs font-black uppercase text-emerald-100 shadow-lg shadow-emerald-950/20">
                 <span className="pulse-dot" />
-                Proposta comercial para restaurantes
+                Tecnologia por Montalvex
               </p>
               <h1 className="max-w-3xl text-3xl font-black leading-tight sm:text-5xl lg:text-6xl">
-                Reservas organizadas
-                <br />
-                do celular do cliente
-                <br />
-                ao painel da equipe.
+                <span className="block">Reservas organizadas</span>
+                <span className="block">equipe no controle</span>
+                <span className="block">cliente sem dúvida.</span>
               </h1>
               <p className="mt-6 max-w-[20rem] break-words text-base leading-8 text-slate-200 sm:max-w-2xl sm:text-lg">
-                Seu restaurante recebe solicitações pelo link, confirma horários no painel e dá ao cliente um protocolo para acompanhar o status, sem depender de caderno, print ou conversa perdida no WhatsApp.
+                O Montalvex Reservas transforma pedidos espalhados em um fluxo claro: o cliente solicita pelo link, recebe protocolo e a equipe acompanha tudo pelo painel.
               </p>
               <div className="mt-6 grid max-w-[20rem] gap-3 sm:max-w-2xl">
                 {heroBullets.map((item) => (
@@ -151,6 +146,11 @@ export default function LandingClient() {
                   Ver como funciona
                 </a>
               </div>
+              <div className="mt-6 flex flex-wrap gap-2 text-xs font-black uppercase text-slate-300">
+                <span className="rounded-full border border-white/10 bg-white/8 px-3 py-2">Produto Montalvex</span>
+                <span className="rounded-full border border-white/10 bg-white/8 px-3 py-2">Operação consultiva</span>
+                <span className="rounded-full border border-white/10 bg-white/8 px-3 py-2">Restaurante-first</span>
+              </div>
             </div>
 
             <div className="relative z-20 min-w-0">
@@ -165,7 +165,7 @@ export default function LandingClient() {
           <SectionIntro
             eyebrow="Problema real"
             title="Quando o salão enche, reserva espalhada vira problema."
-            text="O sistema organiza o que normalmente fica perdido entre telefone, direct, caderno, planilha e mensagens antigas."
+            text="Reserva não se perde porque o cliente esqueceu. Ela se perde porque a operação está espalhada em telefone, direct, caderno, planilha e mensagens antigas."
           />
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {problemCards.map(([Icon, title, text]) => (
@@ -180,12 +180,13 @@ export default function LandingClient() {
           <SectionIntro
             eyebrow="Como funciona"
             title="Como funciona na prática"
-            text="Um fluxo simples para o cliente e claro para a equipe."
+            text="Um fluxo simples para o cliente e previsível para a equipe."
           />
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="relative mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="pointer-events-none absolute left-4 right-4 top-10 hidden h-px bg-gradient-to-r from-transparent via-emerald-200 to-transparent lg:block" />
             {flowSteps.map(([number, title, text]) => (
-              <article key={title} className="relative overflow-hidden rounded-lg border border-slate-200 bg-slate-50 p-5 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl">
-                <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-950 text-sm font-black text-white shadow-lg shadow-emerald-950/20">
+              <article key={title} className="relative overflow-hidden rounded-lg border border-slate-200 bg-slate-50 p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl">
+                <span className="relative z-10 mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-950 text-sm font-black text-white shadow-lg shadow-emerald-950/20">
                   {number}
                 </span>
                 <h3 className="font-black">{title}</h3>
@@ -203,9 +204,9 @@ export default function LandingClient() {
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-2 lg:items-center">
           <div>
             <p className="mb-2 text-sm font-black uppercase text-[#C2410C]">O que o cliente vê</p>
-            <h2 className="text-3xl font-black md:text-4xl">O cliente sabe que a solicitação foi recebida.</h2>
+            <h2 className="text-3xl font-black md:text-4xl">O cliente não fica no escuro. A equipe também não.</h2>
             <p className="mt-4 max-w-xl leading-7 text-slate-600">
-              O cliente não fica perdido esperando resposta. Ele recebe um protocolo e pode acompanhar a situação da reserva.
+              O cliente vê data, horário, pessoas, protocolo e status sem precisar perguntar de novo no WhatsApp.
             </p>
           </div>
           <div className="mx-auto w-full max-w-sm">
@@ -221,7 +222,7 @@ export default function LandingClient() {
             <p className="mb-2 text-sm font-black uppercase text-emerald-800">O que a equipe controla</p>
             <h2 className="text-3xl font-black md:text-4xl">A equipe trabalha com status claro.</h2>
             <p className="mt-4 max-w-xl leading-7 text-slate-600">
-              Em vez de procurar conversa antiga, a equipe enxerga o que precisa ser confirmado, quem está chegando e o que já saiu da operação ativa.
+              Em vez de procurar conversa antiga, a equipe enxerga pendentes, confirmadas, histórico, próxima chegada e o que já saiu da operação ativa.
             </p>
           </div>
         </div>
@@ -231,9 +232,9 @@ export default function LandingClient() {
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div>
             <p className="mb-2 text-sm font-black uppercase text-emerald-200">Acompanhamento</p>
-            <h2 className="text-3xl font-black md:text-4xl">Protocolo reduz dúvida e retrabalho.</h2>
+            <h2 className="text-3xl font-black md:text-4xl">Protocolo transforma dúvida em acompanhamento.</h2>
             <p className="mt-4 max-w-xl leading-7 text-slate-300">
-              O cliente não precisa perguntar toda hora se a reserva foi aceita. Ele consulta com protocolo e telefone. A equipe muda o status no painel e a informação fica clara para os dois lados.
+              Quando a reserva vira protocolo, o cliente consegue consultar o status e a equipe reduz mensagens repetidas perguntando se a mesa foi confirmada.
             </p>
           </div>
           <TrackingPreview />
@@ -243,18 +244,33 @@ export default function LandingClient() {
       <section className="bg-slate-50 px-4 py-16 text-slate-900 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <SectionIntro
-            eyebrow="IA nos planos avançados"
-            title="IA como apoio, não como substituta da equipe."
-            text="Nos planos com IA, o sistema pode apoiar a equipe com resumos e sugestões. A decisão continua com o restaurante."
+            eyebrow="Planos com IA"
+            title="IA para apoiar a operação, não substituir sua equipe."
+            text="Nos planos com IA, o sistema pode apoiar a equipe com resumos e sugestões. As respostas são demonstrativas nesta apresentação, e a decisão continua com o restaurante."
           />
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {aiCards.map(([title, text]) => (
-              <article key={title} className="rounded-lg border border-violet-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-violet-200 hover:shadow-xl">
-                <Sparkles className="mb-4 h-5 w-5 text-violet-700" />
-                <h3 className="font-black">{title}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
-              </article>
-            ))}
+          <div className="mt-8 grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
+            <article className="rounded-lg border border-violet-100 bg-white p-5 shadow-xl shadow-slate-200/70">
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-black uppercase text-violet-800">Resumo simulado</span>
+                <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-black uppercase text-emerald-700">Planos com IA</span>
+              </div>
+              <h3 className="text-xl font-black">Assistente operacional demonstrativo</h3>
+              <div className="mt-5 space-y-3 text-sm">
+                <InfoLine label="Pico previsto" value="20h às 21h" />
+                <InfoLine label="Atenção" value="aniversário informado" />
+                <InfoLine label="Sugestão" value="mesa mais tranquila" />
+                <InfoLine label="Controle" value="equipe decide" />
+              </div>
+            </article>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {aiCards.map(([title, text]) => (
+                <article key={title} className="rounded-lg border border-violet-100 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-violet-200 hover:shadow-xl">
+                  <Sparkles className="mb-4 h-5 w-5 text-violet-700" />
+                  <h3 className="font-black">{title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -266,7 +282,7 @@ export default function LandingClient() {
             <h2 className="text-3xl font-black md:text-4xl">Planos para organizar reservas e evoluir a operação</h2>
             <p className="mt-3 text-slate-300">
               {pricesHidden
-                ? "Solicite uma proposta para entender implantação, suporte e recursos ideais para o seu restaurante."
+                ? "Cada plano combina implantação, suporte e uma camada de clareza operacional para o restaurante parar de improvisar reservas."
                 : "Valores atuais de implantação e mensalidade, sem alteração nos planos."}
             </p>
           </div>
@@ -301,6 +317,13 @@ export default function LandingClient() {
 
       <section className="bg-[#0F172A] px-4 py-16 text-white sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
+          <div className="mb-6 flex justify-center">
+            <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/8 px-4 py-2 text-sm font-black text-emerald-100">
+              <BrandMark compact />
+              <span className="hidden h-4 w-px bg-white/20 sm:block" />
+              <span>Tecnologia por Montalvex</span>
+            </div>
+          </div>
           <h2 className="text-3xl font-black md:text-4xl">Quer organizar as reservas antes do próximo horário de pico?</h2>
           <p className="mx-auto mt-4 max-w-2xl leading-7 text-slate-300">
             Solicite uma proposta e veja como o Montalvex Reservas pode se adaptar à operação do seu restaurante.
@@ -318,18 +341,42 @@ export default function LandingClient() {
 
       <footer className="border-t border-white/10 bg-slate-950 px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-3 text-sm text-slate-400 md:flex-row">
-          <p className="font-black text-white">Montalvex Reservas</p>
-          <p>Reserva pelo celular, painel para equipe e status claro para o cliente.</p>
+          <div className="flex items-center gap-3">
+            <BrandMark compact />
+            <p>Produto de reservas comerciais para restaurantes.</p>
+          </div>
+          <p>Assinatura Montalvex: estratégia, tecnologia e operação com clareza.</p>
         </div>
       </footer>
     </main>
   );
 }
 
+function BrandMark({ compact = false }: { compact?: boolean }) {
+  return (
+    <>
+      {/* Adicionar logo oficial da Montalvex em public/montalvex-logo.png */}
+      <span className={`${compact ? "h-8 w-8" : "h-10 w-10"} flex shrink-0 items-center justify-center rounded-lg bg-[#FEF3C7] text-emerald-950 shadow-lg`}>
+        <Calendar className={compact ? "h-4 w-4" : "h-5 w-5"} strokeWidth={2.5} />
+      </span>
+      <span className={compact ? "sr-only" : "truncate font-black"}>
+        Montalvex <span className="text-emerald-200">Reservas</span>
+      </span>
+    </>
+  );
+}
+
 function HeroVisual() {
   return (
-    <div className="relative mx-auto w-full max-w-xl overflow-hidden rounded-[28px] border border-white/12 bg-white/8 p-4 shadow-2xl shadow-black/30 backdrop-blur">
+    <div className="premium-card relative mx-auto w-full max-w-full overflow-hidden rounded-[28px] border border-white/12 bg-white/8 p-4 shadow-2xl shadow-black/30 backdrop-blur sm:max-w-xl">
       <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-emerald-200/70 to-transparent" />
+      <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-xs font-black text-slate-100">
+        <span className="flex items-center gap-2">
+          <span className="pulse-dot" />
+          Sistema online
+        </span>
+        <span className="hidden text-emerald-200 sm:inline">reserva recebida</span>
+      </div>
       <div className="grid gap-4 sm:grid-cols-[0.76fr_1fr] sm:items-center">
         <div className="mx-auto w-full max-w-[230px]">
           <ReservationPhone compact />
@@ -448,7 +495,7 @@ function PlanCard({ plan, pricesHidden }: { plan: (typeof plans)[number]; prices
   const bullets = planBullets[plan.name] ?? plan.features;
 
   return (
-    <article className={`rounded-lg border p-6 shadow-xl ${
+    <article className={`rounded-lg border p-6 shadow-xl transition duration-300 hover:-translate-y-1 hover:shadow-2xl ${
       plan.highlighted
         ? "border-emerald-200 bg-emerald-100 text-slate-950 lg:-mt-4"
         : "border-white/12 bg-white/8 text-white"
