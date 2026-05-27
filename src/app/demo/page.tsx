@@ -153,7 +153,12 @@ export default function DemoHubPage() {
           </div>
           <div className="grid gap-3 md:grid-cols-3">
             {realRoutes.map(([Icon, title, href]) => (
-              <Link key={href} href={href} className="group rounded-lg border border-white/10 bg-[#071A13] p-4 transition hover:-translate-y-1 hover:bg-white/10">
+              <Link
+                key={href}
+                href={href}
+                aria-label={`Abrir rota: ${title}`}
+                className="group block h-full rounded-lg border border-white/10 bg-[#071A13] p-4 transition hover:-translate-y-1 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C06C58] focus-visible:ring-offset-2 focus-visible:ring-offset-[#10251d]"
+              >
                 <Icon className="mb-4 h-6 w-6 text-emerald-100" />
                 <p className="font-black">{title}</p>
                 <span className="mt-3 inline-flex items-center gap-2 text-sm font-black text-[#C06C58] group-hover:translate-x-1">
