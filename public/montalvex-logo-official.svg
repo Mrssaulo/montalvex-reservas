@@ -1,0 +1,39 @@
+<svg width="960" height="220" viewBox="0 0 960 220" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Montalvex</title>
+  <desc id="desc">Logo horizontal Montalvex com símbolo geométrico e detalhe roxo.</desc>
+  <rect width="960" height="220" fill="white"/>
+  <g transform="translate(48 35)">
+    <path d="M84 1L0 50V102L84 151L168 102V50L84 1Z" fill="#111318"/>
+    <path d="M84 21L22 57V90L84 126L146 90V57L84 21Z" fill="white"/>
+    <path d="M0 109L85 57L111 76L0 145V109Z" fill="url(#slashA)"/>
+    <path d="M85 57L168 7V42L111 76L85 57Z" fill="url(#slashB)"/>
+    <path d="M22 57L84 93L124 69L151 85L84 124L0 75V50L22 57Z" fill="#111318"/>
+    <path d="M151 85L168 74V102L151 112V85Z" fill="#111318"/>
+  </g>
+  <text x="242" y="138" fill="#111318" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="88" font-weight="900" letter-spacing="-5">Montalve</text>
+  <g transform="translate(632 0)">
+    <path d="M88 68H126L102 101L130 138H89L71 113L51 138H12L44 99L17 68H58L73 88L88 68Z" fill="#111318"/>
+    <path d="M17 68H58L73 88L44 99L17 68Z" fill="url(#xA)"/>
+    <path d="M89 138H130L102 101L71 113L89 138Z" fill="url(#xB)"/>
+  </g>
+  <defs>
+    <linearGradient id="slashA" x1="0" y1="145" x2="111" y2="57" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5B21B6"/>
+      <stop offset="0.48" stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#E879F9"/>
+    </linearGradient>
+    <linearGradient id="slashB" x1="85" y1="76" x2="168" y2="7" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5B21B6"/>
+      <stop offset="0.55" stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#E879F9"/>
+    </linearGradient>
+    <linearGradient id="xA" x1="17" y1="99" x2="73" y2="68" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5B21B6"/>
+      <stop offset="1" stop-color="#E879F9"/>
+    </linearGradient>
+    <linearGradient id="xB" x1="71" y1="113" x2="130" y2="138" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6D28D9"/>
+      <stop offset="1" stop-color="#E879F9"/>
+    </linearGradient>
+  </defs>
+</svg>

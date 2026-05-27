@@ -1,0 +1,39 @@
+<svg width="840" height="220" viewBox="0 0 840 220" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Montalvex</title>
+  <desc id="desc">Marca Montalvex horizontal com símbolo geométrico preto e detalhe roxo.</desc>
+  <rect width="840" height="220" fill="white"/>
+  <g transform="translate(48 36)">
+    <path d="M84 0L0 49V101L84 150L168 101V49L84 0Z" fill="#111318"/>
+    <path d="M84 20L21 56V91L84 128L147 91V56L84 20Z" fill="white"/>
+    <path d="M0 108L84 57L110 76L0 144V108Z" fill="url(#slashA)"/>
+    <path d="M84 57L168 6V41L110 76L84 57Z" fill="url(#slashB)"/>
+    <path d="M22 56L84 93L125 68L151 84L84 124L0 74V49L22 56Z" fill="#111318"/>
+    <path d="M151 84L168 73V101L151 111V84Z" fill="#111318"/>
+  </g>
+  <text x="240" y="137" fill="#111318" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="86" font-weight="900" letter-spacing="-5">Montalve</text>
+  <g transform="translate(-128 0)">
+    <path d="M815 68H852L829 101L856 137H816L798 112L779 137H741L772 99L746 68H787L801 88L815 68Z" fill="#111318"/>
+    <path d="M746 68H787L801 88L772 99L746 68Z" fill="url(#xA)"/>
+    <path d="M816 137H856L829 101L798 112L816 137Z" fill="url(#xB)"/>
+  </g>
+  <defs>
+    <linearGradient id="slashA" x1="0" y1="144" x2="111" y2="57" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5B21B6"/>
+      <stop offset="0.5" stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#D946EF"/>
+    </linearGradient>
+    <linearGradient id="slashB" x1="84" y1="76" x2="168" y2="6" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5B21B6"/>
+      <stop offset="0.55" stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#D946EF"/>
+    </linearGradient>
+    <linearGradient id="xA" x1="746" y1="99" x2="801" y2="68" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5B21B6"/>
+      <stop offset="1" stop-color="#D946EF"/>
+    </linearGradient>
+    <linearGradient id="xB" x1="798" y1="112" x2="856" y2="137" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6D28D9"/>
+      <stop offset="1" stop-color="#D946EF"/>
+    </linearGradient>
+  </defs>
+</svg>

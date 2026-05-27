@@ -1,9 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import {
-  Calendar,
   CheckCircle2,
   Clock,
   History,
@@ -30,12 +30,23 @@ const problemCards = [
 ] satisfies Array<[LucideIcon, string, string]>;
 
 const flowSteps = [
-  ["1", "Cliente abre o link", "A experiência começa no canal próprio do restaurante."],
-  ["2", "Escolhe data e horário", "Pessoas, horário e observação chegam padronizados."],
+  ["1", "Cliente abre o link do restaurante", "A experiência começa no canal próprio da casa."],
+  ["2", "Escolhe data, horário e pessoas", "As informações chegam padronizadas para a equipe."],
   ["3", "Recebe protocolo", "O cliente guarda o código para consultar o andamento."],
-  ["4", "Equipe recebe no painel", "A solicitação entra como pendente, com contexto para decidir."],
+  ["4", "Equipe vê no painel", "A solicitação entra como pendente, com contexto para decidir."],
   ["5", "Equipe confirma ou recusa", "A operação segue no controle, sem automação exagerada."],
   ["6", "Cliente acompanha o status", "A informação fica clara sem nova mensagem no WhatsApp."],
+];
+
+const operationSignals = [
+  ["8", "reservas hoje"],
+  ["28", "pessoas previstas"],
+  ["20:30", "próxima chegada"],
+];
+
+const beforeAfter = [
+  ["Antes", "Reservas em conversas, prints, caderno e memória da equipe."],
+  ["Depois", "Solicitação com protocolo, status claro e painel para decidir."],
 ];
 
 const aiCards = [
@@ -157,6 +168,14 @@ export default function LandingClient() {
               <HeroVisual />
             </div>
           </div>
+          <div className="relative z-10 mt-10 grid gap-3 sm:grid-cols-3">
+            {operationSignals.map(([value, label]) => (
+              <div key={label} className="rounded-lg border border-white/10 bg-white/8 p-4 shadow-lg shadow-black/10 backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-white/12">
+                <p className="text-2xl font-black text-[#FEF3C7]">{value}</p>
+                <p className="mt-1 text-xs font-black uppercase text-slate-300">{label}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -164,9 +183,17 @@ export default function LandingClient() {
         <div className="mx-auto max-w-7xl">
           <SectionIntro
             eyebrow="Problema real"
-            title="Quando o salão enche, reserva espalhada vira problema."
-            text="Reserva não se perde porque o cliente esqueceu. Ela se perde porque a operação está espalhada em telefone, direct, caderno, planilha e mensagens antigas."
+            title="Reserva não se perde porque o cliente esqueceu. Ela se perde porque a operação está espalhada."
+            text="Quando o salão enche, telefone, direct, caderno, planilha e mensagens antigas começam a competir pela atenção da equipe."
           />
+          <div className="mt-8 grid gap-4 lg:grid-cols-2">
+            {beforeAfter.map(([label, text]) => (
+              <article key={label} className="rounded-lg border border-amber-200/80 bg-white/80 p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+                <span className="rounded-full bg-emerald-950 px-3 py-1 text-xs font-black uppercase text-[#FEF3C7]">{label}</span>
+                <p className="mt-4 text-lg font-black leading-7">{text}</p>
+              </article>
+            ))}
+          </div>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {problemCards.map(([Icon, title, text]) => (
               <InfoCard key={title} icon={Icon} title={title} text={text} />
@@ -204,9 +231,12 @@ export default function LandingClient() {
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-2 lg:items-center">
           <div>
             <p className="mb-2 text-sm font-black uppercase text-[#C2410C]">O que o cliente vê</p>
-            <h2 className="text-3xl font-black md:text-4xl">O cliente não fica no escuro. A equipe também não.</h2>
+            <h2 className="text-3xl font-black md:text-4xl">O cliente não fica no escuro.</h2>
             <p className="mt-4 max-w-xl leading-7 text-slate-600">
-              O cliente vê data, horário, pessoas, protocolo e status sem precisar perguntar de novo no WhatsApp.
+              O cliente solicita pelo link, recebe um protocolo e consegue acompanhar se a reserva está pendente, confirmada ou recusada.
+            </p>
+            <p className="mt-5 inline-flex rounded-full bg-[#FEF3C7] px-4 py-2 text-sm font-black text-[#C2410C] shadow-sm">
+              Sem precisar perguntar de novo no WhatsApp.
             </p>
           </div>
           <div className="mx-auto w-full max-w-sm">
@@ -220,9 +250,9 @@ export default function LandingClient() {
           <PanelPreview />
           <div>
             <p className="mb-2 text-sm font-black uppercase text-emerald-800">O que a equipe controla</p>
-            <h2 className="text-3xl font-black md:text-4xl">A equipe trabalha com status claro.</h2>
+            <h2 className="text-3xl font-black md:text-4xl">A equipe também não trabalha no escuro.</h2>
             <p className="mt-4 max-w-xl leading-7 text-slate-600">
-              Em vez de procurar conversa antiga, a equipe enxerga pendentes, confirmadas, histórico, próxima chegada e o que já saiu da operação ativa.
+              Em vez de procurar conversas antigas, a equipe vê quem precisa de confirmação, quem está chegando e o que já saiu da operação ativa.
             </p>
           </div>
         </div>
@@ -354,15 +384,17 @@ export default function LandingClient() {
 
 function BrandMark({ compact = false }: { compact?: boolean }) {
   return (
-    <>
-      {/* Adicionar logo oficial da Montalvex em public/montalvex-logo.png */}
-      <span className={`${compact ? "h-8 w-8" : "h-10 w-10"} flex shrink-0 items-center justify-center rounded-lg bg-[#FEF3C7] text-emerald-950 shadow-lg`}>
-        <Calendar className={compact ? "h-4 w-4" : "h-5 w-5"} strokeWidth={2.5} />
+    <span className="flex min-w-0 items-center">
+      <span className={`${compact ? "h-9 w-36" : "h-11 w-44 sm:w-52"} flex shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white px-3 shadow-lg ring-1 ring-white/15`}>
+        <Image
+          src="/montalvex-logo-official.svg"
+          alt="Montalvex"
+          width={compact ? 144 : 208}
+          height={compact ? 33 : 44}
+          className="h-auto w-full object-contain"
+        />
       </span>
-      <span className={compact ? "sr-only" : "truncate font-black"}>
-        Montalvex <span className="text-emerald-200">Reservas</span>
-      </span>
-    </>
+    </span>
   );
 }
 
@@ -393,7 +425,7 @@ function HeroVisual() {
           <div className="rounded-lg border border-emerald-200/20 bg-emerald-950/70 p-4">
             <p className="text-xs font-black uppercase text-emerald-200">Protocolo MV-8F42A1</p>
             <p className="mt-1 text-sm font-black text-white">Status: Confirmada</p>
-            <p className="mt-1 text-xs font-semibold text-emerald-50/70">20:30 - 4 pessoas</p>
+            <p className="mt-1 text-xs font-semibold text-emerald-50/70">20:30 - 4 pessoas - equipe preparada</p>
           </div>
         </div>
       </div>
@@ -457,10 +489,12 @@ function PanelPreview({ compact = false }: { compact?: boolean }) {
         </div>
         <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">online</span>
       </div>
-      <div className="grid grid-cols-3 gap-2">
+      <div className={compact ? "grid grid-cols-3 gap-2" : "grid grid-cols-2 gap-2 sm:grid-cols-4"}>
         <MiniKpi value="8" label="hoje" />
         <MiniKpi value="3" label="pend." tone="amber" />
-        <MiniKpi value="20:30" label="prox." tone="sky" />
+        {!compact ? <MiniKpi value="5" label="conf." tone="emerald" /> : null}
+        {!compact ? <MiniKpi value="28" label="pessoas" tone="slate" /> : null}
+        {compact ? <MiniKpi value="20:30" label="prox." tone="sky" /> : null}
       </div>
       <div className="mt-4 space-y-2">
         <PanelRow name="Mariana Costa" meta="20:30 - 4 pessoas" status="Pendente" tone="pending" />
@@ -485,6 +519,7 @@ function TrackingPreview() {
       <div className="grid gap-3 text-sm">
         <InfoLine label="Horário" value="20:30" />
         <InfoLine label="Pessoas" value="4 pessoas" />
+        <InfoLine label="Mensagem" value="Equipe preparada" />
         <InfoLine label="Telefone" value="final 2026" />
       </div>
     </div>
@@ -578,11 +613,13 @@ function MiniField({ label, value }: { label: string; value: string }) {
   );
 }
 
-function MiniKpi({ value, label, tone = "neutral" }: { value: string; label: string; tone?: "neutral" | "amber" | "sky" }) {
+function MiniKpi({ value, label, tone = "neutral" }: { value: string; label: string; tone?: "neutral" | "amber" | "sky" | "emerald" | "slate" }) {
   const classes = {
     neutral: "border-slate-200 bg-slate-50 text-slate-900",
     amber: "border-amber-200 bg-amber-50 text-amber-800",
     sky: "border-sky-200 bg-sky-50 text-sky-800",
+    emerald: "border-emerald-200 bg-emerald-50 text-emerald-800",
+    slate: "border-slate-200 bg-slate-100 text-slate-800",
   };
 
   return (
