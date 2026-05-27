@@ -17,9 +17,9 @@ import { plans } from "@/lib/mock-data";
 import type { PricingMode } from "@/lib/types";
 
 const heroBullets = [
-  "Link próprio para reservas",
-  "Protocolo para o cliente acompanhar",
-  "Painel para a equipe confirmar e organizar",
+  "Cliente reserva pelo link",
+  "Equipe confirma no painel",
+  "Cliente acompanha por protocolo",
 ];
 
 const problemCards = [
@@ -30,16 +30,16 @@ const problemCards = [
 ] satisfies Array<[LucideIcon, string, string]>;
 
 const flowSteps = [
-  ["1", "Cliente acessa o link", "A reserva começa no canal próprio do restaurante."],
-  ["2", "Escolhe data e horário", "Pessoas, horário e observação entram organizados."],
-  ["3", "Recebe protocolo", "O cliente guarda o código para acompanhar."],
-  ["4", "Equipe vê no painel", "A solicitação aparece como pendente."],
-  ["5", "Confirma, recusa ou finaliza", "A equipe mantém a operação limpa."],
-  ["6", "Cliente acompanha", "Status claro para os dois lados."],
+  ["1", "Cliente acessa o link do restaurante", "A reserva começa em um canal próprio, sem depender de conversa solta."],
+  ["2", "Escolhe data, horário e quantidade de pessoas", "As informações chegam padronizadas para a equipe."],
+  ["3", "Recebe protocolo", "O cliente guarda o código para acompanhar a solicitação."],
+  ["4", "Equipe recebe no painel", "A solicitação entra como pendente, com horário e observações."],
+  ["5", "Equipe confirma ou recusa", "A operação decide com controle, sem promessa automática."],
+  ["6", "Cliente acompanha o status", "A mudança fica clara para os dois lados."],
 ];
 
 const aiCards = [
-  ["Resumo do jantar", "Visão rápida do que está pendente e confirmado."],
+  ["Resumo do jantar", "Visão rápida do que está pendente, confirmado e previsto."],
   ["Horários de pico", "Ajuda a preparar recepção e salão antes da chegada."],
   ["Observações importantes", "Aniversários e preferências ficam mais visíveis."],
   ["Sugestões para o salão", "Apoio para organizar mesas e prioridades."],
@@ -50,29 +50,36 @@ const faqs = [
   ["A reserva é confirmada automaticamente?", "Não nesta fase. A equipe continua no controle."],
   ["O cliente consegue acompanhar?", "Sim. Ele consulta com protocolo e telefone."],
   ["Serve para pizzaria e restaurante?", "Sim. A estrutura é white-label e pode adaptar nome, horários e identidade."],
-  ["A IA já substitui atendimento?", "Não. A IA entra como apoio nos planos avançados."],
+  ["A IA substitui a equipe?", "Não. A IA entra como apoio nos planos avançados. A decisão continua com o restaurante."],
 ];
 
 const planBullets: Record<string, string[]> = {
   "Reservas Online": [
-    "Pagina de reserva",
+    "Página própria de reserva",
     "Painel da equipe",
     "Status e histórico",
-    "Acompanhamento por protocolo",
+    "Protocolo para acompanhamento",
+    "Base publicada e acompanhada",
   ],
   "IA Operacional": [
     "Tudo do Reservas Online",
-    "Apoio com resumo operacional",
-    "Sugestões para horários de pico",
+    "Apoio com resumo do jantar",
+    "Destaque de horários de pico",
     "Observações importantes",
+    "Sugestões operacionais",
   ],
   "IA Completa": [
     "Tudo dos planos anteriores",
-    "Relatórios",
+    "Relatórios mensais",
     "Análise de operação",
-    "Apoio avançado para gestão",
+    "Apoio avançado de gestão",
+    "Consultoria para evolução",
   ],
 };
+
+const whatsappMessage =
+  "Olá! Tenho interesse no Montalvex Reservas para meu restaurante e gostaria de entender a proposta.\n\nPode me apresentar como funciona?";
+const whatsappHref = `https://wa.me/556296377637?text=${encodeURIComponent(whatsappMessage)}`;
 
 export default function LandingClient() {
   const [mode, setMode] = useState<PricingMode>("prospeccao");
@@ -93,7 +100,12 @@ export default function LandingClient() {
 
           <div className="flex shrink-0 items-center gap-3">
             <PriceToggle mode={mode} onChange={setMode} compact />
-            <a href="#planos" className="hidden min-h-10 items-center rounded-lg bg-[#C2410C] px-4 text-sm font-black text-white shadow-lg transition hover:-translate-y-0.5 sm:inline-flex">
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cta-glow hidden min-h-10 items-center rounded-lg bg-[#C2410C] px-4 text-sm font-black text-white shadow-lg transition hover:-translate-y-0.5 sm:inline-flex"
+            >
               Solicitar proposta
             </a>
           </div>
@@ -106,7 +118,7 @@ export default function LandingClient() {
             <div className="relative z-10 min-w-0">
               <p className="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border border-emerald-200/20 bg-emerald-200/10 px-4 py-2 text-xs font-black uppercase text-emerald-100">
                 <span className="pulse-dot" />
-              Proposta comercial para restaurantes
+                Proposta comercial para restaurantes
               </p>
               <h1 className="max-w-3xl text-3xl font-black leading-tight sm:text-5xl lg:text-6xl">
                 Reservas organizadas
@@ -116,18 +128,23 @@ export default function LandingClient() {
                 ao painel da equipe.
               </h1>
               <p className="mt-6 max-w-[20rem] break-words text-base leading-8 text-slate-200 sm:max-w-2xl sm:text-lg">
-                Seu restaurante recebe solicitações, confirma horários, acompanha status e mantém a equipe alinhada sem depender de caderno, print ou conversa perdida no WhatsApp.
+                Seu restaurante recebe solicitações pelo link, confirma horários no painel e dá ao cliente um protocolo para acompanhar o status, sem depender de caderno, print ou conversa perdida no WhatsApp.
               </p>
               <div className="mt-6 grid max-w-[20rem] gap-3 sm:max-w-2xl">
                 {heroBullets.map((item) => (
-                  <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/8 px-4 py-3 text-sm font-bold text-slate-100">
+                  <div key={item} className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/8 px-4 py-3 text-sm font-bold text-slate-100 shadow-lg shadow-black/10 transition hover:-translate-y-0.5 hover:border-emerald-200/30 hover:bg-white/12">
                     <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-300" />
                     {item}
                   </div>
                 ))}
               </div>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <a href="#planos" className="inline-flex min-h-13 items-center justify-center rounded-lg bg-[#C2410C] px-7 font-black text-white shadow-xl transition hover:-translate-y-0.5">
+                <a
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cta-glow inline-flex min-h-13 items-center justify-center rounded-lg bg-[#C2410C] px-7 font-black text-white shadow-xl transition hover:-translate-y-0.5"
+                >
                   Solicitar proposta
                 </a>
                 <a href="#como-funciona" className="inline-flex min-h-13 items-center justify-center rounded-lg border border-white/20 bg-white/8 px-7 font-black text-white transition hover:-translate-y-0.5 hover:bg-white/12">
@@ -162,17 +179,20 @@ export default function LandingClient() {
         <div className="mx-auto max-w-7xl">
           <SectionIntro
             eyebrow="Como funciona"
-            title="Como o Montalvex Reservas organiza a operação"
+            title="Como funciona na prática"
             text="Um fluxo simples para o cliente e claro para a equipe."
           />
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {flowSteps.map(([number, title, text]) => (
-              <article key={title} className="rounded-lg border border-slate-200 bg-slate-50 p-5">
-                <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-950 text-sm font-black text-white">
+              <article key={title} className="relative overflow-hidden rounded-lg border border-slate-200 bg-slate-50 p-5 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl">
+                <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-950 text-sm font-black text-white shadow-lg shadow-emerald-950/20">
                   {number}
                 </span>
                 <h3 className="font-black">{title}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+                <span className="absolute right-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-black uppercase text-emerald-800 shadow-sm">
+                  operação
+                </span>
               </article>
             ))}
           </div>
@@ -182,7 +202,7 @@ export default function LandingClient() {
       <section className="bg-slate-50 px-4 py-16 text-slate-900 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-2 lg:items-center">
           <div>
-            <p className="mb-2 text-sm font-black uppercase text-[#C2410C]">O que o cliente ve</p>
+            <p className="mb-2 text-sm font-black uppercase text-[#C2410C]">O que o cliente vê</p>
             <h2 className="text-3xl font-black md:text-4xl">O cliente sabe que a solicitação foi recebida.</h2>
             <p className="mt-4 max-w-xl leading-7 text-slate-600">
               O cliente não fica perdido esperando resposta. Ele recebe um protocolo e pode acompanhar a situação da reserva.
@@ -213,7 +233,7 @@ export default function LandingClient() {
             <p className="mb-2 text-sm font-black uppercase text-emerald-200">Acompanhamento</p>
             <h2 className="text-3xl font-black md:text-4xl">Protocolo reduz dúvida e retrabalho.</h2>
             <p className="mt-4 max-w-xl leading-7 text-slate-300">
-              O cliente consulta com protocolo e telefone. A equipe muda o status no painel e a informacao fica clara para os dois lados.
+              O cliente não precisa perguntar toda hora se a reserva foi aceita. Ele consulta com protocolo e telefone. A equipe muda o status no painel e a informação fica clara para os dois lados.
             </p>
           </div>
           <TrackingPreview />
@@ -229,7 +249,7 @@ export default function LandingClient() {
           />
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {aiCards.map(([title, text]) => (
-              <article key={title} className="rounded-lg border border-violet-100 bg-white p-5 shadow-sm">
+              <article key={title} className="rounded-lg border border-violet-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-violet-200 hover:shadow-xl">
                 <Sparkles className="mb-4 h-5 w-5 text-violet-700" />
                 <h3 className="font-black">{title}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
@@ -264,13 +284,13 @@ export default function LandingClient() {
       <section className="bg-white px-4 py-16 text-slate-900 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <SectionIntro
-            eyebrow="Perguntas rapidas"
+            eyebrow="Perguntas rápidas"
             title="O essencial antes da conversa comercial"
             text="Respostas curtas para alinhar expectativa sem prometer automação que ainda não faz parte desta fase."
           />
           <div className="mt-8 grid gap-4 lg:grid-cols-2">
             {faqs.map(([question, answer]) => (
-              <article key={question} className="rounded-lg border border-slate-200 bg-slate-50 p-5">
+              <article key={question} className="rounded-lg border border-slate-200 bg-slate-50 p-5 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl">
                 <h3 className="font-black">{question}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-600">{answer}</p>
               </article>
@@ -281,12 +301,17 @@ export default function LandingClient() {
 
       <section className="bg-[#0F172A] px-4 py-16 text-white sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl font-black md:text-4xl">Pronto para tirar reservas do improviso?</h2>
+          <h2 className="text-3xl font-black md:text-4xl">Quer organizar as reservas antes do próximo horário de pico?</h2>
           <p className="mx-auto mt-4 max-w-2xl leading-7 text-slate-300">
-            Comece com reservas online, protocolo para o cliente e painel para a equipe. Depois, evolua para IA nos planos avançados.
+            Solicite uma proposta e veja como o Montalvex Reservas pode se adaptar à operação do seu restaurante.
           </p>
-          <a href="#planos" className="mt-7 inline-flex min-h-13 items-center justify-center rounded-lg bg-[#C2410C] px-7 font-black text-white shadow-xl transition hover:-translate-y-0.5">
-            Solicitar proposta
+          <a
+            href={whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="cta-glow mt-7 inline-flex min-h-13 items-center justify-center rounded-lg bg-[#C2410C] px-7 font-black text-white shadow-xl transition hover:-translate-y-0.5"
+          >
+            Solicitar proposta no WhatsApp
           </a>
         </div>
       </section>
@@ -303,12 +328,20 @@ export default function LandingClient() {
 
 function HeroVisual() {
   return (
-    <div className="mx-auto w-full max-w-xl rounded-[28px] border border-white/12 bg-white/8 p-4 shadow-2xl shadow-black/30 backdrop-blur">
+    <div className="relative mx-auto w-full max-w-xl overflow-hidden rounded-[28px] border border-white/12 bg-white/8 p-4 shadow-2xl shadow-black/30 backdrop-blur">
+      <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-emerald-200/70 to-transparent" />
       <div className="grid gap-4 sm:grid-cols-[0.76fr_1fr] sm:items-center">
         <div className="mx-auto w-full max-w-[230px]">
           <ReservationPhone compact />
         </div>
         <div className="space-y-4">
+          <div className="flex items-center justify-between gap-3 rounded-lg border border-amber-200/30 bg-amber-100 px-3 py-2 text-xs font-black text-amber-900 shadow-lg">
+            <span className="flex items-center gap-2">
+              <span className="pulse-dot bg-amber-600" />
+              Nova solicitação
+            </span>
+            <span>20:30</span>
+          </div>
           <PanelPreview compact />
           <div className="rounded-lg border border-emerald-200/20 bg-emerald-950/70 p-4">
             <p className="text-xs font-black uppercase text-emerald-200">Protocolo MV-8F42A1</p>
@@ -333,8 +366,10 @@ function SectionIntro({ eyebrow, title, text }: { eyebrow: string; title: string
 
 function InfoCard({ icon: Icon, title, text }: { icon: LucideIcon; title: string; text: string }) {
   return (
-    <article className="rounded-lg border border-amber-200/70 bg-white p-5 shadow-sm">
-      <Icon className="mb-4 h-6 w-6 text-[#C2410C]" />
+    <article className="rounded-lg border border-amber-200/70 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-[#C2410C]/40 hover:shadow-xl">
+      <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#FEF3C7] text-[#C2410C]">
+        <Icon className="h-5 w-5" />
+      </span>
       <h3 className="font-black">{title}</h3>
       <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
     </article>
@@ -354,6 +389,8 @@ function ReservationPhone({ compact = false }: { compact?: boolean }) {
           <MiniField label="Data" value="Hoje" />
           <MiniField label="Horário" value="20:30" />
           {!compact ? <MiniField label="Pessoas" value="4 pessoas" /> : null}
+          {!compact ? <MiniField label="Protocolo" value="MV-8F42A1" /> : null}
+          {!compact ? <MiniField label="Status" value="Confirmada" /> : null}
           <div className="rounded-lg bg-[#C2410C] py-3 text-center text-sm font-black text-white">
             Enviar reserva
           </div>
@@ -381,7 +418,8 @@ function PanelPreview({ compact = false }: { compact?: boolean }) {
       <div className="mt-4 space-y-2">
         <PanelRow name="Mariana Costa" meta="20:30 - 4 pessoas" status="Pendente" tone="pending" />
         <PanelRow name="Lucas Martins" meta="20:00 - 2 pessoas" status="Confirmada" tone="confirmed" />
-        {!compact ? <PanelRow name="Historico" meta="Finalizadas e recusadas" status="Separado" tone="history" /> : null}
+        {!compact ? <PanelRow name="Finalizadas" meta="Histórico organizado" status="Histórico" tone="history" /> : null}
+        {!compact ? <PanelRow name="Recusadas" meta="Fora da operação ativa" status="Separado" tone="history" /> : null}
       </div>
     </div>
   );
@@ -438,7 +476,7 @@ function PlanCard({ plan, pricesHidden }: { plan: (typeof plans)[number]; prices
             <p className="text-2xl font-black">R$ {plan.priceSetup.toLocaleString("pt-BR")}</p>
             <p className="mt-4 text-sm font-bold opacity-70">Mensalidade</p>
             <p className="text-3xl font-black">
-              R$ {plan.priceMonthly}<span className="text-base font-bold opacity-70">/mes</span>
+              R$ {plan.priceMonthly}<span className="text-base font-bold opacity-70">/mês</span>
             </p>
           </>
         )}
@@ -451,9 +489,14 @@ function PlanCard({ plan, pricesHidden }: { plan: (typeof plans)[number]; prices
           </li>
         ))}
       </ul>
-      <a href="#planos" className={`inline-flex min-h-12 w-full items-center justify-center rounded-lg px-4 text-sm font-black transition hover:-translate-y-0.5 ${
+      <a
+        href={whatsappHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`cta-glow inline-flex min-h-12 w-full items-center justify-center rounded-lg px-4 text-sm font-black transition hover:-translate-y-0.5 ${
         plan.highlighted ? "bg-[#C2410C] text-white" : "border border-white/20 bg-white/8 text-white"
-      }`}>
+      }`}
+      >
         Solicitar proposta
       </a>
     </article>
@@ -462,7 +505,7 @@ function PlanCard({ plan, pricesHidden }: { plan: (typeof plans)[number]; prices
 
 function PriceToggle({ mode, onChange, compact = false }: { mode: PricingMode; onChange: (mode: PricingMode) => void; compact?: boolean }) {
   const toggle = (
-    <div className="mode-toggle" aria-label="Alternar exibicao de valores">
+    <div className="mode-toggle" aria-label="Alternar exibição de valores">
       <button type="button" className={mode === "prospeccao" ? "active" : ""} onClick={() => onChange("prospeccao")}>
         Ocultar valores
       </button>
