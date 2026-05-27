@@ -48,8 +48,9 @@ export default async function RealReservationPage({
       }}
     >
       <div className="absolute left-1/2 top-10 h-72 w-72 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
+      <div className="absolute bottom-0 right-0 h-64 w-64 translate-x-1/3 rounded-full bg-black/10 blur-3xl" />
       <section
-        className="reveal-up relative mx-auto max-w-xl overflow-hidden rounded-[28px] border border-white/20 shadow-2xl shadow-black/35"
+        className="reveal-up relative mx-auto max-w-xl overflow-hidden rounded-[30px] border border-white/20 shadow-2xl shadow-black/35"
         style={{ background, color: "#1F2937" }}
       >
         <header className="relative overflow-hidden" style={{ background: primary, color: background }}>
@@ -71,7 +72,7 @@ export default async function RealReservationPage({
             </div>
             <h1 className="font-serif-bistro text-3xl font-bold">{restaurant.name}</h1>
             <p className="mx-auto mt-2 max-w-sm text-sm leading-6 opacity-85">
-              Escolha o melhor horario. A equipe confirma a mesa e voce acompanha tudo pelo protocolo.
+              Escolha o melhor horário. A equipe confirma a mesa e você acompanha tudo pelo protocolo.
             </p>
           </div>
         </header>
@@ -87,10 +88,10 @@ export default async function RealReservationPage({
           <>
             <div className="border-b border-[#E8E2D4] px-5 py-4">
               <ol className="grid grid-cols-3 gap-2 text-xs font-black">
-                {["Dados", "Horario", "Confirmacao"].map((label, index) => (
+                {["Dados", "Horário", "Confirmação"].map((label, index) => (
                   <li key={label} className="flex items-center gap-2">
                     <span
-                      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs"
+                      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs transition duration-200"
                       style={{
                         background: index < 2 ? primary : "#F5F1E8",
                         color: index < 2 ? background : "#6B7280",
@@ -142,7 +143,7 @@ function SuccessView({
   return (
     <div className="animate-fade-in p-7 text-center">
       <div
-        className="success-ring mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full"
+        className="success-ring mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full shadow-xl"
         style={{ background: primary }}
       >
         <Check className="h-10 w-10 text-white" strokeWidth={3} />
@@ -155,10 +156,10 @@ function SuccessView({
         Reserva recebida
       </h2>
       <p className="mt-2 text-sm leading-6 text-[#6B7280]">
-        Sua solicitacao foi registrada como pendente. Guarde este codigo: ele e a chave para acompanhar a confirmacao.
+        Sua solicitação foi registrada como pendente. Guarde este código: ele é a chave para acompanhar a confirmação.
       </p>
 
-      <div className="my-6 rounded-2xl border border-[#E8E2D4] bg-white p-5 text-left shadow-lg">
+      <div className="my-6 rounded-2xl border border-[#E8E2D4] bg-white p-5 text-left shadow-lg transition duration-300 hover:-translate-y-1 hover:shadow-xl">
         <div className="mb-4 flex items-center justify-between border-b border-[#E8E2D4] pb-4">
           <span className="text-xs font-black uppercase tracking-wide text-[#6B7280]">
             Protocolo
@@ -169,19 +170,19 @@ function SuccessView({
         </div>
         <div className="flex items-center justify-between">
           <span className="text-sm font-semibold text-[#6B7280]">Status</span>
-          <span className="status-pill bg-amber-100 text-amber-800">
-            Aguardando confirmacao
+          <span className="status-pill animate-pulse bg-amber-100 text-amber-800">
+            Aguardando confirmação
           </span>
         </div>
         <p className="mt-4 rounded-lg bg-[#F5F1E8] p-3 text-xs font-bold leading-5 text-[#6B7280]">
-          Se a equipe confirmar ou recusar, o status sera atualizado na pagina de acompanhamento.
+          Se a equipe confirmar ou recusar, o status será atualizado na página de acompanhamento.
         </p>
       </div>
 
       <div className="grid gap-3">
         <Link
           href={`/r/${slug}/acompanhar?codigo=${encodeURIComponent(protocol)}`}
-          className="inline-flex min-h-12 items-center justify-center rounded-lg px-4 font-black text-white shadow-lg transition hover:-translate-y-0.5"
+          className="inline-flex min-h-12 items-center justify-center rounded-xl px-4 font-black text-white shadow-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-xl"
           style={{ background: accent }}
         >
           Acompanhar minha reserva

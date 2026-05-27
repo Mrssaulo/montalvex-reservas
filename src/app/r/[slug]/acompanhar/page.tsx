@@ -25,9 +25,9 @@ import type { Reservation, ReservationStatus } from "@/lib/supabase/types";
 export const dynamic = "force-dynamic";
 
 const TRACKING_MESSAGES: Record<ReservationStatus, string> = {
-  pending: "Sua reserva foi recebida e aguarda confirmacao da equipe.",
-  confirmed: "Sua reserva foi confirmada. A equipe ja esta preparada para receber voce.",
-  declined: "Sua reserva nao foi confirmada. Entre em contato com o restaurante para verificar outro horario.",
+  pending: "Sua reserva foi recebida e aguarda confirmação da equipe.",
+  confirmed: "Sua reserva foi confirmada. A equipe já está preparada para receber você.",
+  declined: "Sua reserva não foi confirmada. Entre em contato com o restaurante para verificar outro horário.",
   finished: "Reserva finalizada.",
 };
 
@@ -70,8 +70,9 @@ export default async function TrackReservationPage({
       }}
     >
       <div className="absolute left-1/2 top-10 h-72 w-72 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
+      <div className="absolute bottom-0 right-0 h-64 w-64 translate-x-1/3 rounded-full bg-black/10 blur-3xl" />
       <section
-        className="reveal-up relative mx-auto max-w-xl overflow-hidden rounded-[28px] border border-white/20 shadow-2xl shadow-black/35"
+        className="reveal-up relative mx-auto max-w-xl overflow-hidden rounded-[30px] border border-white/20 shadow-2xl shadow-black/35"
         style={{ background, color: "#1F2937" }}
       >
         <header className="relative overflow-hidden" style={{ background: primary, color: background }}>
@@ -88,14 +89,14 @@ export default async function TrackReservationPage({
             </div>
             <h1 className="font-serif-bistro text-3xl font-bold">{restaurant.name}</h1>
             <p className="mx-auto mt-2 max-w-sm text-sm leading-6 opacity-85">
-              Consulte com protocolo e telefone. Se a equipe confirmar ou recusar, o status sera atualizado aqui.
+              Consulte com protocolo e telefone. Se a equipe confirmar ou recusar, o status será atualizado aqui.
             </p>
           </div>
         </header>
 
         <div className="space-y-5 p-5">
           <form action={`/r/${slug}/acompanhar`} className="space-y-4">
-            <div className="rounded-lg border border-[#E8E2D4] bg-[#F5F1E8] p-4">
+            <div className="rounded-2xl border border-[#E8E2D4] bg-[#F5F1E8] p-4 transition duration-300 hover:-translate-y-0.5 hover:shadow-md">
               <div className="flex items-start gap-3">
                 <Search className="mt-0.5 h-5 w-5 shrink-0" style={{ color: primary }} />
                 <p className="text-sm leading-6 text-[#6B7280]">
@@ -128,7 +129,7 @@ export default async function TrackReservationPage({
 
             <button
               type="submit"
-              className="cta-glow min-h-13 w-full rounded-lg font-black text-white shadow-xl transition hover:-translate-y-0.5"
+              className="cta-glow min-h-13 w-full rounded-xl font-black text-white shadow-xl transition duration-200 hover:-translate-y-0.5 hover:shadow-2xl"
               style={{ background: accent }}
             >
               Consultar reserva
@@ -143,7 +144,7 @@ export default async function TrackReservationPage({
 
           {canSearch && !reservation ? (
             <Notice tone="error">
-              Nao encontramos uma reserva com esse protocolo e telefone para este restaurante.
+              Não encontramos uma reserva com esse protocolo e telefone para este restaurante.
             </Notice>
           ) : null}
 
@@ -178,7 +179,7 @@ function ReservationStatusCard({
   const style = STATUS_STYLES[reservation.status];
 
   return (
-    <article className="rounded-lg border border-[#E8E2D4] bg-white p-5 shadow-lg">
+    <article className="animate-fade-in rounded-2xl border border-[#E8E2D4] bg-white p-5 shadow-lg transition duration-300 hover:-translate-y-1 hover:shadow-xl">
       <div className="mb-4 flex items-start justify-between gap-3 border-b border-[#E8E2D4] pb-4">
         <div>
           <p className="text-xs font-black uppercase tracking-wide text-[#6B7280]">
@@ -188,7 +189,10 @@ function ReservationStatusCard({
             #{reservationProtocol(reservation)}
           </p>
         </div>
-        <span className="status-pill" style={{ background: style.bg, color: style.text }}>
+        <span
+          className={`status-pill ${reservation.status === "pending" ? "animate-pulse" : ""}`}
+          style={{ background: style.bg, color: style.text }}
+        >
           {STATUS_LABELS[reservation.status]}
         </span>
       </div>
@@ -200,10 +204,10 @@ function ReservationStatusCard({
       <div className="space-y-3 text-sm">
         <Detail label="Nome" value={reservation.customer_name} icon={CheckCircle2} />
         <Detail label="Data" value={formatDateBr(reservation.reservation_date)} icon={Calendar} />
-        <Detail label="Horario" value={toDisplayTime(reservation.reservation_time)} icon={Clock} />
+        <Detail label="Horário" value={toDisplayTime(reservation.reservation_time)} icon={Clock} />
         <Detail label="Pessoas" value={`${reservation.people} pessoas`} icon={Users} />
         {reservation.notes ? (
-          <Detail label="Observacao" value={reservation.notes} icon={MessageSquareText} />
+          <Detail label="Observação" value={reservation.notes} icon={MessageSquareText} />
         ) : null}
       </div>
     </article>
@@ -220,7 +224,7 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <label className="block rounded-lg border border-[#E8E2D4] bg-white p-4 card-shadow transition hover:-translate-y-0.5 hover:shadow-lg focus-within:ring-2 focus-within:ring-emerald-900/20">
+    <label className="block rounded-2xl border border-[#E8E2D4] bg-white p-4 card-shadow transition duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-within:-translate-y-0.5 focus-within:ring-2 focus-within:ring-emerald-900/20">
       <span className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-[#6B7280]">
         <Icon className="h-3.5 w-3.5" />
         {label}
@@ -263,7 +267,7 @@ function Notice({
   };
 
   return (
-    <div className={`rounded-lg border p-4 text-sm font-bold ${classes[tone]}`}>
+    <div className={`animate-fade-in rounded-2xl border p-4 text-sm font-bold ${classes[tone]}`}>
       {children}
     </div>
   );

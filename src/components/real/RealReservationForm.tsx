@@ -60,11 +60,11 @@ export function RealReservationForm({
         </div>
       ) : null}
 
-      <div className="rounded-lg border border-[#E8E2D4] bg-[#F5F1E8] p-4">
+      <div className="rounded-2xl border border-[#E8E2D4] bg-[#F5F1E8] p-4 transition duration-300 hover:-translate-y-0.5 hover:shadow-md">
         <div className="flex items-start gap-3">
           <CalendarCheck className="mt-0.5 h-5 w-5 shrink-0" style={{ color: primary }} />
           <p className="text-sm leading-6 text-[#6B7280]">
-            Escolha data e horario. Sua solicitacao entra no painel do restaurante como pendente.
+            Escolha data e horário. Sua solicitação entra no painel do restaurante como pendente.
           </p>
         </div>
       </div>
@@ -89,7 +89,7 @@ export function RealReservationForm({
             placeholder="(11) 99999-9999"
           />
           <p className="mt-2 text-xs font-semibold leading-5 text-[#64748B]">
-            Usaremos este numero para identificar sua reserva e avisar sobre a confirmacao.
+            Usaremos este número para identificar sua reserva e avisar sobre a confirmação.
           </p>
         </Field>
       </div>
@@ -112,7 +112,7 @@ export function RealReservationForm({
           <button
             type="button"
             onClick={() => setCalendarOpen((current) => !current)}
-            className="flex min-h-10 w-full items-center justify-between gap-3 rounded-lg border border-[#E8E2D4] bg-[#FDFBF7] px-3 py-2 text-left text-sm font-black transition hover:bg-[#F5F1E8]"
+            className="flex min-h-10 w-full items-center justify-between gap-3 rounded-xl border border-[#E8E2D4] bg-[#FDFBF7] px-3 py-2 text-left text-sm font-black transition duration-200 hover:-translate-y-0.5 hover:bg-[#F5F1E8] hover:shadow-sm"
             aria-expanded={calendarOpen}
           >
             <span>{formatDisplayDate(selectedDate)}</span>
@@ -137,7 +137,7 @@ export function RealReservationForm({
         />
       ) : null}
 
-      <Field label="Horario" icon={Clock}>
+      <Field label="Horário" icon={Clock}>
         <input required type="hidden" name="reservation_time" value={selectedTime} />
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
           {slots.map((time) => {
@@ -149,8 +149,8 @@ export function RealReservationForm({
                 type="button"
                 aria-pressed={selected}
                 onClick={() => setSelectedTime(time)}
-                className={`time-slot min-h-12 rounded-lg border px-2 text-sm font-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
-                  selected ? "selected shadow-lg" : "bg-white hover:-translate-y-0.5 hover:bg-stone-50"
+                className={`time-slot min-h-12 rounded-xl border px-2 text-sm font-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
+                  selected ? "selected scale-[1.02] shadow-lg" : "bg-white hover:-translate-y-0.5 hover:bg-stone-50 hover:shadow-sm"
                 }`}
                 style={{ borderColor: selected ? primary : "#E8E2D4" }}
               >
@@ -160,19 +160,19 @@ export function RealReservationForm({
           })}
         </div>
         <p className="mt-3 text-xs font-semibold text-[#6B7280]">
-          Horario selecionado: <span style={{ color: primary }}>{selectedTime || "nenhum"}</span>
+          Horário selecionado: <span style={{ color: primary }}>{selectedTime || "nenhum"}</span>
         </p>
         <p className="mt-1 text-xs font-semibold text-[#6B7280]">
-          Atendimento das {openingTime} as {closingTime}. Ultima reserva as {lastReservationTime}.
+          Atendimento das {openingTime} às {closingTime}. Última reserva às {lastReservationTime}.
         </p>
       </Field>
 
-      <Field label="Observacoes" icon={MessageSquareText}>
+      <Field label="Observações" icon={MessageSquareText}>
         <textarea
           name="notes"
           rows={3}
           className="w-full resize-none bg-transparent py-1 text-sm outline-none"
-          placeholder="Aniversario, restricoes alimentares, preferencia de mesa..."
+          placeholder="Aniversário, restrições alimentares, preferência de mesa..."
         />
       </Field>
 
@@ -209,8 +209,8 @@ function CalendarPicker({
           type="button"
           onClick={onPreviousMonth}
           disabled={!canGoBack}
-          className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#E8E2D4] bg-white text-[#1F2937] disabled:cursor-not-allowed disabled:opacity-40"
-          aria-label="Mes anterior"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E8E2D4] bg-white text-[#1F2937] transition duration-200 hover:-translate-y-0.5 hover:bg-[#F5F1E8] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0"
+          aria-label="Mês anterior"
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
@@ -220,8 +220,8 @@ function CalendarPicker({
         <button
           type="button"
           onClick={onNextMonth}
-          className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#E8E2D4] bg-white text-[#1F2937]"
-          aria-label="Proximo mes"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E8E2D4] bg-white text-[#1F2937] transition duration-200 hover:-translate-y-0.5 hover:bg-[#F5F1E8] hover:shadow-sm"
+          aria-label="Próximo mês"
         >
           <ChevronRight className="h-4 w-4" />
         </button>
@@ -248,11 +248,11 @@ function CalendarPicker({
               type="button"
               disabled={disabled}
               onClick={() => onSelectDate(day.date)}
-              className={`flex h-10 items-center justify-center rounded-lg text-sm font-black transition ${
+              className={`flex h-10 items-center justify-center rounded-xl text-sm font-black transition duration-200 ${
                 selected
-                  ? "text-white shadow-lg"
-                  : "bg-white text-[#1F2937] hover:-translate-y-0.5 hover:bg-[#F5F1E8]"
-              } disabled:cursor-not-allowed disabled:bg-transparent disabled:text-[#C7BFAF]`}
+                  ? "scale-[1.04] text-white shadow-lg"
+                  : "bg-white text-[#1F2937] hover:-translate-y-0.5 hover:bg-[#F5F1E8] hover:shadow-sm"
+              } disabled:cursor-not-allowed disabled:bg-transparent disabled:text-[#C7BFAF] disabled:hover:translate-y-0 disabled:hover:shadow-none`}
               style={{ background: selected ? primary : undefined }}
             >
               {day.day}
@@ -275,10 +275,10 @@ function SubmitButton({ accent, disabled }: { accent: string; disabled: boolean 
     <button
       type="submit"
       disabled={pending || disabled}
-      className="cta-glow min-h-13 w-full rounded-lg font-black text-white shadow-xl transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
+      className="cta-glow min-h-13 w-full rounded-xl font-black text-white shadow-xl transition duration-200 hover:-translate-y-0.5 hover:shadow-2xl disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
       style={{ background: accent }}
     >
-      {pending ? "Enviando solicitacao..." : "Enviar solicitacao de reserva"}
+      {pending ? "Enviando solicitação..." : "Enviar solicitação de reserva"}
     </button>
   );
 }
@@ -293,7 +293,7 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div className="block rounded-2xl border border-[#E8E2D4] bg-white p-4 card-shadow transition hover:-translate-y-0.5 hover:shadow-lg focus-within:ring-2 focus-within:ring-emerald-900/20">
+    <div className="block rounded-2xl border border-[#E8E2D4] bg-white p-4 card-shadow transition duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-within:-translate-y-0.5 focus-within:ring-2 focus-within:ring-emerald-900/20">
       <span className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-[#6B7280]">
         {Icon ? <Icon className="h-3.5 w-3.5" /> : null}
         {label}
