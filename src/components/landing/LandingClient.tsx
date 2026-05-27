@@ -59,36 +59,43 @@ export default function LandingClient() {
 
           <div className="flex items-center gap-3">
             <PriceToggle mode={mode} onChange={setMode} compact />
-            <Link href="/demo" className="cta-glow inline-flex min-h-10 items-center rounded-lg bg-[#C06C58] px-4 text-sm font-black text-white shadow-lg transition hover:-translate-y-0.5">
-              Ver demo
+            <Link href="/demo" className="cta-glow inline-flex min-h-10 shrink-0 items-center rounded-lg bg-[#C06C58] px-3 text-sm font-black text-white shadow-lg transition hover:-translate-y-0.5 sm:px-4">
+              <span className="sm:hidden">Demo</span>
+              <span className="hidden sm:inline">Ver demo</span>
             </Link>
           </div>
         </div>
       </header>
 
-      <section className="relative mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-12 md:grid-cols-[0.86fr_1.14fr] md:items-center md:pb-20 md:pt-16">
-        <div className="reveal-up">
-          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-200/25 bg-emerald-200/10 px-4 py-2 text-xs font-black uppercase text-emerald-100">
-            <span className="pulse-dot" />
-            Operacao de reservas em tempo real
-          </p>
-          <h1 className="text-4xl font-black leading-tight md:text-6xl">
-            Do celular do cliente ao painel da equipe, sem reserva perdida no caminho.
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-emerald-50/80">
-            Uma experiencia comercial premium para restaurantes: solicitacao pelo celular, protocolo para o cliente, painel para a equipe e IA demonstrativa como apoio honesto para a operacao.
-          </p>
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <Link href="/demo" className="cta-glow inline-flex min-h-13 items-center justify-center rounded-lg bg-[#C06C58] px-7 font-black text-white shadow-xl transition hover:-translate-y-0.5">
-              Ver demo guiada
-            </Link>
-            <a href="#planos" className="inline-flex min-h-13 items-center justify-center rounded-lg border border-white/20 bg-white/8 px-7 font-black text-white transition hover:-translate-y-0.5 hover:bg-white/12">
-              Conhecer planos
-            </a>
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f241d] to-[#17352a]">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
+            <div className="reveal-up relative z-10">
+              <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-200/25 bg-emerald-200/10 px-4 py-2 text-xs font-black uppercase text-emerald-100">
+                <span className="pulse-dot" />
+                Operacao de reservas em tempo real
+              </p>
+              <h1 className="max-w-3xl text-4xl font-black leading-tight md:text-5xl xl:text-6xl">
+                Do celular do cliente ao painel da equipe, sem reserva perdida no caminho.
+              </h1>
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-emerald-50/80">
+                Uma experiencia comercial premium para restaurantes: solicitacao pelo celular, protocolo para o cliente, painel para a equipe e IA demonstrativa como apoio honesto para a operacao.
+              </p>
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                <Link href="/demo" className="cta-glow inline-flex min-h-13 items-center justify-center rounded-lg bg-[#C06C58] px-7 font-black text-white shadow-xl transition hover:-translate-y-0.5">
+                  Ver demo guiada
+                </Link>
+                <a href="#planos" className="inline-flex min-h-13 items-center justify-center rounded-lg border border-white/20 bg-white/8 px-7 font-black text-white transition hover:-translate-y-0.5 hover:bg-white/12">
+                  Conhecer planos
+                </a>
+              </div>
+            </div>
+
+            <div className="relative">
+              <ProductHero />
+            </div>
           </div>
         </div>
-
-        <ProductHero />
       </section>
 
       <section className="bg-[#FDFBF7] px-5 py-16 text-[#1F2937]">
@@ -253,43 +260,82 @@ export default function LandingClient() {
 
 function ProductHero() {
   return (
-    <div className="reveal-up relative z-10 min-h-[640px] md:min-h-[700px]">
-      <div className="absolute right-0 top-8 hidden w-[80%] rounded-[28px] border border-white/15 bg-[#111827]/96 p-4 shadow-2xl shadow-black/45 md:block float-slow">
-        <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
-          <div>
-            <p className="text-xs font-black uppercase text-slate-400">Painel da equipe</p>
-            <h2 className="text-lg font-black text-white">Reservas de hoje</h2>
-          </div>
-          <span className="inline-flex items-center gap-2 rounded-full bg-emerald-400/12 px-3 py-1 text-xs font-black text-emerald-300">
-            <span className="pulse-dot" />
-            ao vivo
-          </span>
+    <div className="reveal-up relative z-20 mx-auto w-full max-w-[620px]">
+      <div className="flex flex-col gap-4 sm:hidden">
+        <div className="mx-auto w-48">
+          <ReservationPhone />
         </div>
-        <div className="grid gap-4 lg:grid-cols-[1fr_0.82fr]">
+        <div className="rounded-[22px] border border-white/15 bg-[#111827]/96 p-3 shadow-2xl shadow-black/35">
+          <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
+            <div>
+              <p className="text-xs font-black uppercase text-slate-400">Painel da equipe</p>
+              <h2 className="text-base font-black text-white">Reservas de hoje</h2>
+            </div>
+            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-400/12 px-3 py-1 text-xs font-black text-emerald-300">
+              <span className="pulse-dot" />
+              ao vivo
+            </span>
+          </div>
           <TeamPanel compact />
-          <div className="space-y-4">
-            <TrackingPreview compact />
-            <AiPreview compact />
+        </div>
+        <TrackingPreview compact />
+      </div>
+
+      <div className="relative hidden h-[590px] w-full overflow-hidden sm:block lg:h-[620px]">
+        <div className="absolute right-0 top-40 z-20 w-[84%] rounded-[22px] border border-white/15 bg-[#111827]/96 p-3 shadow-2xl shadow-black/40 md:p-4 lg:top-12 lg:w-[82%] float-slow">
+          <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
+            <div>
+              <p className="text-xs font-black uppercase text-slate-400">Painel da equipe</p>
+              <h2 className="text-lg font-black text-white">Reservas de hoje</h2>
+            </div>
+            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-400/12 px-3 py-1 text-xs font-black text-emerald-300">
+              <span className="pulse-dot" />
+              ao vivo
+            </span>
+          </div>
+          <div className="grid gap-3 md:gap-4 lg:grid-cols-[1fr_0.74fr]">
+            <TeamPanel compact />
+            <div className="hidden space-y-4 lg:block">
+              <TrackingPreview compact />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="absolute left-0 top-0 w-[245px] max-w-[58vw] float-soft md:w-[282px] md:max-w-none">
-        <ReservationPhone />
-      </div>
+        <div className="absolute left-4 top-0 z-20 w-52 float-soft md:w-56 lg:left-0 lg:top-24 lg:w-60">
+          <ReservationPhone />
+        </div>
 
-      <div className="floating-card absolute right-2 top-2 rounded-lg border border-emerald-300/25 bg-slate-950/92 p-4 text-white shadow-2xl backdrop-blur md:right-8">
-        <p className="text-xs font-black uppercase text-emerald-300">Nova reserva</p>
-        <p className="mt-1 text-sm font-black">20:30 - 4 pessoas</p>
+        <div className="floating-card absolute right-4 top-6 z-30 rounded-lg border border-emerald-300/25 bg-slate-950/92 p-3 text-white shadow-2xl backdrop-blur md:p-4 lg:right-8 lg:top-0">
+          <p className="text-xs font-black uppercase text-emerald-300">Nova reserva</p>
+          <p className="mt-1 text-sm font-black">20:30 - 4 pessoas</p>
+        </div>
+        <div className="floating-card float-delay absolute left-[42%] top-[138px] z-30 rounded-lg border border-sky-300/25 bg-white p-3 text-slate-950 shadow-2xl md:p-4 lg:left-48 lg:top-6">
+          <p className="text-xs font-black uppercase text-sky-700">Protocolo</p>
+          <p className="mt-1 font-mono text-sm font-black">MV-8F42A1</p>
+        </div>
+        <HeroAiCard />
+        <div className="floating-card absolute bottom-8 right-4 z-30 hidden rounded-lg border border-amber-300/30 bg-amber-50 p-4 text-amber-950 shadow-2xl md:block lg:right-10">
+          <p className="text-xs font-black uppercase text-amber-700">Pendente</p>
+          <p className="mt-1 text-sm font-black">Aguardando equipe</p>
+        </div>
       </div>
-      <div className="floating-card float-delay absolute bottom-10 left-8 rounded-lg border border-sky-300/25 bg-white p-4 text-slate-950 shadow-2xl md:left-20">
-        <p className="text-xs font-black uppercase text-sky-700">Protocolo</p>
-        <p className="mt-1 font-mono text-sm font-black">MV-8F42A1</p>
+    </div>
+  );
+}
+
+function HeroAiCard() {
+  return (
+    <div className="floating-card absolute bottom-7 left-3 z-30 hidden w-[250px] rounded-lg border border-violet-200/20 bg-[#071A13]/95 p-4 text-white shadow-2xl backdrop-blur md:block lg:bottom-28 lg:left-auto lg:right-6">
+      <div className="mb-3 flex items-center gap-2">
+        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-200/12 text-violet-100">
+          <Bot className="h-4 w-4" />
+        </span>
+        <div>
+          <p className="text-xs font-black uppercase text-violet-100/70">IA demonstrativa</p>
+          <p className="text-sm font-black">Apoio simulado</p>
+        </div>
       </div>
-      <div className="floating-card absolute bottom-28 right-0 rounded-lg border border-amber-300/30 bg-amber-50 p-4 text-amber-950 shadow-2xl md:right-16">
-        <p className="text-xs font-black uppercase text-amber-700">Pendente</p>
-        <p className="mt-1 text-sm font-black">Aguardando equipe</p>
-      </div>
+      <p className="text-xs leading-5 text-violet-100/75">Pico previsto: 20h as 21h. Atencao: aniversario informado.</p>
     </div>
   );
 }
@@ -435,8 +481,8 @@ function AiPreview({ compact = false }: { compact?: boolean }) {
 }
 
 function PriceToggle({ mode, onChange, compact = false }: { mode: PricingMode; onChange: (mode: PricingMode) => void; compact?: boolean }) {
-  return (
-    <div className={`mode-toggle ${compact ? "hidden sm:inline-flex" : ""}`} aria-label="Alternar exibicao de valores">
+  const toggle = (
+    <div className="mode-toggle" aria-label="Alternar exibicao de valores">
       <button type="button" className={mode === "prospeccao" ? "active" : ""} onClick={() => onChange("prospeccao")}>
         Ocultar valores
       </button>
@@ -445,6 +491,12 @@ function PriceToggle({ mode, onChange, compact = false }: { mode: PricingMode; o
       </button>
     </div>
   );
+
+  if (compact) {
+    return <div className="hidden sm:block">{toggle}</div>;
+  }
+
+  return toggle;
 }
 
 function MiniField({ label, value }: { label: string; value: string }) {
