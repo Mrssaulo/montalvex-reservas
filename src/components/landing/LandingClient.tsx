@@ -22,7 +22,8 @@ const operationTimeline = [
   ["20:15", "Entra como pendente", "A equipe recebe a solicitacao no painel antes do pico."],
   ["20:16", "IA destaca observacao", "Aniversario informado e preferencia por mesa tranquila."],
   ["20:17", "Equipe confirma", "Status muda para confirmada e a mesa entra no preparo."],
-  ["20:18", "Cliente acompanha", "Protocolo e telefone mostram o status atualizado."],
+  ["Cliente ve", "Reserva confirmada", "Protocolo e telefone mostram o status atualizado."],
+  ["IA apoia", "Resumo do jantar", "Nos planos avancados, resumos e sugestoes ajudam a preparar o salao."],
 ];
 
 const valueCards = [
@@ -67,20 +68,24 @@ export default function LandingClient() {
         </div>
       </header>
 
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f241d] to-[#17352a]">
+      <section className="relative overflow-hidden bg-gradient-to-b from-slate-950 via-[#0f241d] to-slate-900">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
-            <div className="reveal-up relative z-10">
+          <div className="grid min-w-0 grid-cols-1 items-center gap-12 lg:grid-cols-2">
+            <div className="reveal-up relative z-10 min-w-0">
               <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-200/25 bg-emerald-200/10 px-4 py-2 text-xs font-black uppercase text-emerald-100">
                 <span className="pulse-dot" />
                 Operacao de reservas em tempo real
               </p>
-              <h1 className="max-w-3xl text-4xl font-black leading-tight md:text-5xl xl:text-6xl">
+              <h1 className="max-w-[20rem] break-words text-2xl font-black leading-tight [overflow-wrap:anywhere] sm:max-w-3xl sm:text-4xl md:text-5xl xl:text-6xl">
                 Do celular do cliente ao painel da equipe, sem reserva perdida no caminho.
               </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-emerald-50/80">
-                Uma experiencia comercial premium para restaurantes: solicitacao pelo celular, protocolo para o cliente, painel para a equipe e IA demonstrativa como apoio honesto para a operacao.
+              <p className="mt-6 max-w-[21rem] text-base leading-8 text-emerald-50/80 sm:max-w-2xl sm:text-lg">
+                Organize solicitacoes, confirmacoes, acompanhamento por protocolo e operacao do salao em uma experiencia feita para restaurante.
               </p>
+              <div className="mt-6 grid gap-3 text-sm font-bold text-emerald-50/72 sm:grid-cols-2">
+                <span className="rounded-lg border border-white/10 bg-white/8 px-4 py-3">Link proprio para reservar</span>
+                <span className="rounded-lg border border-white/10 bg-white/8 px-4 py-3">Painel claro para a equipe</span>
+              </div>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Link href="/demo" className="cta-glow inline-flex min-h-13 items-center justify-center rounded-lg bg-[#C06C58] px-7 font-black text-white shadow-xl transition hover:-translate-y-0.5">
                   Ver demo guiada
@@ -91,7 +96,7 @@ export default function LandingClient() {
               </div>
             </div>
 
-            <div className="relative">
+            <div className="relative min-w-0">
               <ProductHero />
             </div>
           </div>
@@ -102,8 +107,8 @@ export default function LandingClient() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-10 grid gap-5 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
             <div>
-              <p className="mb-2 text-sm font-black uppercase text-[#C06C58]">Veja o fluxo funcionando</p>
-              <h2 className="text-3xl font-black md:text-4xl">A reserva caminha sozinha. A decisao continua com a equipe.</h2>
+              <p className="mb-2 text-sm font-black uppercase text-[#C2410C]">Fluxo em 10 segundos</p>
+              <h2 className="text-3xl font-black md:text-4xl">Do pedido no celular ao salao preparado.</h2>
             </div>
             <p className="leading-7 text-[#6B7280]">
               Do pedido inicial ao status confirmado, cada etapa fica visivel para o restaurante e mais tranquila para o cliente.
@@ -168,7 +173,7 @@ export default function LandingClient() {
               A proposta fica mais facil de entender porque conecta dor real, fluxo operacional e acompanhamento do cliente.
             </p>
           </div>
-          <div className="grid gap-4 md:grid-cols-5">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {valueCards.map(([Icon, title, text]) => (
               <article key={title} className="rounded-lg border border-[#E8E2D4] bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
                 <Icon className="mb-4 h-6 w-6 text-[#C06C58]" />
@@ -260,7 +265,7 @@ export default function LandingClient() {
 
 function ProductHero() {
   return (
-    <div className="reveal-up relative z-20 mx-auto w-full max-w-[620px]">
+    <div className="reveal-up relative z-20 mx-auto w-full min-w-0 max-w-[620px]">
       <div className="flex flex-col gap-4 sm:hidden">
         <div className="mx-auto w-48">
           <ReservationPhone />
@@ -278,11 +283,14 @@ function ProductHero() {
           </div>
           <TeamPanel compact />
         </div>
-        <TrackingPreview compact />
+        <div className="rounded-lg border border-emerald-200/20 bg-emerald-950/45 p-4 text-white">
+          <p className="text-xs font-black uppercase text-emerald-200">Protocolo MV-8F42A1</p>
+          <p className="mt-1 text-sm font-bold text-emerald-50/75">Status confirmado e consulta pelo telefone.</p>
+        </div>
       </div>
 
       <div className="relative hidden h-[590px] w-full overflow-hidden sm:block lg:h-[620px]">
-        <div className="absolute right-0 top-40 z-20 w-[84%] rounded-[22px] border border-white/15 bg-[#111827]/96 p-3 shadow-2xl shadow-black/40 md:p-4 lg:top-12 lg:w-[82%] float-slow">
+        <div className="absolute right-2 top-36 z-20 w-[82%] rounded-[22px] border border-white/15 bg-[#111827]/96 p-3 shadow-2xl shadow-black/40 md:p-4 lg:right-0 lg:top-12 lg:w-[80%] float-slow">
           <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
             <div>
               <p className="text-xs font-black uppercase text-slate-400">Painel da equipe</p>
@@ -295,29 +303,25 @@ function ProductHero() {
           </div>
           <div className="grid gap-3 md:gap-4 lg:grid-cols-[1fr_0.74fr]">
             <TeamPanel compact />
-            <div className="hidden space-y-4 lg:block">
+            <div className="hidden space-y-4 xl:block">
               <TrackingPreview compact />
             </div>
           </div>
         </div>
 
-        <div className="absolute left-4 top-0 z-20 w-52 float-soft md:w-56 lg:left-0 lg:top-24 lg:w-60">
+        <div className="absolute left-5 top-2 z-20 w-52 float-soft md:w-56 lg:left-0 lg:top-24 lg:w-60">
           <ReservationPhone />
         </div>
 
-        <div className="floating-card absolute right-4 top-6 z-30 rounded-lg border border-emerald-300/25 bg-slate-950/92 p-3 text-white shadow-2xl backdrop-blur md:p-4 lg:right-8 lg:top-0">
+        <div className="floating-card absolute right-4 top-7 z-30 rounded-lg border border-emerald-300/25 bg-slate-950/92 p-3 text-white shadow-2xl backdrop-blur md:p-4 lg:right-8 lg:top-0">
           <p className="text-xs font-black uppercase text-emerald-300">Nova reserva</p>
           <p className="mt-1 text-sm font-black">20:30 - 4 pessoas</p>
         </div>
-        <div className="floating-card float-delay absolute left-[42%] top-[138px] z-30 rounded-lg border border-sky-300/25 bg-white p-3 text-slate-950 shadow-2xl md:p-4 lg:left-48 lg:top-6">
+        <div className="floating-card float-delay absolute left-[46%] top-[145px] z-30 rounded-lg border border-sky-300/25 bg-white p-3 text-slate-950 shadow-2xl md:p-4 lg:left-48 lg:top-6">
           <p className="text-xs font-black uppercase text-sky-700">Protocolo</p>
           <p className="mt-1 font-mono text-sm font-black">MV-8F42A1</p>
         </div>
         <HeroAiCard />
-        <div className="floating-card absolute bottom-8 right-4 z-30 hidden rounded-lg border border-amber-300/30 bg-amber-50 p-4 text-amber-950 shadow-2xl md:block lg:right-10">
-          <p className="text-xs font-black uppercase text-amber-700">Pendente</p>
-          <p className="mt-1 text-sm font-black">Aguardando equipe</p>
-        </div>
       </div>
     </div>
   );
@@ -325,7 +329,7 @@ function ProductHero() {
 
 function HeroAiCard() {
   return (
-    <div className="floating-card absolute bottom-7 left-3 z-30 hidden w-[250px] rounded-lg border border-violet-200/20 bg-[#071A13]/95 p-4 text-white shadow-2xl backdrop-blur md:block lg:bottom-28 lg:left-auto lg:right-6">
+    <div className="floating-card absolute bottom-8 right-6 z-30 hidden w-[230px] rounded-lg border border-violet-200/20 bg-[#071A13]/95 p-4 text-white shadow-2xl backdrop-blur md:block lg:bottom-28 lg:right-6">
       <div className="mb-3 flex items-center gap-2">
         <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-200/12 text-violet-100">
           <Bot className="h-4 w-4" />

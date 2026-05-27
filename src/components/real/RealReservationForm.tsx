@@ -88,6 +88,9 @@ export function RealReservationForm({
             className="w-full bg-transparent py-1 text-base font-semibold outline-none"
             placeholder="(11) 99999-9999"
           />
+          <p className="mt-2 text-xs font-semibold leading-5 text-[#64748B]">
+            Usaremos este numero para identificar sua reserva e avisar sobre a confirmacao.
+          </p>
         </Field>
       </div>
 
@@ -136,7 +139,7 @@ export function RealReservationForm({
 
       <Field label="Horario" icon={Clock}>
         <input required type="hidden" name="reservation_time" value={selectedTime} />
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
           {slots.map((time) => {
             const selected = selectedTime === time;
 
@@ -200,7 +203,7 @@ function CalendarPicker({
   const canGoBack = formatDate(addMonths(visibleMonth, -1)) >= formatDate(monthStart(today));
 
   return (
-    <div className="animate-fade-in rounded-lg border border-[#E8E2D4] bg-white p-3 shadow-lg">
+    <div className="animate-fade-in rounded-2xl border border-[#E8E2D4] bg-white p-4 shadow-xl">
       <div className="mb-3 flex items-center justify-between gap-2">
         <button
           type="button"
@@ -290,7 +293,7 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div className="block rounded-lg border border-[#E8E2D4] bg-white p-4 card-shadow transition hover:-translate-y-0.5 hover:shadow-lg focus-within:ring-2 focus-within:ring-emerald-900/20">
+    <div className="block rounded-2xl border border-[#E8E2D4] bg-white p-4 card-shadow transition hover:-translate-y-0.5 hover:shadow-lg focus-within:ring-2 focus-within:ring-emerald-900/20">
       <span className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-[#6B7280]">
         {Icon ? <Icon className="h-3.5 w-3.5" /> : null}
         {label}

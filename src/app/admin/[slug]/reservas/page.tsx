@@ -4,7 +4,9 @@ import {
   Calendar,
   Check,
   Clock,
+  MessageSquareText,
   Phone,
+  Sparkles,
   Table2,
   Users,
   type LucideIcon,
@@ -86,7 +88,7 @@ export default async function RealAdminReservationsPage({
             <div>
               <h1 className="font-black">{restaurant.name}</h1>
               <p className="text-xs font-semibold text-slate-500">
-                Painel de reservas reais · desenvolvimento sem login
+                Painel de reservas do jantar
               </p>
             </div>
           </div>
@@ -103,13 +105,11 @@ export default async function RealAdminReservationsPage({
         <section className="mb-6 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
           <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
             <p className="text-xs font-black uppercase tracking-wide text-emerald-700">
-              Base real Supabase
+              Resumo da operacao
             </p>
-            <h2 className="mt-1 text-2xl font-black">Reservas do restaurante</h2>
+            <h2 className="mt-1 text-2xl font-black">Tudo que a recepcao precisa ver antes do pico</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-              Todas as consultas e atualizacoes desta tela sao filtradas por{" "}
-              <span className="font-bold">{restaurant.slug}</span>. O painel ainda esta aberto
-              para desenvolvimento e recebera login na proxima fase.
+              Pendentes, confirmadas, proxima chegada, observacoes importantes e historico organizado para a equipe agir rapido.
             </p>
           </div>
 
@@ -154,6 +154,45 @@ export default async function RealAdminReservationsPage({
           <Kpi icon={Users} label="Pessoas hoje" value={peopleToday} helper="Apenas reservas ativas" />
           <Kpi icon={Clock} label="Pendentes hoje" value={pendingToday.length} helper="Aguardando acao" tone="amber" />
           <Kpi icon={Check} label="Confirmadas hoje" value={confirmedToday.length} helper="Mesas garantidas" tone="emerald" />
+        </section>
+
+        <section className="mb-7 grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-900 text-white">
+                <Table2 className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-xs font-black uppercase tracking-wide text-slate-500">Resumo da operacao</p>
+                <h2 className="font-black">Hoje no salao</h2>
+              </div>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <MiniSummary label="Reservas hoje" value={String(activeTodayReservations.length)} />
+              <MiniSummary label="Pessoas previstas" value={String(peopleToday)} />
+              <MiniSummary label="Historico" value={String(historyReservations.length)} />
+            </div>
+            <p className="mt-4 rounded-lg bg-slate-50 p-3 text-sm font-semibold leading-6 text-slate-600">
+              Priorize as pendentes, confira observacoes de aniversario ou preferencia de mesa e finalize reservas ja atendidas para manter a visao limpa.
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-violet-200 bg-gradient-to-br from-violet-50 via-white to-emerald-50 p-5 shadow-sm">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-600 text-white">
+                <Sparkles className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-xs font-black uppercase tracking-wide text-violet-700">IA nos planos avancados</p>
+                <h2 className="font-black">Resumo demonstrativo</h2>
+              </div>
+            </div>
+            <div className="space-y-2 text-sm font-semibold text-slate-700">
+              <AiLine text="Horario de pico: 20h as 21h." />
+              <AiLine text="Observacoes importantes aparecem antes da chegada." />
+              <AiLine text="A IA ajuda com resumos e sugestoes. A equipe continua no controle." />
+            </div>
+          </div>
         </section>
 
         <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
@@ -237,6 +276,24 @@ function Kpi({
       <p className="text-4xl font-black tabular-nums">{value}</p>
       <p className="mt-1 text-xs font-semibold opacity-70">{helper}</p>
     </article>
+  );
+}
+
+function MiniSummary({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+      <p className="text-2xl font-black text-slate-950">{value}</p>
+      <p className="mt-1 text-xs font-bold text-slate-500">{label}</p>
+    </div>
+  );
+}
+
+function AiLine({ text }: { text: string }) {
+  return (
+    <p className="flex gap-2 rounded-lg border border-white bg-white/80 p-3">
+      <MessageSquareText className="mt-0.5 h-4 w-4 shrink-0 text-violet-600" />
+      <span>{text}</span>
+    </p>
   );
 }
 

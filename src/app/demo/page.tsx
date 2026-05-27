@@ -18,10 +18,12 @@ import {
 } from "lucide-react";
 
 const guidedSteps = [
-  ["01", "Experiencia do cliente", "Solicita uma mesa pelo celular, com horario, pessoas e observacao."],
-  ["02", "Painel da equipe", "A reserva entra como pendente para confirmar ou recusar."],
-  ["03", "Acompanhamento", "O cliente consulta o status pelo protocolo MV-8F42A1."],
-  ["04", "IA demonstrativa", "Resumo simulado mostra pico, aniversario e sugestao de mesa."],
+  ["01", "Abra a experiencia do cliente", "Mostre o link do restaurante e o formulario de reserva pelo celular."],
+  ["02", "Faca uma solicitacao", "Escolha horario, pessoas e observacao para simular uma reserva real."],
+  ["03", "Copie o protocolo", "Use o codigo gerado para explicar o acompanhamento do cliente."],
+  ["04", "Veja no painel da equipe", "A reserva entra como pendente para confirmar ou recusar."],
+  ["05", "Consulte o status", "O cliente acompanha com protocolo e telefone."],
+  ["06", "Mostre a IA demonstrativa", "Resumo e sugestoes aparecem como potencial dos planos avancados."],
 ];
 
 const realRoutes = [
@@ -81,7 +83,7 @@ export default function DemoHubPage() {
               Use esses blocos como roteiro comercial para mostrar o que muda na rotina do restaurante.
             </p>
           </div>
-          <div className="grid gap-3 md:grid-cols-4">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {guidedSteps.map(([number, title, text]) => (
               <article key={number} className="rounded-lg border border-white/10 bg-[#071A13] p-4">
                 <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[#FDFBF7] text-sm font-black text-[#1B4332]">
@@ -157,11 +159,11 @@ export default function DemoHubPage() {
         <section className="rounded-lg border border-white/12 bg-white/8 p-5">
           <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs font-black uppercase text-emerald-100/60">Rotas reais funcionando</p>
-              <h2 className="text-2xl font-black">Teste a base Supabase separada da demo</h2>
+              <p className="text-xs font-black uppercase text-emerald-100/60">Links reais funcionando</p>
+              <h2 className="text-2xl font-black">Teste o produto real sem sair da apresentacao</h2>
             </div>
             <p className="max-w-lg text-sm leading-6 text-emerald-50/60">
-              Links internos para validacao comercial e tecnica, sem alterar banco, actions ou rotas reais.
+              Caminhos para validar a reserva do cliente, o acompanhamento por protocolo e o painel da equipe.
             </p>
           </div>
           <div className="grid gap-3 md:grid-cols-3">

@@ -17,13 +17,19 @@ import {
   getRestaurantContextBySlug,
   reservationProtocol,
   STATUS_LABELS,
-  STATUS_MESSAGES,
   STATUS_STYLES,
   toDisplayTime,
 } from "@/lib/reservations";
-import type { Reservation } from "@/lib/supabase/types";
+import type { Reservation, ReservationStatus } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
+
+const TRACKING_MESSAGES: Record<ReservationStatus, string> = {
+  pending: "Sua reserva foi recebida e aguarda confirmacao da equipe.",
+  confirmed: "Sua reserva foi confirmada. A equipe ja esta preparada para receber voce.",
+  declined: "Sua reserva nao foi confirmada. Entre em contato com o restaurante para verificar outro horario.",
+  finished: "Reserva finalizada.",
+};
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -58,14 +64,14 @@ export default async function TrackReservationPage({
 
   return (
     <main
-      className="relative min-h-screen overflow-hidden px-4 py-6 sm:py-8"
+      className="relative min-h-screen overflow-hidden px-4 py-6 sm:py-10"
       style={{
         background: `linear-gradient(135deg, ${primary} 0%, #2D5A43 100%)`,
       }}
     >
       <div className="absolute left-1/2 top-10 h-72 w-72 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
       <section
-        className="reveal-up relative mx-auto max-w-md overflow-hidden rounded-[28px] border border-white/20 shadow-2xl shadow-black/35"
+        className="reveal-up relative mx-auto max-w-xl overflow-hidden rounded-[28px] border border-white/20 shadow-2xl shadow-black/35"
         style={{ background, color: "#1F2937" }}
       >
         <header className="relative overflow-hidden" style={{ background: primary, color: background }}>
@@ -81,7 +87,9 @@ export default async function TrackReservationPage({
               <Home className="h-8 w-8" strokeWidth={1.6} />
             </div>
             <h1 className="font-serif-bistro text-3xl font-bold">{restaurant.name}</h1>
-            <p className="mt-2 text-sm opacity-85">Acompanhe o status da sua reserva</p>
+            <p className="mx-auto mt-2 max-w-sm text-sm leading-6 opacity-85">
+              Consulte com protocolo e telefone. Se a equipe confirmar ou recusar, o status sera atualizado aqui.
+            </p>
           </div>
         </header>
 
@@ -186,7 +194,7 @@ function ReservationStatusCard({
       </div>
 
       <p className="mb-4 rounded-lg p-3 text-sm font-bold" style={{ background: style.bg, color: style.text }}>
-        {STATUS_MESSAGES[reservation.status]}
+        {TRACKING_MESSAGES[reservation.status]}
       </p>
 
       <div className="space-y-3 text-sm">

@@ -42,14 +42,14 @@ export default async function RealReservationPage({
 
   return (
     <main
-      className="relative min-h-screen overflow-hidden px-4 py-6 sm:py-8"
+      className="relative min-h-screen overflow-hidden px-4 py-6 sm:py-10"
       style={{
         background: `linear-gradient(135deg, ${primary} 0%, #2D5A43 100%)`,
       }}
     >
       <div className="absolute left-1/2 top-10 h-72 w-72 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
       <section
-        className="reveal-up relative mx-auto max-w-md overflow-hidden rounded-[28px] border border-white/20 shadow-2xl shadow-black/35"
+        className="reveal-up relative mx-auto max-w-xl overflow-hidden rounded-[28px] border border-white/20 shadow-2xl shadow-black/35"
         style={{ background, color: "#1F2937" }}
       >
         <header className="relative overflow-hidden" style={{ background: primary, color: background }}>
@@ -70,7 +70,9 @@ export default async function RealReservationPage({
               )}
             </div>
             <h1 className="font-serif-bistro text-3xl font-bold">{restaurant.name}</h1>
-            <p className="mt-2 text-sm opacity-85">Reserva de mesa com confirmacao da equipe</p>
+            <p className="mx-auto mt-2 max-w-sm text-sm leading-6 opacity-85">
+              Escolha o melhor horario. A equipe confirma a mesa e voce acompanha tudo pelo protocolo.
+            </p>
           </div>
         </header>
 
@@ -153,10 +155,10 @@ function SuccessView({
         Reserva recebida
       </h2>
       <p className="mt-2 text-sm leading-6 text-[#6B7280]">
-        Sua solicitacao foi registrada como pendente. Guarde este codigo para acompanhar sua reserva.
+        Sua solicitacao foi registrada como pendente. Guarde este codigo: ele e a chave para acompanhar a confirmacao.
       </p>
 
-      <div className="my-6 rounded-lg border border-[#E8E2D4] bg-white p-5 text-left shadow-lg">
+      <div className="my-6 rounded-2xl border border-[#E8E2D4] bg-white p-5 text-left shadow-lg">
         <div className="mb-4 flex items-center justify-between border-b border-[#E8E2D4] pb-4">
           <span className="text-xs font-black uppercase tracking-wide text-[#6B7280]">
             Protocolo
@@ -171,6 +173,9 @@ function SuccessView({
             Aguardando confirmacao
           </span>
         </div>
+        <p className="mt-4 rounded-lg bg-[#F5F1E8] p-3 text-xs font-bold leading-5 text-[#6B7280]">
+          Se a equipe confirmar ou recusar, o status sera atualizado na pagina de acompanhamento.
+        </p>
       </div>
 
       <div className="grid gap-3">
