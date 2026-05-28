@@ -29,10 +29,10 @@ export const STATUS_STYLES: Record<
 };
 
 export const STATUS_MESSAGES: Record<ReservationStatus, string> = {
-  pending: "Sua reserva foi recebida e aguarda confirmacao da equipe.",
-  confirmed: "Sua reserva foi confirmada. A equipe ja esta preparada para receber voce.",
+  pending: "Sua reserva foi recebida e aguarda confirmação da equipe.",
+  confirmed: "Sua reserva foi confirmada. A equipe já está preparada para receber você.",
   declined:
-    "Sua reserva nao foi confirmada. Entre em contato com o restaurante para verificar disponibilidade.",
+    "Sua reserva não foi confirmada. Entre em contato com o restaurante para verificar disponibilidade.",
   finished: "Reserva finalizada.",
 };
 

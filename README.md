@@ -1,6 +1,6 @@
 # Montalvex Reservas
 
-MVP em Next.js para reservas white-label de restaurantes. A demo comercial continua intacta e a base real agora usa Supabase para restaurantes, configuracoes e reservas.
+MVP em Next.js para reservas white-label de restaurantes. A demo comercial continua intacta e a base real usa Supabase para restaurantes, configurações, reservas, acompanhamento por protocolo e controle de capacidade do salão.
 
 ## Stack
 
@@ -12,7 +12,7 @@ MVP em Next.js para reservas white-label de restaurantes. A demo comercial conti
 
 Sem Neon, sem Drizzle, sem OpenRouter, sem IA real e sem pagamento nesta fase.
 
-## Variaveis de ambiente
+## Variáveis De Ambiente
 
 Crie um arquivo `.env.local` na raiz do projeto usando `.env.example` como base:
 
@@ -22,29 +22,47 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 ```
 
-Nao coloque chaves reais no repositorio. `SUPABASE_SERVICE_ROLE_KEY` e usada apenas em codigo server-side.
+Não coloque chaves reais no repositório. `SUPABASE_SERVICE_ROLE_KEY` é usada apenas em código server-side.
 
 ## Banco Supabase
 
 1. Abra o SQL Editor no Supabase.
-2. Rode o conteudo de `supabase/schema.sql`.
-3. Depois rode o conteudo de `supabase/seed.sql`.
+2. Rode o conteúdo de `supabase/schema.sql`.
+3. Depois rode o conteúdo de `supabase/seed.sql`.
 
-Para projetos que ja rodaram o schema anterior, rode tambem:
+Para projetos que já rodaram o schema anterior, rode também:
 
 ```sql
--- conteudo de supabase/add-reservation-tracking.sql
+-- conteúdo de supabase/add-reservation-tracking.sql
 ```
 
 Essa migration adiciona `reservation_code` e `public_token` em `reservations` sem apagar dados existentes.
 
-Se o painel ou as rotas reais retornarem erro de permissao no Supabase durante o MVP sem login, rode tambem:
+Para adicionar capacidade do salão em bancos existentes, rode:
 
 ```sql
--- conteudo de supabase/fix-reservation-status-policies.sql
+-- conteúdo de supabase/add-restaurant-capacity.sql
 ```
 
-Esse arquivo cria policies temporarias para desenvolvimento. Antes de producao real, substitua por autenticacao e permissoes por restaurante.
+Essa migration adiciona em `restaurants`:
+
+- `total_tables`: quantidade total de mesas do restaurante.
+- `total_seats`: quantidade total de cadeiras/lugares disponíveis.
+- `seats_per_table`: média de pessoas por mesa usada para estimar mesas ocupadas por reserva.
+
+No seed do Bistrô Monte Verde:
+
+- `total_tables = 18`
+- `total_seats = 72`
+- `seats_per_table = 4`
+
+Se o painel ou as rotas reais retornarem erro de permissão no Supabase durante o MVP sem login, rode também:
+
+```sql
+-- conteúdo de supabase/fix-reservation-status-policies.sql
+```
+
+Esse arquivo cria policies temporárias para desenvolvimento. Antes de produção real, substitua por autenticação e permissões por restaurante.
 
 O schema cria:
 
@@ -52,24 +70,82 @@ O schema cria:
 - `reservations`
 - `restaurant_settings`
 
-As tabelas ficam com RLS habilitado e sem acesso publico direto para `anon`/`authenticated`. Neste MVP, o app usa Server Actions com service role no servidor e sempre escopa as operacoes por restaurante.
+As tabelas ficam com RLS habilitado e sem acesso público direto para `anon`/`authenticated`. Neste MVP, o app usa Server Actions com service role no servidor e sempre escopa as operações por restaurante.
 
-## Rotas demo
+## Capacidade Do Salão
 
-Estas rotas continuam sendo a demonstracao comercial e nao foram movidas:
+O cálculo fica em `src/lib/capacity.ts`.
+
+Mesas estimadas por reserva:
+
+```ts
+Math.ceil(people / seats_per_table)
+```
+
+Com `seats_per_table = 4`:
+
+- 1 a 4 pessoas = 1 mesa
+- 5 a 8 pessoas = 2 mesas
+- 9 a 12 pessoas = 3 mesas
+
+Status que contam na capacidade:
+
+- `pending`: conta como em análise para reservas de hoje.
+- `confirmed`: conta como comprometida/ocupada para reservas de hoje e também para reservas antigas ainda não finalizadas.
+
+Status que não contam:
+
+- `declined`
+- `finished`
+
+Regra crítica:
+
+Mesas e lugares só são liberados quando a reserva é finalizada pela equipe. Uma reserva `confirmed` não libera capacidade automaticamente pelo horário, mesmo que seja antiga.
+
+O painel `/admin/bistro-monte-verde/reservas` mostra:
+
+- mesas totais;
+- mesas livres estimadas;
+- mesas confirmadas;
+- mesas em análise;
+- lugares totais;
+- lugares livres estimados;
+- lugares confirmados;
+- lugares em análise;
+- pessoas previstas;
+- ocupação estimada.
+
+Também existe uma área “Configuração do salão” para editar `total_tables`, `total_seats` e `seats_per_table` com Server Action segura por `slug`.
+
+## Como Testar Capacidade
+
+1. Aplique `supabase/add-restaurant-capacity.sql` no Supabase.
+2. Abra `/admin/bistro-monte-verde/reservas`.
+3. Confira o bloco “Capacidade do salão”.
+4. Crie uma reserva com 4 pessoas: deve estimar 1 mesa e 4 lugares.
+5. Crie uma reserva com 5 pessoas: deve estimar 2 mesas e 5 lugares.
+6. Confirme uma reserva pendente: ela sai de “em análise” e entra como confirmada/ocupada.
+7. Recuse uma reserva pendente: ela deixa de contar na capacidade.
+8. Finalize uma reserva confirmada: mesas e lugares são liberados.
+9. Altere total de mesas/lugares no painel e confira o recálculo.
+10. Consulte o acompanhamento do cliente para confirmar que o status continua funcionando.
+
+## Rotas Demo
+
+Estas rotas continuam sendo a demonstração comercial e não foram movidas:
 
 - `/`
 - `/demo`
 - `/demo/reserva`
 - `/demo/painel`
 
-## Rotas reais
+## Rotas Reais
 
 Depois de rodar o seed:
 
-- `/r/bistro-monte-verde/reserva` - formulario publico real de reserva.
-- `/r/bistro-monte-verde/acompanhar` - acompanhamento publico por protocolo e telefone.
-- `/admin/bistro-monte-verde/reservas` - painel real basico de reservas.
+- `/r/bistro-monte-verde/reserva` - formulário público real de reserva.
+- `/r/bistro-monte-verde/acompanhar` - acompanhamento público por protocolo e telefone.
+- `/admin/bistro-monte-verde/reservas` - painel real de reservas e capacidade do salão.
 
 Regras multi-restaurante implementadas nesta base:
 
@@ -79,9 +155,9 @@ Regras multi-restaurante implementadas nesta base:
 - consulta acompanhamento por `restaurant_id` + `reservation_code` + telefone;
 - lista reservas sempre com filtro por `restaurant_id`;
 - atualiza status apenas quando a reserva pertence ao restaurante correto;
-- nao confia em `restaurant_id` enviado pelo frontend.
+- não confia em `restaurant_id` enviado pelo frontend.
 
-## Rodar localmente
+## Rodar Localmente
 
 ```bash
 npm run dev
@@ -89,22 +165,22 @@ npm run dev
 
 Depois abra `http://localhost:3000`.
 
-## Validar build
+## Validar Build
 
 ```bash
 npm run build
 ```
 
-## Avisos de seguranca
+## Avisos De Segurança
 
-O painel admin ainda esta aberto para desenvolvimento. Nao use com cliente real em producao antes de adicionar autenticacao, permissoes e politicas completas.
+O painel admin ainda está aberto para desenvolvimento. Não use com cliente real em produção antes de adicionar autenticação, permissões e políticas completas.
 
-O acompanhamento por protocolo + telefone e a solucao temporaria do MVP para o cliente ver se a reserva esta pendente, confirmada, recusada ou finalizada.
+O acompanhamento por protocolo + telefone é a solução temporária do MVP para o cliente ver se a reserva está pendente, confirmada, recusada ou finalizada.
 
-## Proximas fases
+## Próximas Fases
 
 - Login real para restaurantes.
-- RLS completa por usuario/organizacao.
-- Permissoes para equipe/admin.
-- IA real para atendimento e operacao.
+- RLS completa por usuário/organização.
+- Permissões para equipe/admin.
+- IA real para atendimento e operação.
 - Pagamentos e planos.

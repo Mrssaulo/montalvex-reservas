@@ -109,20 +109,20 @@ const faqs = [
 
 export default function LandingClient() {
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#07110d] text-white">
+    <main className="min-h-screen max-w-[100vw] overflow-x-hidden bg-[#07110d] text-white">
       <Header />
 
-      <section className="relative overflow-hidden border-b border-white/10 bg-[#07110d]">
+      <section className="relative max-w-[100vw] overflow-hidden border-b border-white/10 bg-[#07110d]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.22),transparent_30%),radial-gradient(circle_at_78%_12%,rgba(194,65,12,0.16),transparent_26%),linear-gradient(135deg,#07110d_0%,#0b1814_42%,#12100d_100%)]" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.12] [background-image:linear-gradient(rgba(255,255,255,0.13)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.13)_1px,transparent_1px)] [background-size:42px_42px]" />
 
-        <div className="relative mx-auto grid max-w-7xl gap-12 px-4 pb-16 pt-12 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:pb-24 lg:pt-20">
+        <div className="relative mx-auto grid w-full max-w-[100vw] gap-12 overflow-hidden px-4 pb-16 pt-12 sm:max-w-7xl sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:pb-24 lg:pt-20">
           <div className="min-w-0">
             <p className="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border border-emerald-200/20 bg-emerald-200/10 px-4 py-2 text-xs font-black uppercase tracking-wide text-emerald-100 shadow-lg shadow-emerald-950/20">
               <span className="pulse-dot" />
               Tecnologia por Montalvex
             </p>
-            <h1 className="max-w-3xl text-3xl font-black leading-[1.05] text-white sm:text-5xl lg:text-7xl">
+            <h1 className="max-w-3xl text-3xl font-black leading-[1.05] text-white text-balance sm:text-5xl lg:text-7xl">
               Reservas organizadas, equipe no controle e cliente sem dúvida.
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-slate-200 sm:text-lg">
@@ -146,7 +146,7 @@ export default function LandingClient() {
               </a>
             </div>
 
-            <div className="mt-8 grid grid-cols-3 gap-3 text-center">
+            <div className="mt-8 grid gap-3 text-center sm:grid-cols-3">
               <HeroMetric value="8" label="reservas hoje" />
               <HeroMetric value="28" label="pessoas previstas" />
               <HeroMetric value="20:30" label="próxima chegada" />
@@ -233,6 +233,9 @@ export default function LandingClient() {
             <p className="mt-4 max-w-xl leading-7 text-slate-600">
               Em vez de procurar conversas antigas, a equipe vê quem precisa de confirmação, quem está chegando e o que já saiu da operação ativa.
             </p>
+            <p className="mt-5 rounded-3xl border border-emerald-100 bg-emerald-50 p-4 text-sm font-bold leading-6 text-emerald-900 shadow-sm">
+              Além das reservas, a equipe enxerga mesas livres, lugares disponíveis, pessoas previstas e pressão do horário de pico.
+            </p>
           </div>
         </div>
       </section>
@@ -255,7 +258,7 @@ export default function LandingClient() {
           <SectionIntro
             eyebrow="IA nos planos avançados"
             title="IA para apoiar a operação, não substituir sua equipe."
-            text="Nos planos com IA, o sistema pode apoiar a equipe com resumos, alertas e sugestões para preparar melhor o salão. A equipe continua no controle."
+            text="Nos planos com IA, o sistema pode apoiar a equipe com resumos, alertas e sugestões para preparar melhor o salão. A IA Operacional fica mais útil porque analisa reservas, capacidade e pendências do salão."
           />
           <div className="mt-9 grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
             <article className="rounded-3xl border border-violet-100 bg-white p-6 shadow-xl shadow-slate-200/70 transition duration-300 hover:-translate-y-1 hover:shadow-2xl">
@@ -352,9 +355,9 @@ export default function LandingClient() {
 
 function Header() {
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#07110d]/90 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
-        <Link href="/" className="flex min-w-0 items-center gap-3">
+    <header className="sticky top-0 z-40 max-w-[100vw] overflow-hidden border-b border-white/10 bg-[#07110d]/90 backdrop-blur-xl">
+      <div className="mx-auto flex w-full max-w-[100vw] items-center justify-between gap-2 px-4 py-3 sm:max-w-7xl sm:gap-3 sm:px-6 lg:px-8">
+        <Link href="/" className="flex min-w-0 shrink-0 items-center gap-3">
           <BrandMark />
           <span className="hidden min-w-0 text-sm font-black text-slate-100 sm:block sm:text-base">
             Reservas
@@ -369,7 +372,7 @@ function Header() {
           ))}
         </nav>
 
-        <WhatsappButton label="Solicitar proposta" className="min-h-10 shrink-0 px-3 text-xs sm:px-4 sm:text-sm" />
+        <WhatsappButton label="Solicitar proposta" className="min-h-10 max-w-[128px] shrink-0 whitespace-nowrap px-2.5 text-[11px] sm:max-w-none sm:px-4 sm:text-sm" />
       </div>
     </header>
   );
@@ -378,7 +381,7 @@ function Header() {
 function BrandMark({ compact = false }: { compact?: boolean }) {
   const frameClass = compact
     ? "h-8 w-32 px-2"
-    : "h-10 w-36 px-2 sm:h-12 sm:w-56 sm:px-3";
+    : "h-10 w-32 px-2 sm:h-12 sm:w-56 sm:px-3";
 
   return (
     <span className="flex min-w-0 items-center" aria-label="Montalvex">
@@ -411,7 +414,7 @@ function WhatsappButton({ label, className = "" }: { label: string; className?: 
 
 function HeroMetric({ value, label }: { value: string; label: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.07] p-3 shadow-lg shadow-black/10 backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-white/[0.11]">
+    <div className="min-w-0 rounded-2xl border border-white/10 bg-white/[0.07] p-3 shadow-lg shadow-black/10 backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-white/[0.11]">
       <p className="text-2xl font-black text-[#F7F0DF]">{value}</p>
       <p className="mt-1 text-[10px] font-black uppercase tracking-wide text-slate-300 sm:text-xs">{label}</p>
     </div>
@@ -420,7 +423,7 @@ function HeroMetric({ value, label }: { value: string; label: string }) {
 
 function HeroVisual() {
   return (
-    <div className="premium-card relative mx-auto w-full max-w-2xl overflow-hidden rounded-[34px] border border-white/12 bg-white/[0.08] p-4 shadow-2xl shadow-black/30 backdrop-blur">
+    <div className="premium-card relative mx-auto w-full max-w-2xl overflow-hidden rounded-[34px] border border-white/12 bg-white/[0.08] p-3 shadow-2xl shadow-black/30 backdrop-blur sm:p-4">
       <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-emerald-200/70 to-transparent" />
       <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-950/75 px-4 py-3 text-xs font-black text-slate-100">
         <span className="flex items-center gap-2">
@@ -429,11 +432,11 @@ function HeroVisual() {
         </span>
         <span className="hidden text-emerald-200 sm:inline">reserva recebida</span>
       </div>
-      <div className="grid gap-4 md:grid-cols-[0.78fr_1fr] md:items-center">
+      <div className="grid min-w-0 gap-4 md:grid-cols-[0.78fr_1fr] md:items-center">
         <div className="mx-auto w-full max-w-[250px]">
           <ReservationPhone compact />
         </div>
-        <div className="space-y-4">
+        <div className="min-w-0 space-y-4">
           <div className="flex items-center justify-between gap-3 rounded-2xl border border-amber-200/40 bg-[#F7F0DF] px-4 py-3 text-xs font-black text-amber-950 shadow-lg">
             <span className="flex items-center gap-2">
               <span className="pulse-dot bg-amber-600" />
@@ -527,7 +530,7 @@ function ReservationPhone({ compact = false }: { compact?: boolean }) {
 
 function PanelPreview({ compact = false }: { compact?: boolean }) {
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-4 text-slate-950 shadow-xl transition duration-300 hover:-translate-y-1">
+    <div className="min-w-0 rounded-3xl border border-slate-200 bg-white p-4 text-slate-950 shadow-xl transition duration-300 hover:-translate-y-1">
       <div className="mb-4 flex items-center justify-between gap-3">
         <div>
           <p className="text-xs font-black uppercase tracking-wide text-slate-500">Painel da equipe</p>
@@ -535,7 +538,7 @@ function PanelPreview({ compact = false }: { compact?: boolean }) {
         </div>
         <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">online</span>
       </div>
-      <div className={compact ? "grid grid-cols-3 gap-2" : "grid grid-cols-2 gap-2 sm:grid-cols-4"}>
+      <div className={compact ? "grid grid-cols-3 gap-2 [grid-template-columns:repeat(3,minmax(0,1fr))]" : "grid grid-cols-2 gap-2 sm:grid-cols-4"}>
         <MiniKpi value="8" label="hoje" />
         <MiniKpi value="3" label="pend." tone="amber" />
         {!compact ? <MiniKpi value="5" label="conf." tone="emerald" /> : null}
@@ -630,8 +633,8 @@ function MiniKpi({ value, label, tone = "neutral" }: { value: string; label: str
   };
 
   return (
-    <div className={`rounded-2xl border p-3 ${classes[tone]}`}>
-      <p className="text-xl font-black">{value}</p>
+    <div className={`min-w-0 rounded-2xl border p-2 sm:p-3 ${classes[tone]}`}>
+      <p className="text-lg font-black sm:text-xl">{value}</p>
       <p className="text-xs font-bold opacity-70">{label}</p>
     </div>
   );

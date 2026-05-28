@@ -11,8 +11,12 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
-import { updateReservationStatus } from "@/app/actions/reservations";
+import {
+  updateReservationStatus,
+  updateRestaurantCapacity,
+} from "@/app/actions/reservations";
 import { AdminStatusButton } from "@/components/real/AdminStatusButton";
+import { calculateRestaurantCapacity } from "@/lib/capacity";
 import {
   formatDateBr,
   getReservationsForRestaurant,
@@ -67,6 +71,14 @@ export default async function RealAdminReservationsPage({
     .reduce((total, reservation) => total + reservation.people, 0);
   const nextArrival = confirmedToday[0];
   const primary = restaurant.primary_color ?? "#1B4332";
+  const capacity = calculateRestaurantCapacity({
+    reservations,
+    totalTables: restaurant.total_tables,
+    totalSeats: restaurant.total_seats,
+    seatsPerTable: restaurant.seats_per_table,
+    currentDate: today,
+  });
+  const capacityAction = updateRestaurantCapacity.bind(null, slug);
 
   return (
     <main className="min-h-screen bg-slate-100 text-slate-950">
@@ -137,6 +149,22 @@ export default async function RealAdminReservationsPage({
           </div>
         </section>
 
+        <section className="mb-7 grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+          <CapacityPanel capacity={capacity} />
+          <CapacitySettingsForm
+            action={capacityAction}
+            totalTables={capacity.totalTables}
+            totalSeats={capacity.totalSeats}
+            seatsPerTable={capacity.seatsPerTable}
+          />
+        </section>
+
+        {capacity.oldConfirmedCount > 0 ? (
+          <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-bold leading-6 text-amber-900">
+            Existe reserva confirmada antiga ainda não finalizada. Finalize para liberar capacidade.
+          </div>
+        ) : null}
+
         {query.erro || query.ok ? (
           <div
             className={`mb-6 rounded-lg border p-4 text-sm font-black ${
@@ -188,9 +216,11 @@ export default async function RealAdminReservationsPage({
               </div>
             </div>
             <div className="space-y-2 text-sm font-semibold text-slate-700">
-              <AiLine text="Horário de pico: 20h às 21h." />
-              <AiLine text="Observações importantes aparecem antes da chegada." />
-              <AiLine text="A IA ajuda com resumos e sugestões. A equipe continua no controle." />
+              <AiLine text={`Mesas livres estimadas: ${capacity.availableTables}.`} />
+              <AiLine text={`Lugares livres estimados: ${capacity.availableSeats}.`} />
+              <AiLine text={`${capacity.pendingTables} mesas podem ser comprometidas por reservas pendentes.`} />
+              <AiLine text={capacity.occupancyPercent >= 80 ? "Ocupação acima de 80%. Sugestão: confirmar pendentes antes do horário de pico." : "A IA Operacional fica mais útil porque analisa reservas, capacidade e pendências do salão."} />
+              <AiLine text="Atenção: reservas confirmadas continuam ocupando capacidade até serem finalizadas." />
             </div>
           </div>
         </section>
@@ -245,6 +275,193 @@ export default async function RealAdminReservationsPage({
         </footer>
       </div>
     </main>
+  );
+}
+
+function CapacityPanel({
+  capacity,
+}: {
+  capacity: ReturnType<typeof calculateRestaurantCapacity>;
+}) {
+  const barTone =
+    capacity.occupancyPercent > 85
+      ? "bg-red-500"
+      : capacity.occupancyPercent >= 60
+        ? "bg-amber-500"
+        : "bg-emerald-500";
+
+  return (
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+      <div className="mb-5 grid gap-4 sm:grid-cols-[1fr_auto] sm:items-center">
+        <div className="min-w-0">
+          <p className="text-xs font-black uppercase tracking-wide text-emerald-700">
+            Capacidade do salão
+          </p>
+          <h2 className="mt-1 text-2xl font-black">
+            Mesas, lugares e pressão operacional
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-slate-600">
+            As mesas livres são estimadas com base nas reservas pendentes e confirmadas.
+          </p>
+        </div>
+        <div className="mx-auto w-full max-w-56 rounded-2xl bg-slate-950 px-4 py-3 text-center text-white sm:mx-0 sm:self-center">
+          <p className="text-xs font-black uppercase text-slate-400">Ocupação estimada</p>
+          <p className="text-3xl font-black tabular-nums">{capacity.occupancyPercent}%</p>
+        </div>
+      </div>
+
+      <div className="mb-5 h-3 overflow-hidden rounded-full bg-slate-100">
+        <div
+          className={`h-full rounded-full transition-all duration-300 ${barTone}`}
+          style={{ width: `${capacity.occupancyPercent}%` }}
+        />
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+          <p className="text-xs font-black uppercase tracking-wide text-slate-500">Mesas</p>
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            <CapacityStat label="Total" value={capacity.totalTables} />
+            <CapacityStat label="Livres estimadas" value={capacity.availableTables} tone="emerald" />
+            <CapacityStat label="Confirmadas" value={capacity.confirmedTables} tone="slate" />
+            <CapacityStat label="Em análise" value={capacity.pendingTables} tone="amber" />
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+          <p className="text-xs font-black uppercase tracking-wide text-slate-500">Lugares</p>
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            <CapacityStat label="Total" value={capacity.totalSeats} />
+            <CapacityStat label="Livres estimados" value={capacity.availableSeats} tone="emerald" />
+            <CapacityStat label="Confirmados" value={capacity.confirmedSeats} tone="slate" />
+            <CapacityStat label="Em análise" value={capacity.pendingSeats} tone="amber" />
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <CapacityStat label="Pessoas previstas" value={capacity.totalPeople} wide />
+        <CapacityStat label="Ocupação por mesas" value={`${capacity.occupancyPercentByTables}%`} wide />
+        <CapacityStat label="Ocupação por lugares" value={`${capacity.occupancyPercentBySeats}%`} wide />
+      </div>
+
+      <p className="mt-4 rounded-2xl bg-amber-50 p-3 text-xs font-bold leading-5 text-amber-900">
+        Mesas e lugares confirmados continuam ocupando capacidade até a equipe finalizar o atendimento.
+      </p>
+    </section>
+  );
+}
+
+function CapacitySettingsForm({
+  action,
+  totalTables,
+  totalSeats,
+  seatsPerTable,
+}: {
+  action: (formData: FormData) => Promise<void>;
+  totalTables: number;
+  totalSeats: number;
+  seatsPerTable: number;
+}) {
+  return (
+    <form
+      action={action}
+      className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+    >
+      <p className="text-xs font-black uppercase tracking-wide text-slate-500">
+        Configuração do salão
+      </p>
+      <h2 className="mt-1 text-xl font-black">Capacidade operacional</h2>
+      <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
+        Ajuste mesas e lugares sem expor identificadores do restaurante no formulário.
+      </p>
+
+      <div className="mt-5 grid gap-3">
+        <CapacityInput
+          label="Total de mesas"
+          name="total_tables"
+          defaultValue={totalTables}
+          min={1}
+          max={300}
+        />
+        <CapacityInput
+          label="Total de cadeiras/lugares"
+          name="total_seats"
+          defaultValue={totalSeats}
+          min={1}
+          max={2000}
+        />
+        <CapacityInput
+          label="Pessoas médias por mesa"
+          name="seats_per_table"
+          defaultValue={seatsPerTable}
+          min={1}
+          max={20}
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="mt-5 min-h-11 w-full rounded-xl bg-slate-950 px-4 text-sm font-black text-white shadow-lg transition duration-200 hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-xl"
+      >
+        Salvar capacidade
+      </button>
+    </form>
+  );
+}
+
+function CapacityInput({
+  label,
+  name,
+  defaultValue,
+  min,
+  max,
+}: {
+  label: string;
+  name: string;
+  defaultValue: number;
+  min: number;
+  max: number;
+}) {
+  return (
+    <label className="block rounded-xl border border-slate-200 bg-slate-50 p-3 transition duration-200 hover:bg-white hover:shadow-sm focus-within:bg-white focus-within:ring-2 focus-within:ring-emerald-900/20">
+      <span className="text-xs font-black uppercase tracking-wide text-slate-500">{label}</span>
+      <input
+        required
+        name={name}
+        type="number"
+        min={min}
+        max={max}
+        defaultValue={defaultValue}
+        className="mt-1 w-full bg-transparent text-lg font-black outline-none"
+      />
+    </label>
+  );
+}
+
+function CapacityStat({
+  label,
+  value,
+  tone = "neutral",
+  wide = false,
+}: {
+  label: string;
+  value: number | string;
+  tone?: "neutral" | "emerald" | "amber" | "slate";
+  wide?: boolean;
+}) {
+  const classes = {
+    neutral: "bg-white text-slate-950",
+    emerald: "bg-emerald-50 text-emerald-800",
+    amber: "bg-amber-50 text-amber-800",
+    slate: "bg-slate-100 text-slate-800",
+  };
+
+  return (
+    <div className={`rounded-xl border border-slate-200 p-3 ${classes[tone]} ${wide ? "bg-slate-50" : ""}`}>
+      <p className="text-2xl font-black tabular-nums">{value}</p>
+      <p className="mt-1 text-[11px] font-black uppercase tracking-wide opacity-70">{label}</p>
+    </div>
   );
 }
 
@@ -431,7 +648,7 @@ function StatusActions({
         action={updateReservationStatus.bind(null, slug)}
         reservationId={reservation.id}
         nextStatus="finished"
-        label="Marcar como finalizada"
+        label="Finalizar"
         icon="flag"
         tone="neutral"
       />

@@ -29,6 +29,9 @@ export type Database = {
           opening_time: string;
           closing_time: string;
           last_reservation_time: string;
+          total_tables: number;
+          total_seats: number;
+          seats_per_table: number;
           is_active: boolean | null;
           created_at: string | null;
           updated_at: string | null;
@@ -46,6 +49,9 @@ export type Database = {
           opening_time?: string;
           closing_time?: string;
           last_reservation_time?: string;
+          total_tables?: number;
+          total_seats?: number;
+          seats_per_table?: number;
           is_active?: boolean | null;
           created_at?: string | null;
           updated_at?: string | null;

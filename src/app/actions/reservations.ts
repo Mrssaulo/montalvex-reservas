@@ -5,7 +5,6 @@ import { redirect } from "next/navigation";
 import {
   buildTimeSlots,
   getDateWeekday,
-  getPeopleAlreadyBooked,
   getRestaurantContextBySlug,
   isAllowedStatusTransition,
   normalizeReservationCode,
@@ -24,7 +23,7 @@ export async function createReservation(slug: string, formData: FormData) {
   const context = await getRestaurantContextBySlug(slug);
 
   if (!context) {
-    redirect(`/r/${slug}/reserva?erro=Restaurante%20nao%20encontrado`);
+    redirectToReservationError(slug, "Restaurante não encontrado");
   }
 
   const { restaurant, settings } = context;
@@ -41,44 +40,32 @@ export async function createReservation(slug: string, formData: FormData) {
   );
 
   if (!customerName || !customerPhone || !reservationDate || !reservationTime || !people) {
-    redirect(`/r/${slug}/reserva?erro=Preencha%20os%20campos%20obrigatorios`);
+    redirectToReservationError(slug, "Preencha os campos obrigatórios");
   }
 
   if (!Number.isInteger(people) || people < 1 || people > 60) {
-    redirect(`/r/${slug}/reserva?erro=Informe%20uma%20quantidade%20de%20pessoas%20valida`);
+    redirectToReservationError(slug, "Informe uma quantidade de pessoas válida");
   }
 
   if (!isValidDate(reservationDate) || !isValidTime(reservationTime)) {
-    redirect(`/r/${slug}/reserva?erro=Data%20ou%20horario%20invalido`);
+    redirectToReservationError(slug, "Data ou horário inválido");
   }
 
   if (!slots.includes(reservationTime)) {
-    redirect(`/r/${slug}/reserva?erro=Escolha%20um%20horario%20disponivel`);
+    redirectToReservationError(slug, "Escolha um horário disponível");
   }
 
   const availableDays = settings?.available_days ?? [1, 2, 3, 4, 5, 6, 0];
 
   if (!availableDays.includes(getDateWeekday(reservationDate))) {
-    redirect(`/r/${slug}/reserva?erro=Restaurante%20fechado%20nesta%20data`);
+    redirectToReservationError(slug, "Restaurante fechado nesta data");
   }
 
   if (
     settings?.allow_large_groups === false &&
     people > (settings.large_group_threshold ?? 8)
   ) {
-    redirect(`/r/${slug}/reserva?erro=Grupo%20acima%20do%20limite%20configurado`);
-  }
-
-  if (settings?.max_people_per_slot) {
-    const alreadyBooked = await getPeopleAlreadyBooked(
-      restaurant.id,
-      reservationDate,
-      reservationTime,
-    );
-
-    if (alreadyBooked + people > settings.max_people_per_slot) {
-      redirect(`/r/${slug}/reserva?erro=Horario%20sem%20capacidade%20para%20este%20grupo`);
-    }
+    redirectToReservationError(slug, "Grupo acima do limite configurado");
   }
 
   const data = await insertReservationWithCode({
@@ -92,7 +79,7 @@ export async function createReservation(slug: string, formData: FormData) {
   });
 
   if (!data) {
-    redirect(`/r/${slug}/reserva?erro=Nao%20foi%20possivel%20criar%20a%20reserva`);
+    redirectToReservationError(slug, "Não foi possível criar a reserva");
   }
 
   revalidatePath(`/admin/${slug}/reservas`);
@@ -108,13 +95,13 @@ export async function updateReservationStatus(
   const nextStatus = getText(formData, "next_status") as ReservationStatus;
 
   if (!allowedStatuses.includes(nextStatus)) {
-    redirect(`/admin/${slug}/reservas?erro=Status%20invalido`);
+    redirectToAdminError(slug, "Status inválido");
   }
 
   const context = await getRestaurantContextBySlug(slug);
 
   if (!context) {
-    redirect(`/admin/${slug}/reservas?erro=Restaurante%20nao%20encontrado`);
+    redirectToAdminError(slug, "Restaurante não encontrado");
   }
 
   const supabase = getSupabaseServerClient();
@@ -132,11 +119,11 @@ export async function updateReservationStatus(
       reservationId,
       error: reservationError,
     });
-    redirect(`/admin/${slug}/reservas?erro=Reserva%20nao%20encontrada`);
+    redirectToAdminError(slug, "Reserva não encontrada");
   }
 
   if (!isAllowedStatusTransition(reservation.status, nextStatus)) {
-    redirect(`/admin/${slug}/reservas?erro=Transicao%20de%20status%20nao%20permitida`);
+    redirectToAdminError(slug, "Transição de status não permitida");
   }
 
   const { error } = await supabase
@@ -153,12 +140,62 @@ export async function updateReservationStatus(
       nextStatus,
       error,
     });
-    redirect(`/admin/${slug}/reservas?erro=Nao%20foi%20possivel%20atualizar%20a%20reserva`);
+    redirectToAdminError(slug, "Não foi possível atualizar a reserva");
   }
 
   revalidatePath(`/admin/${slug}/reservas`);
   revalidatePath(`/r/${slug}/acompanhar`);
   redirect(`/admin/${slug}/reservas?ok=${encodeURIComponent(getStatusFeedback(nextStatus))}`);
+}
+
+export async function updateRestaurantCapacity(
+  slug: string,
+  formData: FormData,
+) {
+  const context = await getRestaurantContextBySlug(slug);
+
+  if (!context) {
+    redirectToAdminError(slug, "Restaurante não encontrado");
+  }
+
+  const totalTables = getInteger(formData, "total_tables");
+  const totalSeats = getInteger(formData, "total_seats");
+  const seatsPerTable = getInteger(formData, "seats_per_table");
+
+  if (!isInRange(totalTables, 1, 300)) {
+    redirectToAdminError(slug, "Total de mesas inválido");
+  }
+
+  if (!isInRange(totalSeats, 1, 2000)) {
+    redirectToAdminError(slug, "Total de lugares inválido");
+  }
+
+  if (!isInRange(seatsPerTable, 1, 20)) {
+    redirectToAdminError(slug, "Pessoas por mesa inválido");
+  }
+
+  const supabase = getSupabaseServerClient();
+  const { error } = await supabase
+    .from("restaurants")
+    .update({
+      total_tables: totalTables,
+      total_seats: totalSeats,
+      seats_per_table: seatsPerTable,
+    })
+    .eq("id", context.restaurant.id)
+    .eq("slug", slug);
+
+  if (error) {
+    console.error("[restaurants:capacity] failed to update capacity", {
+      slug,
+      restaurantId: context.restaurant.id,
+      error,
+    });
+    redirectToAdminError(slug, "Não foi possível atualizar a capacidade");
+  }
+
+  revalidatePath(`/admin/${slug}/reservas`);
+  redirect(`/admin/${slug}/reservas?ok=${encodeURIComponent("Capacidade do salão atualizada")}`);
 }
 
 async function insertReservationWithCode({
@@ -232,9 +269,26 @@ function getStatusFeedback(status: ReservationStatus) {
   return messages[status];
 }
 
+function redirectToReservationError(slug: string, message: string): never {
+  redirect(`/r/${slug}/reserva?erro=${encodeURIComponent(message)}`);
+}
+
+function redirectToAdminError(slug: string, message: string): never {
+  redirect(`/admin/${slug}/reservas?erro=${encodeURIComponent(message)}`);
+}
+
 function getText(formData: FormData, key: string) {
   const value = formData.get(key);
   return typeof value === "string" ? value.trim() : "";
+}
+
+function getInteger(formData: FormData, key: string) {
+  const value = Number(getText(formData, key));
+  return Number.isInteger(value) ? value : 0;
+}
+
+function isInRange(value: number, min: number, max: number) {
+  return Number.isInteger(value) && value >= min && value <= max;
 }
 
 function getOptionalText(formData: FormData, key: string) {

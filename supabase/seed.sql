@@ -10,6 +10,9 @@ with upserted_restaurant as (
     opening_time,
     closing_time,
     last_reservation_time,
+    total_tables,
+    total_seats,
+    seats_per_table,
     is_active
   )
   values (
@@ -23,6 +26,9 @@ with upserted_restaurant as (
     '18:00',
     '00:00',
     '22:30',
+    18,
+    72,
+    4,
     true
   )
   on conflict (slug) do update set
@@ -35,6 +41,9 @@ with upserted_restaurant as (
     opening_time = excluded.opening_time,
     closing_time = excluded.closing_time,
     last_reservation_time = excluded.last_reservation_time,
+    total_tables = excluded.total_tables,
+    total_seats = excluded.total_seats,
+    seats_per_table = excluded.seats_per_table,
     is_active = excluded.is_active,
     updated_at = now()
   returning id
@@ -104,7 +113,7 @@ cross join (
       4,
       current_date,
       '20:00'::time,
-      'Aniversario. Preferencia por uma mesa mais reservada.',
+      'Aniversário. Preferência por uma mesa mais reservada.',
       'pending'
     ),
     (
@@ -115,7 +124,7 @@ cross join (
       2,
       current_date,
       '19:30'::time,
-      'Sem restricoes alimentares.',
+      'Sem restrições alimentares.',
       'confirmed'
     ),
     (

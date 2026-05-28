@@ -64,9 +64,12 @@ export function RealReservationForm({
         <div className="flex items-start gap-3">
           <CalendarCheck className="mt-0.5 h-5 w-5 shrink-0" style={{ color: primary }} />
           <p className="text-sm leading-6 text-[#6B7280]">
-            Escolha data e horário. Sua solicitação entra no painel do restaurante como pendente.
+            Escolha data e horário. Sua solicitação será analisada pela equipe conforme disponibilidade do salão.
           </p>
         </div>
+        <p className="mt-3 rounded-xl bg-white/70 p-3 text-xs font-bold leading-5 text-[#6B7280]">
+          Horários com alta demanda podem depender de confirmação. A confirmação depende da disponibilidade do salão.
+        </p>
       </div>
 
       <div className="grid gap-4">

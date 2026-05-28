@@ -13,6 +13,9 @@ create table if not exists public.restaurants (
   opening_time time not null default '18:00',
   closing_time time not null default '00:00',
   last_reservation_time time not null default '22:30',
+  total_tables integer not null default 20 check (total_tables >= 1),
+  total_seats integer not null default 80 check (total_seats >= 1),
+  seats_per_table integer not null default 4 check (seats_per_table >= 1),
   is_active boolean default true,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
