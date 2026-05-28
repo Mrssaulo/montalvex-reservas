@@ -5,6 +5,7 @@ import {
   Bot,
   CalendarCheck,
   CheckCircle2,
+  ClipboardCheck,
   Clock,
   History,
   LayoutDashboard,
@@ -30,6 +31,11 @@ const realRoutes = [
   [Smartphone, "Reserva real de teste", "/r/bistro-monte-verde/reserva"],
   [SearchCheck, "Acompanhamento real", "/r/bistro-monte-verde/acompanhar"],
   [LayoutDashboard, "Painel real admin", "/admin/bistro-monte-verde/reservas"],
+] satisfies Array<[LucideIcon, string, string]>;
+
+const proposalRoutes = [
+  [ClipboardCheck, "Proposta Bistro Monte Verde", "/proposta/bistro-monte-verde"],
+  [Sparkles, "Proposta Nossa Casa", "/proposta/nossa-casa"],
 ] satisfies Array<[LucideIcon, string, string]>;
 
 const aiCards = [
@@ -156,7 +162,7 @@ export default function DemoHubPage() {
           </div>
         </section>
 
-        <section className="rounded-lg border border-white/12 bg-white/8 p-5">
+        <section className="mb-7 rounded-lg border border-white/12 bg-white/8 p-5">
           <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-xs font-black uppercase text-emerald-100/60">Links reais funcionando</p>
@@ -179,6 +185,36 @@ export default function DemoHubPage() {
                 <p className="mt-2 break-all font-mono text-xs text-emerald-50/50">{href}</p>
                 <span className="mt-4 inline-flex items-center gap-2 text-sm font-black text-[#C06C58] transition group-hover:translate-x-1">
                   Abrir rota
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className="rounded-lg border border-white/12 bg-white/8 p-5">
+          <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase text-emerald-100/60">Propostas personalizadas</p>
+              <h2 className="text-2xl font-black">Links internos de teste</h2>
+            </div>
+            <p className="max-w-lg text-sm leading-6 text-emerald-50/60">
+              Exemplos usando o mesmo produto base, com copy e diagnostico por restaurante.
+            </p>
+          </div>
+          <div className="grid gap-3 md:grid-cols-2">
+            {proposalRoutes.map(([Icon, title, href]) => (
+              <Link
+                key={href}
+                href={href}
+                aria-label={`Abrir rota: ${title}`}
+                className="group block h-full min-w-0 rounded-lg border border-white/10 bg-[#071A13] p-4 transition hover:-translate-y-1 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C06C58] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f241d]"
+              >
+                <Icon className="mb-4 h-6 w-6 text-emerald-100" />
+                <p className="break-words font-black">{title}</p>
+                <p className="mt-2 break-all font-mono text-xs text-emerald-50/50">{href}</p>
+                <span className="mt-4 inline-flex items-center gap-2 text-sm font-black text-[#C06C58] transition group-hover:translate-x-1">
+                  Abrir proposta
                   <ArrowRight className="h-4 w-4" />
                 </span>
               </Link>
