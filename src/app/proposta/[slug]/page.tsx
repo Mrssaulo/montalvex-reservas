@@ -24,8 +24,8 @@ type PageProps = {
 };
 
 const flowSteps = [
-  [PhoneCall, "Cliente reserva", "Pedido pelo celular com data, horario, pessoas e observacoes."],
-  [LayoutDashboard, "Equipe decide", "Painel para confirmar, recusar e finalizar sem perder o controle do salao."],
+  [PhoneCall, "Cliente reserva", "Pedido pelo celular com data, horário, pessoas e observações."],
+  [LayoutDashboard, "Equipe decide", "Painel para confirmar, recusar e finalizar sem perder o controle do salão."],
   [SearchCheck, "Cliente acompanha", "Protocolo para consultar status sem chamar a equipe outra vez."],
 ] satisfies Array<[LucideIcon, string, string]>;
 
@@ -66,7 +66,7 @@ export default async function ProposalPage({ params }: PageProps) {
             href={proposal.demoReservationUrl}
             className="hidden min-h-10 items-center justify-center rounded-2xl bg-[#C2410C] px-4 text-sm font-black text-white shadow-xl shadow-[#C2410C]/20 transition duration-300 hover:-translate-y-1 hover:bg-[#D64A0F] sm:inline-flex"
           >
-            Ver demonstracao
+            Ver demonstração
           </Link>
         </div>
       </header>
@@ -129,7 +129,7 @@ export default async function ProposalPage({ params }: PageProps) {
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>
             <p className="mb-2 text-sm font-black uppercase tracking-wide text-[#C2410C]">
-              Diagnostico personalizado
+              Diagnóstico personalizado
             </p>
             <h2 className="text-3xl font-black leading-tight md:text-5xl">
               {proposal.diagnosisTitle}
@@ -167,8 +167,8 @@ export default async function ProposalPage({ params }: PageProps) {
         <div className="mx-auto max-w-7xl">
           <SectionIntro
             eyebrow="Fluxo proposto"
-            title="O mesmo produto base, ajustado ao tipo de operacao."
-            text="A proposta muda a conversa comercial, mas preserva o fluxo real do Montalvex Reservas: pedido padronizado, decisao da equipe e acompanhamento por protocolo."
+            title="O mesmo produto base, ajustado ao tipo de operação."
+            text="A proposta muda a conversa comercial, mas preserva o fluxo real do Montalvex Reservas: pedido padronizado, decisão da equipe e acompanhamento por protocolo."
           />
           <div className="mt-9 grid gap-4 md:grid-cols-3">
             {flowSteps.map(([Icon, title, text]) => (
@@ -217,10 +217,10 @@ export default async function ProposalPage({ params }: PageProps) {
                 IA demonstrativa
               </p>
               <h2 className="text-3xl font-black leading-tight md:text-5xl">
-                Apoio inteligente, sem tirar a decisao da equipe.
+                Apoio inteligente, sem tirar a decisão da equipe.
               </h2>
               <p className="mt-4 leading-7 text-slate-600">
-                Disponivel nos planos com IA, como apoio premium para resumo da operacao, observacoes importantes e prioridades do salao. Nao e confirmacao automatica e nao substitui a equipe.
+                Disponível nos planos com IA, como apoio premium para resumo da operação, observações importantes e prioridades do salão. Não é confirmação automática e não substitui a equipe.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -274,7 +274,7 @@ export default async function ProposalPage({ params }: PageProps) {
             Vamos ver o Montalvex Reservas funcionando para {proposal.restaurantName}?
           </h2>
           <p className="mx-auto mt-4 max-w-2xl leading-7 text-slate-300">
-            A proposta e personalizada, mas o produto base continua consistente: reserva pelo celular, painel da equipe, historico e acompanhamento por protocolo.
+            A proposta é personalizada, mas o produto base continua consistente: reserva pelo celular, painel da equipe, histórico e acompanhamento por protocolo.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Link
@@ -282,7 +282,7 @@ export default async function ProposalPage({ params }: PageProps) {
               className="inline-flex min-h-13 items-center justify-center rounded-2xl px-7 text-center font-black text-white shadow-xl transition duration-300 hover:-translate-y-1"
               style={{ background: proposal.accentColor }}
             >
-              Ver demonstracao
+              Ver demonstração
             </Link>
             <a
               href={whatsappHref}
@@ -290,7 +290,7 @@ export default async function ProposalPage({ params }: PageProps) {
               rel="noopener noreferrer"
               className="inline-flex min-h-13 items-center justify-center rounded-2xl border border-white/20 bg-white/[0.08] px-7 text-center font-black text-white transition duration-300 hover:-translate-y-1 hover:bg-white/[0.13]"
             >
-              Solicitar apresentacao
+              Solicitar apresentação
             </a>
           </div>
         </div>
@@ -312,14 +312,14 @@ function ProposalPreview({ proposal }: { proposal: Proposal }) {
   const previewRows =
     proposal.tone === "operational"
       ? [
-          ["Grupos no pico", "Pendentes visiveis", "pending"],
-          ["Rodizio e salao", "Equipe prepara antes", "confirmed"],
-          ["Historico", "Fora da visao ativa", "history"],
+          ["Grupos no pico", "Pendentes visíveis", "pending"],
+          ["Rodízio e salão", "Equipe prepara antes", "confirmed"],
+          ["Histórico", "Fora da visão ativa", "history"],
         ]
       : [
-          ["Mesa especial", "Observacao visivel", "pending"],
-          ["Experiencia", "Equipe preparada", "confirmed"],
-          ["Historico", "Movimento organizado", "history"],
+          ["Mesa especial", "Observação visível", "pending"],
+          ["Experiência", "Equipe preparada", "confirmed"],
+          ["Histórico", "Movimento organizado", "history"],
         ];
 
   return (
@@ -327,7 +327,7 @@ function ProposalPreview({ proposal }: { proposal: Proposal }) {
       <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-950/75 px-4 py-3 text-xs font-black text-slate-100">
         <span className="flex items-center gap-2">
           <span className="pulse-dot" />
-          {proposal.tone === "operational" ? "Operacao em tempo real" : "Experiencia acompanhada"}
+          {proposal.tone === "operational" ? "Operação em tempo real" : "Experiência acompanhada"}
         </span>
         <span className="hidden text-emerald-200 sm:inline">{proposal.recommendedPlan}</span>
       </div>
@@ -341,7 +341,7 @@ function ProposalPreview({ proposal }: { proposal: Proposal }) {
             </div>
             <div className="mt-4 space-y-3">
               <MiniField label={proposal.tone === "operational" ? "Grupo" : "Mesa"} value={proposal.tone === "operational" ? "8 pessoas" : "4 pessoas"} />
-              <MiniField label="Horario" value={proposal.tone === "operational" ? "20:45" : "20:30"} />
+              <MiniField label="Horário" value={proposal.tone === "operational" ? "20:45" : "20:30"} />
               <div className="rounded-2xl py-3 text-center text-sm font-black text-white shadow-lg" style={{ background: proposal.accentColor }}>
                 Enviar reserva
               </div>
@@ -397,7 +397,7 @@ function PreviewRow({
   const labels = {
     pending: "Pendente",
     confirmed: "Pronto",
-    history: "Historico",
+    history: "Histórico",
   };
 
   return (
@@ -521,8 +521,8 @@ function PlanCard({
           <p className="text-sm font-bold text-slate-300">{recommendedPlan.tagline}</p>
           {proposal.showPrices ? (
             <div className="my-6 grid gap-3 sm:grid-cols-2">
-              <PriceBox label="Implantacao" value={`R$ ${recommendedPlan.priceSetup.toLocaleString("pt-BR")}`} />
-              <PriceBox label="Mensalidade" value={`R$ ${recommendedPlan.priceMonthly}/mes`} />
+              <PriceBox label="Implantação" value={`R$ ${recommendedPlan.priceSetup.toLocaleString("pt-BR")}`} />
+              <PriceBox label="Mensalidade" value={`R$ ${recommendedPlan.priceMonthly}/mês`} />
             </div>
           ) : (
             <p className="my-6 rounded-2xl border border-white/10 bg-slate-950/70 p-4 text-sm font-bold text-slate-300">

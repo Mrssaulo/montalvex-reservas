@@ -46,11 +46,20 @@ export function RealReservationForm({
   lastReservationTime,
 }: RealReservationFormProps) {
   const initialTime = slots[3] ?? slots[0] ?? "";
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
   const [selectedTime, setSelectedTime] = useState(initialTime);
   const [selectedDate, setSelectedDate] = useState(today);
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [visibleMonth, setVisibleMonth] = useState(() => monthStart(today));
   const days = useMemo(() => buildCalendarDays(visibleMonth), [visibleMonth]);
+  const missingFields = [
+    customerName.trim() ? null : "nome",
+    customerPhone.trim() ? null : "telefone",
+    selectedDate ? null : "data",
+    selectedTime ? null : "horário",
+  ].filter(Boolean);
+  const canSubmit = missingFields.length === 0;
 
   return (
     <form action={action} className="space-y-4 p-4 sm:p-5">
@@ -78,6 +87,8 @@ export function RealReservationForm({
             required
             name="customer_name"
             type="text"
+            value={customerName}
+            onChange={(event) => setCustomerName(event.target.value)}
             className="w-full bg-transparent py-1 text-base font-semibold outline-none"
             placeholder="Como podemos te chamar?"
           />
@@ -88,6 +99,8 @@ export function RealReservationForm({
             required
             name="customer_phone"
             type="tel"
+            value={customerPhone}
+            onChange={(event) => setCustomerPhone(event.target.value)}
             className="w-full bg-transparent py-1 text-base font-semibold outline-none"
             placeholder="(11) 99999-9999"
           />
@@ -179,7 +192,13 @@ export function RealReservationForm({
         />
       </Field>
 
-      <SubmitButton accent={accent} disabled={!selectedDate || !selectedTime} />
+      {!canSubmit ? (
+        <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm font-bold leading-5 text-amber-900">
+          Preencha {formatMissingFields(missingFields)} para solicitar a reserva.
+        </p>
+      ) : null}
+
+      <SubmitButton accent={accent} disabled={!canSubmit} />
     </form>
   );
 }
@@ -281,9 +300,19 @@ function SubmitButton({ accent, disabled }: { accent: string; disabled: boolean 
       className="cta-glow min-h-13 w-full rounded-xl font-black text-white shadow-xl transition duration-200 hover:-translate-y-0.5 hover:shadow-2xl disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
       style={{ background: accent }}
     >
-      {pending ? "Enviando solicitação..." : "Enviar solicitação de reserva"}
+      {pending ? "Enviando solicitação..." : "Solicitar Reserva"}
     </button>
   );
+}
+
+function formatMissingFields(fields: Array<string | null>) {
+  const values = fields.filter((field): field is string => Boolean(field));
+
+  if (values.length <= 1) {
+    return values[0] ?? "os campos obrigatórios";
+  }
+
+  return `${values.slice(0, -1).join(", ")} e ${values.at(-1)}`;
 }
 
 function Field({

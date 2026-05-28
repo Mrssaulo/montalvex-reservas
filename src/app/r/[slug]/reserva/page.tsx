@@ -17,6 +17,8 @@ type PageProps = {
   searchParams: Promise<{ erro?: string; sucesso?: string }>;
 };
 
+const realReservationSlots = buildTimeSlots("18:00", "22:30", 30);
+
 export default async function RealReservationPage({
   params,
   searchParams,
@@ -29,20 +31,16 @@ export default async function RealReservationPage({
     notFound();
   }
 
-  const { restaurant, settings } = context;
+  const { restaurant } = context;
   const primary = restaurant.primary_color ?? "#1B4332";
   const accent = restaurant.accent_color ?? "#C06C58";
   const background = restaurant.background_color ?? "#FDFBF7";
-  const slots = buildTimeSlots(
-    restaurant.opening_time,
-    restaurant.last_reservation_time,
-    settings?.interval_minutes ?? 30,
-  );
+  const slots = realReservationSlots;
   const action = createReservation.bind(null, slug);
 
   return (
     <main
-      className="relative min-h-screen overflow-hidden px-3 py-6 sm:px-4 sm:py-10"
+      className="relative min-h-screen max-w-[100vw] overflow-hidden px-3 py-6 sm:px-4 sm:py-10 [&_*]:min-w-0"
       style={{
         background: `linear-gradient(135deg, ${primary} 0%, #2D5A43 100%)`,
       }}
@@ -50,7 +48,7 @@ export default async function RealReservationPage({
       <div className="absolute left-1/2 top-10 h-72 w-72 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
       <div className="absolute bottom-0 right-0 h-64 w-64 translate-x-1/3 rounded-full bg-black/10 blur-3xl" />
       <section
-        className="reveal-up relative mx-auto w-full max-w-xl overflow-hidden rounded-[30px] border border-white/20 shadow-2xl shadow-black/35"
+        className="reveal-up relative mx-auto w-full max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-[30px] border border-white/20 shadow-2xl shadow-black/35 sm:max-w-xl"
         style={{ background, color: "#1F2937" }}
       >
         <header className="relative overflow-hidden" style={{ background: primary, color: background }}>
@@ -70,7 +68,7 @@ export default async function RealReservationPage({
                 <Home className="h-8 w-8" strokeWidth={1.6} />
               )}
             </div>
-            <h1 className="font-serif-bistro text-3xl font-bold">{restaurant.name}</h1>
+            <h1 className="break-words font-serif-bistro text-2xl font-bold sm:text-3xl">{restaurant.name}</h1>
             <p className="mx-auto mt-2 max-w-sm text-sm leading-6 opacity-85">
               Escolha o melhor horário. A equipe confirma a mesa e você acompanha tudo pelo protocolo.
             </p>
@@ -87,11 +85,11 @@ export default async function RealReservationPage({
         ) : (
           <>
             <div className="border-b border-[#E8E2D4] px-5 py-4">
-              <ol className="grid grid-cols-3 gap-2 text-xs font-black">
-                {["Dados", "Horário", "Confirmação"].map((label, index) => (
-                  <li key={label} className="flex min-w-0 items-center gap-2">
+              <ol className="grid grid-cols-3 gap-1 text-[10px] font-black sm:gap-2 sm:text-xs">
+                {["Dados", "Horário", "Conf."].map((label, index) => (
+                  <li key={label} className="flex min-w-0 items-center gap-1 sm:gap-2">
                     <span
-                      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs transition duration-200"
+                      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] transition duration-200 sm:h-7 sm:w-7 sm:text-xs"
                       style={{
                         background: index < 2 ? primary : "#F5F1E8",
                         color: index < 2 ? background : "#6B7280",
@@ -114,7 +112,7 @@ export default async function RealReservationPage({
               accent={accent}
               openingTime={toDisplayTime(restaurant.opening_time)}
               closingTime={toDisplayTime(restaurant.closing_time)}
-              lastReservationTime={toDisplayTime(restaurant.last_reservation_time)}
+              lastReservationTime="22:30"
             />
           </>
         )}
@@ -156,7 +154,7 @@ function SuccessView({
         Reserva recebida
       </h2>
       <p className="mt-2 text-sm leading-6 text-[#6B7280]">
-        Sua solicitação foi registrada como pendente. Guarde este código: ele é a chave para acompanhar a confirmação.
+        Sua solicitação será confirmada pela equipe em breve. Guarde este código para acompanhar a confirmação.
       </p>
 
       <div className="my-6 rounded-2xl border border-[#E8E2D4] bg-white p-5 text-left shadow-lg transition duration-300 hover:-translate-y-1 hover:shadow-xl">

@@ -17,12 +17,13 @@ Sem Neon, sem Drizzle, sem OpenRouter, sem IA real e sem pagamento nesta fase.
 Crie um arquivo `.env.local` na raiz do projeto usando `.env.example` como base:
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+ADMIN_ACCESS_TOKEN=
 ```
 
-Não coloque chaves reais no repositório. `SUPABASE_SERVICE_ROLE_KEY` é usada apenas em código server-side.
+Não coloque chaves reais no repositório. `SUPABASE_SERVICE_ROLE_KEY` é usada apenas em código server-side. `ADMIN_ACCESS_TOKEN` é o código simples do painel administrativo neste MVP.
 
 ## Banco Supabase
 
@@ -63,6 +64,14 @@ Se o painel ou as rotas reais retornarem erro de permissão no Supabase durante 
 ```
 
 Esse arquivo cria policies temporárias para desenvolvimento. Antes de produção real, substitua por autenticação e permissões por restaurante.
+
+Para histórico com arquivamento visual, rode também:
+
+```sql
+-- conteúdo de supabase/add-reservation-history-archive.sql
+```
+
+Essa migration adiciona `archived_at` em `reservations`. O botão X do histórico preenche esse campo e não deleta a reserva do banco.
 
 O schema cria:
 
@@ -117,6 +126,20 @@ O painel `/admin/bistro-monte-verde/reservas` mostra:
 
 Também existe uma área “Configuração do salão” para editar `total_tables`, `total_seats` e `seats_per_table` com Server Action segura por `slug`.
 
+## Painel Admin MVP
+
+O painel real em `/admin/[slug]/reservas` exige `ADMIN_ACCESS_TOKEN`.
+
+Fluxo atual:
+
+- o usuário abre `/admin/bistro-monte-verde/reservas`;
+- informa o código configurado em `ADMIN_ACCESS_TOKEN`;
+- o app grava o cookie httpOnly `montalvex_admin_session` por até 8 horas;
+- o botão “Sair” limpa o cookie e redireciona para `/`;
+- as Server Actions de confirmar, recusar, finalizar, arquivar e alterar capacidade validam a sessão antes de alterar dados.
+
+Essa proteção é simples e temporária. Login completo por restaurante/equipe pode ser implementado depois com permissões reais e RLS mais restritiva.
+
 ## Como Testar Capacidade
 
 1. Aplique `supabase/add-restaurant-capacity.sql` no Supabase.
@@ -160,10 +183,22 @@ Regras multi-restaurante implementadas nesta base:
 ## Rodar Localmente
 
 ```bash
+npm install
 npm run dev
 ```
 
 Depois abra `http://localhost:3000`.
+
+## Configurar Na Vercel
+
+No projeto da Vercel, configure as mesmas variáveis:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `ADMIN_ACCESS_TOKEN`
+
+Depois faça o deploy normalmente. Não exponha `SUPABASE_SERVICE_ROLE_KEY` como variável pública e não prefixe essa chave com `NEXT_PUBLIC_`.
 
 ## Validar Build
 
@@ -173,9 +208,11 @@ npm run build
 
 ## Avisos De Segurança
 
-O painel admin ainda está aberto para desenvolvimento. Não use com cliente real em produção antes de adicionar autenticação, permissões e políticas completas.
+O painel admin usa token único por ambiente e cookie httpOnly. É suficiente para validar o MVP com cuidado, mas não substitui login completo, usuários por restaurante, auditoria e permissões por equipe.
 
 O acompanhamento por protocolo + telefone é a solução temporária do MVP para o cliente ver se a reserva está pendente, confirmada, recusada ou finalizada.
+
+OpenRouter/IA real ainda não foi integrado. A IA continua demonstrativa/visual para planos futuros.
 
 ## Próximas Fases
 

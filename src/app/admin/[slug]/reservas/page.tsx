@@ -4,6 +4,8 @@ import {
   Calendar,
   Check,
   Clock,
+  ExternalLink,
+  LogOut,
   MessageSquareText,
   Phone,
   Sparkles,
@@ -11,6 +13,7 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
+import { loginAdmin, logoutAdmin } from "@/app/actions/admin-auth";
 import {
   archiveReservationFromHistory,
   updateReservationStatus,
@@ -18,6 +21,7 @@ import {
 } from "@/app/actions/reservations";
 import { ArchiveHistoryButton } from "@/components/real/ArchiveHistoryButton";
 import { AdminStatusButton } from "@/components/real/AdminStatusButton";
+import { getAdminAccessState } from "@/lib/admin-auth";
 import { calculateRestaurantCapacity } from "@/lib/capacity";
 import {
   formatDateBr,
@@ -51,6 +55,21 @@ export default async function RealAdminReservationsPage({
   }
 
   const { restaurant } = context;
+  const access = await getAdminAccessState();
+  const primary = restaurant.primary_color ?? "#1B4332";
+
+  if (!access.ok) {
+    return (
+      <AdminAccessGate
+        slug={slug}
+        restaurantName={restaurant.name}
+        primary={primary}
+        error={query.erro}
+        missingConfig={access.reason === "missing_config"}
+      />
+    );
+  }
+
   const reservations = await getReservationsForRestaurant(restaurant.id);
   const today = getTodayDate();
   const todayReservations = reservations.filter(
@@ -73,7 +92,6 @@ export default async function RealAdminReservationsPage({
   const peopleToday = activeTodayReservations
     .reduce((total, reservation) => total + reservation.people, 0);
   const nextArrival = confirmedToday[0];
-  const primary = restaurant.primary_color ?? "#1B4332";
   const capacity = calculateRestaurantCapacity({
     reservations,
     totalTables: restaurant.total_tables,
@@ -82,11 +100,14 @@ export default async function RealAdminReservationsPage({
     currentDate: today,
   });
   const capacityAction = updateRestaurantCapacity.bind(null, slug);
+  const currentDateLabel = formatLongDate(today);
+  const reservationLink = `/r/${slug}/reserva`;
+  const trackingLink = `/r/${slug}/acompanhar`;
 
   return (
     <main className="min-h-screen max-w-[100vw] overflow-x-hidden bg-slate-100 text-slate-950 [&_*]:min-w-0">
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/92 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-5">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:px-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex min-w-0 items-center gap-3">
             <div
               className="flex h-11 w-11 items-center justify-center rounded-lg text-white shadow-lg"
@@ -101,18 +122,34 @@ export default async function RealAdminReservationsPage({
               </span>
             </div>
             <div className="min-w-0">
-              <h1 className="truncate font-black">{restaurant.name}</h1>
-              <p className="text-xs font-semibold text-slate-500">
-                Painel de reservas do jantar
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="truncate font-black">{restaurant.name}</h1>
+                <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-black uppercase text-amber-800">
+                  MVP em desenvolvimento
+                </span>
+              </div>
+              <p className="mt-1 text-xs font-semibold text-slate-500">
+                Sistema ativo · {currentDateLabel}
               </p>
             </div>
           </div>
-          <Link
-            href={`/r/${slug}/reserva`}
-            className="hidden min-h-10 items-center justify-center rounded-xl border border-slate-200 px-3 text-xs font-black text-slate-700 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-sm sm:inline-flex"
-          >
-            Link de reserva
-          </Link>
+          <div className="flex flex-wrap items-center gap-2">
+            <HeaderLink href={reservationLink} label="Reserva" />
+            <HeaderLink href={trackingLink} label="Acompanhar" />
+            <span className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 text-xs font-black text-emerald-800">
+              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              Online
+            </span>
+            <form action={logoutAdmin}>
+              <button
+                type="submit"
+                className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 text-xs font-black text-slate-700 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-sm"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                Sair
+              </button>
+            </form>
+          </div>
         </div>
       </header>
 
@@ -180,11 +217,24 @@ export default async function RealAdminReservationsPage({
           </div>
         ) : null}
 
-        <section className="mb-7 grid min-w-0 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <Kpi icon={Calendar} label="Reservas ativas hoje" value={activeTodayReservations.length} helper="Pendentes + confirmadas" />
-          <Kpi icon={Users} label="Pessoas hoje" value={peopleToday} helper="Apenas reservas ativas" />
+        <section className="mb-7 grid min-w-0 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           <Kpi icon={Clock} label="Pendentes hoje" value={pendingToday.length} helper="Aguardando ação" tone="amber" />
           <Kpi icon={Check} label="Confirmadas hoje" value={confirmedToday.length} helper="Mesas garantidas" tone="emerald" />
+          <Kpi icon={Users} label="Pessoas previstas" value={peopleToday} helper="Pendentes + confirmadas" />
+          <Kpi icon={Calendar} label="Ocupação estimada" value={`${capacity.occupancyPercent}%`} helper="Mesas ou lugares" />
+          <Kpi
+            icon={Clock}
+            label="Próxima chegada"
+            value={nextArrival ? toDisplayTime(nextArrival.reservation_time) : "--"}
+            helper={nextArrival ? nextArrival.customer_name : "Sem confirmadas"}
+            tone="emerald"
+          />
+          <Kpi
+            icon={Table2}
+            label="Capacidade usada"
+            value={`${capacity.activeTables}/${capacity.totalTables}`}
+            helper="Mesas estimadas"
+          />
         </section>
 
         <section className="mb-7 grid min-w-0 gap-4 lg:grid-cols-[1.05fr_0.95fr]">
@@ -355,6 +405,96 @@ function CapacityPanel({
   );
 }
 
+function AdminAccessGate({
+  slug,
+  restaurantName,
+  primary,
+  error,
+  missingConfig,
+}: {
+  slug: string;
+  restaurantName: string;
+  primary: string;
+  error?: string;
+  missingConfig: boolean;
+}) {
+  const action = loginAdmin.bind(null, slug);
+
+  return (
+    <main className="flex min-h-screen max-w-[100vw] items-center justify-center overflow-x-hidden bg-slate-100 px-4 py-10 text-slate-950 [&_*]:min-w-0">
+      <section className="w-full max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-xl sm:max-w-md">
+        <div
+          className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg text-white"
+          style={{ background: primary }}
+        >
+          <Table2 className="h-6 w-6" />
+        </div>
+        <p className="text-xs font-black uppercase tracking-wide text-slate-500">
+          Acesso administrativo
+        </p>
+        <h1 className="mt-1 break-words text-2xl font-black">{restaurantName}</h1>
+        <p className="mt-2 break-words text-sm font-semibold leading-6 text-slate-600">
+          Digite o código interno para abrir o painel real de reservas.
+        </p>
+
+        {error ? (
+          <div className="mt-4 break-all rounded-lg border border-red-200 bg-red-50 p-3 text-sm font-bold text-red-800">
+            {error}
+          </div>
+        ) : null}
+
+        {missingConfig ? (
+          <div className="mt-4 break-all rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm font-bold text-amber-900">
+            Configure ADMIN_ACCESS_TOKEN no ambiente antes de usar o painel.
+          </div>
+        ) : null}
+
+        <form action={action} className="mt-5 space-y-4">
+          <label className="block rounded-xl border border-slate-200 bg-slate-50 p-3 focus-within:bg-white focus-within:ring-2 focus-within:ring-emerald-900/20">
+            <span className="text-xs font-black uppercase tracking-wide text-slate-500">
+              Código de acesso
+            </span>
+            <input
+              required
+              name="access_code"
+              type="password"
+              autoComplete="current-password"
+              className="mt-1 w-full bg-transparent text-lg font-black outline-none"
+              placeholder="Digite o código"
+            />
+          </label>
+          <button
+            type="submit"
+            className="min-h-11 w-full rounded-xl bg-slate-950 px-4 text-sm font-black text-white shadow-lg transition duration-200 hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-xl"
+          >
+            Entrar no painel
+          </button>
+        </form>
+
+        <Link
+          href={`/r/${slug}/reserva`}
+          className="mt-4 block text-center text-sm font-black underline underline-offset-4 transition hover:opacity-75"
+          style={{ color: primary }}
+        >
+          Voltar para reserva pública
+        </Link>
+      </section>
+    </main>
+  );
+}
+
+function HeaderLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link
+      href={href}
+      className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 text-xs font-black text-slate-700 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-sm"
+    >
+      {label}
+      <ExternalLink className="h-3.5 w-3.5" />
+    </Link>
+  );
+}
+
 function CapacitySettingsForm({
   action,
   totalTables,
@@ -477,7 +617,7 @@ function Kpi({
 }: {
   icon: LucideIcon;
   label: string;
-  value: number;
+  value: number | string;
   helper: string;
   tone?: "slate" | "amber" | "emerald";
 }) {
@@ -493,10 +633,19 @@ function Kpi({
         <span className="text-xs font-black uppercase tracking-wide opacity-75">{label}</span>
         <Icon className="h-5 w-5 opacity-60" />
       </div>
-      <p className="text-4xl font-black tabular-nums">{value}</p>
+      <p className="break-words text-4xl font-black tabular-nums">{value}</p>
       <p className="mt-1 text-xs font-semibold opacity-70">{helper}</p>
     </article>
   );
+}
+
+function formatLongDate(date: string) {
+  const [year, month, day] = date.split("-").map(Number);
+
+  return new Intl.DateTimeFormat("pt-BR", {
+    dateStyle: "full",
+    timeZone: "America/Sao_Paulo",
+  }).format(new Date(Date.UTC(year, month - 1, day)));
 }
 
 function MiniSummary({ label, value }: { label: string; value: string }) {
@@ -571,6 +720,7 @@ function ReservationCard({
   compact?: boolean;
 }) {
   const style = STATUS_STYLES[reservation.status];
+  const whatsappHref = toWhatsappHref(reservation.customer_phone);
 
   return (
     <article
@@ -591,10 +741,15 @@ function ReservationCard({
               #{reservationProtocol(reservation)}
             </span>
           </div>
-          <p className="mt-1 flex min-w-0 items-center gap-1.5 text-sm font-semibold text-slate-500">
+          <a
+            href={whatsappHref}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-1 flex min-w-0 items-center gap-1.5 text-sm font-semibold text-slate-500 transition hover:text-emerald-700"
+          >
             <Phone className="h-3.5 w-3.5 shrink-0" />
             <span className="min-w-0 break-all">{reservation.customer_phone}</span>
-          </p>
+          </a>
         </div>
         <span
           className={`status-pill shrink-0 ${reservation.status === "pending" ? "animate-pulse" : ""}`}
@@ -619,6 +774,12 @@ function ReservationCard({
       {compact ? null : <StatusActions reservation={reservation} slug={slug} />}
     </article>
   );
+}
+
+function toWhatsappHref(phone: string) {
+  const digits = phone.replace(/\D/g, "");
+  const number = digits.startsWith("55") ? digits : `55${digits}`;
+  return `https://wa.me/${number}`;
 }
 
 function StatusActions({

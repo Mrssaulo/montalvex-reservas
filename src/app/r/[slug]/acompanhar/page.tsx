@@ -4,11 +4,13 @@ import {
   Calendar,
   CheckCircle2,
   Clock,
+  Flag,
   Home,
   MessageSquareText,
   Phone,
   Search,
   Users,
+  XCircle,
   type LucideIcon,
 } from "lucide-react";
 import {
@@ -30,6 +32,7 @@ const TRACKING_MESSAGES: Record<ReservationStatus, string> = {
   declined: "Sua reserva não foi confirmada. Entre em contato com o restaurante para verificar outro horário.",
   finished: "Reserva finalizada.",
 };
+const statusOrder: ReservationStatus[] = ["pending", "confirmed", "declined", "finished"];
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -64,7 +67,7 @@ export default async function TrackReservationPage({
 
   return (
     <main
-      className="relative min-h-screen overflow-hidden px-3 py-6 sm:px-4 sm:py-10"
+      className="relative min-h-screen max-w-[100vw] overflow-hidden px-3 py-6 sm:px-4 sm:py-10 [&_*]:min-w-0"
       style={{
         background: `linear-gradient(135deg, ${primary} 0%, #2D5A43 100%)`,
       }}
@@ -72,7 +75,7 @@ export default async function TrackReservationPage({
       <div className="absolute left-1/2 top-10 h-72 w-72 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
       <div className="absolute bottom-0 right-0 h-64 w-64 translate-x-1/3 rounded-full bg-black/10 blur-3xl" />
       <section
-        className="reveal-up relative mx-auto w-full max-w-xl overflow-hidden rounded-[30px] border border-white/20 shadow-2xl shadow-black/35"
+        className="reveal-up relative mx-auto w-full max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-[30px] border border-white/20 shadow-2xl shadow-black/35 sm:max-w-xl"
         style={{ background, color: "#1F2937" }}
       >
         <header className="relative overflow-hidden" style={{ background: primary, color: background }}>
@@ -87,8 +90,8 @@ export default async function TrackReservationPage({
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-white/30 bg-white/10 shadow-xl">
               <Home className="h-8 w-8" strokeWidth={1.6} />
             </div>
-            <h1 className="font-serif-bistro text-3xl font-bold">{restaurant.name}</h1>
-            <p className="mx-auto mt-2 max-w-sm text-sm leading-6 opacity-85">
+            <h1 className="break-words font-serif-bistro text-2xl font-bold sm:text-3xl">{restaurant.name}</h1>
+            <p className="mx-auto mt-2 max-w-sm break-words text-sm leading-6 opacity-85">
               Consulte com protocolo e telefone. Se a equipe confirmar ou recusar, o status será atualizado aqui.
             </p>
           </div>
@@ -144,11 +147,23 @@ export default async function TrackReservationPage({
 
           {canSearch && !reservation ? (
             <Notice tone="error">
-              Não encontramos uma reserva com esse protocolo e telefone para este restaurante.
+              <div className="space-y-3">
+                <p>
+                  Não encontramos uma reserva com esse protocolo e telefone para este restaurante.
+                  Confira se o código e o telefone estão exatamente como foram informados na solicitação.
+                </p>
+                <Link
+                  href={`/r/${slug}/reserva`}
+                  className="inline-flex min-h-10 items-center justify-center rounded-xl bg-white px-4 text-sm font-black text-red-800 shadow-sm transition hover:-translate-y-0.5"
+                >
+                  Voltar para reserva
+                </Link>
+              </div>
             </Notice>
           ) : null}
 
           {reservation ? <ReservationStatusCard reservation={reservation} primary={primary} /> : null}
+          <StatusGuide />
 
           <Link
             href={`/r/${slug}/reserva`}
@@ -190,9 +205,10 @@ function ReservationStatusCard({
           </p>
         </div>
         <span
-          className={`status-pill shrink-0 ${reservation.status === "pending" ? "animate-pulse" : ""}`}
+          className={`status-pill shrink-0 gap-1.5 ${reservation.status === "pending" ? "animate-pulse" : ""}`}
           style={{ background: style.bg, color: style.text }}
         >
+          {renderStatusIcon(reservation.status, "h-3.5 w-3.5")}
           {STATUS_LABELS[reservation.status]}
         </span>
       </div>
@@ -212,6 +228,59 @@ function ReservationStatusCard({
       </div>
     </article>
   );
+}
+
+function StatusGuide() {
+  return (
+    <section className="rounded-2xl border border-[#E8E2D4] bg-white p-4 shadow-sm">
+      <p className="text-xs font-black uppercase tracking-wide text-[#6B7280]">
+        O que cada status significa
+      </p>
+      <div className="mt-3 grid gap-2">
+        {statusOrder.map((status) => {
+          const style = STATUS_STYLES[status];
+
+          return (
+            <div
+              key={status}
+              className="flex min-w-0 items-start gap-3 rounded-xl border border-[#E8E2D4] bg-[#FDFBF7] p-3"
+            >
+              <span
+                className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full"
+                style={{ background: style.bg, color: style.text }}
+              >
+                {renderStatusIcon(status, "h-4 w-4")}
+              </span>
+              <div className="min-w-0">
+                <p className="font-black" style={{ color: style.text }}>
+                  {STATUS_LABELS[status]}
+                </p>
+                <p className="mt-1 text-xs font-semibold leading-5 text-[#6B7280]">
+                  {TRACKING_MESSAGES[status]}
+                </p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function renderStatusIcon(status: ReservationStatus, className: string) {
+  if (status === "pending") {
+    return <Clock className={className} />;
+  }
+
+  if (status === "confirmed") {
+    return <CheckCircle2 className={className} />;
+  }
+
+  if (status === "declined") {
+    return <XCircle className={className} />;
+  }
+
+  return <Flag className={className} />;
 }
 
 function Field({

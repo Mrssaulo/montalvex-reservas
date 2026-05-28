@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getAdminAccessState } from "@/lib/admin-auth";
 import {
   buildTimeSlots,
   getDateWeekday,
@@ -18,6 +19,7 @@ const allowedStatuses: ReservationStatus[] = [
   "declined",
   "finished",
 ];
+const realReservationSlots = buildTimeSlots("18:00", "22:30", 30);
 
 export async function createReservation(slug: string, formData: FormData) {
   const context = await getRestaurantContextBySlug(slug);
@@ -33,11 +35,7 @@ export async function createReservation(slug: string, formData: FormData) {
   const reservationTime = getText(formData, "reservation_time");
   const notes = getOptionalText(formData, "notes");
   const people = Number(getText(formData, "people"));
-  const slots = buildTimeSlots(
-    restaurant.opening_time,
-    restaurant.last_reservation_time,
-    settings?.interval_minutes ?? 30,
-  );
+  const slots = realReservationSlots;
 
   if (!customerName || !customerPhone || !reservationDate || !reservationTime || !people) {
     redirectToReservationError(slug, "Preencha os campos obrigatórios");
@@ -91,6 +89,8 @@ export async function updateReservationStatus(
   slug: string,
   formData: FormData,
 ) {
+  await ensureAdminAccess(slug);
+
   const reservationId = getText(formData, "reservation_id");
   const nextStatus = getText(formData, "next_status") as ReservationStatus;
 
@@ -143,6 +143,14 @@ export async function updateReservationStatus(
     redirectToAdminError(slug, "Não foi possível atualizar a reserva");
   }
 
+  logReservationAction({
+    reservationId: reservation.id,
+    restaurantId: context.restaurant.id,
+    action: statusActionName(nextStatus),
+    previousStatus: reservation.status,
+    newStatus: nextStatus,
+  });
+
   revalidatePath(`/admin/${slug}/reservas`);
   revalidatePath(`/r/${slug}/acompanhar`);
   redirect(`/admin/${slug}/reservas?ok=${encodeURIComponent(getStatusFeedback(nextStatus))}`);
@@ -152,6 +160,8 @@ export async function updateRestaurantCapacity(
   slug: string,
   formData: FormData,
 ) {
+  await ensureAdminAccess(slug);
+
   const context = await getRestaurantContextBySlug(slug);
 
   if (!context) {
@@ -212,6 +222,8 @@ export async function archiveReservationFromHistory(
   slug: string,
   formData: FormData,
 ) {
+  await ensureAdminAccess(slug);
+
   const reservationId = getText(formData, "reservation_id");
   const context = await getRestaurantContextBySlug(slug);
 
@@ -271,6 +283,14 @@ export async function archiveReservationFromHistory(
     });
     redirectToAdminError(slug, "Não foi possível ocultar a reserva do histórico");
   }
+
+  logReservationAction({
+    reservationId: reservation.id,
+    restaurantId: context.restaurant.id,
+    action: "archive",
+    previousStatus: reservation.status,
+    newStatus: reservation.status,
+  });
 
   revalidatePath(`/admin/${slug}/reservas`);
   redirect(`/admin/${slug}/reservas?ok=${encodeURIComponent("Reserva ocultada do histórico")}`);
@@ -345,6 +365,55 @@ function getStatusFeedback(status: ReservationStatus) {
   };
 
   return messages[status];
+}
+
+async function ensureAdminAccess(slug: string) {
+  const access = await getAdminAccessState();
+
+  if (access.ok) {
+    return;
+  }
+
+  const message =
+    access.reason === "missing_config"
+      ? "ADMIN_ACCESS_TOKEN não configurado no servidor"
+      : "Acesse o painel com o código administrativo";
+
+  redirectToAdminError(slug, message);
+}
+
+function statusActionName(status: ReservationStatus) {
+  const actions: Record<ReservationStatus, string> = {
+    pending: "status_pending",
+    confirmed: "confirm",
+    declined: "decline",
+    finished: "finish",
+  };
+
+  return actions[status];
+}
+
+function logReservationAction({
+  reservationId,
+  restaurantId,
+  action,
+  previousStatus,
+  newStatus,
+}: {
+  reservationId: string;
+  restaurantId: string;
+  action: string;
+  previousStatus: ReservationStatus;
+  newStatus: ReservationStatus;
+}) {
+  console.log("[reservations:admin_action]", {
+    timestamp: new Date().toISOString(),
+    reservation_id: reservationId,
+    restaurant_id: restaurantId,
+    action,
+    previous_status: previousStatus,
+    new_status: newStatus,
+  });
 }
 
 function redirectToReservationError(slug: string, message: string): never {

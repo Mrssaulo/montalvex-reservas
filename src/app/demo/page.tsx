@@ -19,12 +19,12 @@ import {
 } from "lucide-react";
 
 const guidedSteps = [
-  ["01", "Abra a experiencia do cliente", "Mostre o link do restaurante e o formulario de reserva pelo celular."],
-  ["02", "Faca uma solicitacao", "Escolha horario, pessoas e observacao para simular uma reserva real."],
-  ["03", "Copie o protocolo", "Use o codigo gerado para explicar o acompanhamento do cliente."],
+  ["01", "Abra a experiência do cliente", "Mostre o link do restaurante e o formulário de reserva pelo celular."],
+  ["02", "Faça uma solicitação", "Escolha horário, pessoas e observação para simular uma reserva real."],
+  ["03", "Copie o protocolo", "Use o código gerado para explicar o acompanhamento do cliente."],
   ["04", "Veja no painel da equipe", "A reserva entra como pendente para confirmar ou recusar."],
   ["05", "Consulte o status", "O cliente acompanha com protocolo e telefone."],
-  ["06", "Mostre a IA demonstrativa", "Resumo e sugestoes aparecem como potencial dos planos avancados."],
+  ["06", "Mostre a IA demonstrativa", "Resumo e sugestões aparecem como potencial dos planos avançados."],
 ];
 
 const realRoutes = [
@@ -34,14 +34,14 @@ const realRoutes = [
 ] satisfies Array<[LucideIcon, string, string]>;
 
 const proposalRoutes = [
-  [ClipboardCheck, "Proposta Bistro Monte Verde", "/proposta/bistro-monte-verde"],
+  [ClipboardCheck, "Proposta Bistrô Monte Verde", "/proposta/bistro-monte-verde"],
   [Sparkles, "Proposta Nossa Casa", "/proposta/nossa-casa"],
 ] satisfies Array<[LucideIcon, string, string]>;
 
 const aiCards = [
-  ["Pico previsto", "20h as 21h"],
-  ["Atencao", "Aniversario informado"],
-  ["Sugestao", "Mesa mais tranquila"],
+  ["Pico previsto", "20h às 21h"],
+  ["Atenção", "Aniversário informado"],
+  ["Sugestão", "Mesa mais tranquila"],
   ["Resumo", "3 pendentes, 5 confirmadas, 28 pessoas previstas"],
 ];
 
@@ -51,24 +51,24 @@ export default function DemoHubPage() {
       <div className="mobile-gutter max-w-6xl">
         <Link href="/" className="mb-8 inline-flex items-center gap-2 text-sm font-bold text-emerald-50/75 transition hover:-translate-x-0.5 hover:text-white">
           <ArrowLeft className="h-4 w-4" />
-          Pagina comercial
+          Página comercial
         </Link>
 
         <section className="mb-12 grid gap-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-center">
           <div className="min-w-0">
             <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-200/25 bg-emerald-200/10 px-4 py-2 text-xs font-black uppercase text-emerald-100">
               <span className="pulse-dot" />
-              Demonstracao comercial guiada
+              Demonstração comercial guiada
             </p>
             <h1 className="max-w-3xl break-words text-3xl font-black leading-tight sm:text-4xl md:text-6xl">
               Uma demo para mostrar o produto funcionando do pedido ao painel.
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-emerald-50/75">
-              Apresente a jornada completa: cliente reserva, equipe recebe, protocolo acompanha e IA demonstrativa ajuda a vender a visao premium sem prometer automacao real.
+              Apresente a jornada completa: cliente reserva, equipe recebe, protocolo acompanha e IA demonstrativa ajuda a vender a visão premium sem prometer automação real.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link href="/demo/reserva" className="cta-glow inline-flex min-h-12 items-center justify-center rounded-lg bg-[#C06C58] px-6 font-black text-white shadow-xl transition hover:-translate-y-0.5">
-                Experiencia do cliente
+                Experiência do cliente
               </Link>
               <Link href="/demo/painel" className="inline-flex min-h-12 items-center justify-center rounded-lg border border-white/20 bg-white/8 px-6 font-black text-white transition hover:-translate-y-0.5 hover:bg-white/12">
                 Painel da equipe
@@ -82,7 +82,7 @@ export default function DemoHubPage() {
         <section className="mb-7 rounded-lg border border-white/12 bg-white/8 p-5 shadow-2xl shadow-black/20">
           <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs font-black uppercase text-emerald-100/60">Apresentacao guiada</p>
+              <p className="text-xs font-black uppercase text-emerald-100/60">Apresentação guiada</p>
               <h2 className="text-2xl font-black">Veja o fluxo funcionando</h2>
             </div>
             <p className="max-w-lg text-sm leading-6 text-emerald-50/60">
@@ -108,7 +108,7 @@ export default function DemoHubPage() {
             icon={Smartphone}
             eyebrow="Cliente"
             title="Reserva pelo celular"
-            text="Tela do Bistro Monte Verde com horario, pessoas, observacao e protocolo apos envio."
+            text="Tela do Bistrô Monte Verde com horário, pessoas, observação e protocolo após envio."
           >
             <PhonePreview />
           </DemoCard>
@@ -118,7 +118,7 @@ export default function DemoHubPage() {
             icon={LayoutDashboard}
             eyebrow="Equipe"
             title="Painel operacional"
-            text="Pendentes, confirmadas, historico, KPIs, proxima chegada e botoes de acao."
+            text="Pendentes, confirmadas, histórico, KPIs, próxima chegada e botões de ação."
           >
             <PanelPreview />
           </DemoCard>
@@ -132,7 +132,7 @@ export default function DemoHubPage() {
             </p>
             <h2 className="text-2xl font-black">Protocolo e status para o cliente</h2>
             <p className="mt-3 text-sm leading-6 text-emerald-50/70">
-              O cliente nao precisa perguntar de novo no WhatsApp. Ele acompanha a reserva com protocolo e telefone.
+              O cliente não precisa perguntar de novo no WhatsApp. Ele acompanha a reserva com protocolo e telefone.
             </p>
           </div>
           <TrackingMini />
@@ -147,7 +147,7 @@ export default function DemoHubPage() {
               </p>
               <h2 className="text-2xl font-black">Assistente IA demonstrativo</h2>
               <p className="mt-3 text-sm leading-6 text-emerald-50/70">
-                Respostas simuladas para demonstrar potencial dos planos com IA. Disponivel nos planos com IA; a equipe continua no controle.
+                Respostas simuladas para demonstrar potencial dos planos com IA. Disponível nos planos com IA; a equipe continua no controle.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -166,7 +166,7 @@ export default function DemoHubPage() {
           <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-xs font-black uppercase text-emerald-100/60">Links reais funcionando</p>
-              <h2 className="text-2xl font-black">Teste o produto real sem sair da apresentacao</h2>
+              <h2 className="text-2xl font-black">Teste o produto real sem sair da apresentação</h2>
             </div>
             <p className="max-w-lg text-sm leading-6 text-emerald-50/60">
               Caminhos para validar a reserva do cliente, o acompanhamento por protocolo e o painel da equipe.
@@ -199,7 +199,7 @@ export default function DemoHubPage() {
               <h2 className="text-2xl font-black">Links internos de teste</h2>
             </div>
             <p className="max-w-lg text-sm leading-6 text-emerald-50/60">
-              Exemplos usando o mesmo produto base, com copy e diagnostico por restaurante.
+              Exemplos usando o mesmo produto base, com copy e diagnóstico por restaurante.
             </p>
           </div>
           <div className="grid gap-3 md:grid-cols-2">
@@ -241,7 +241,7 @@ function HeroDemoStack() {
       </div>
       <div className="floating-card float-delay rounded-lg border border-violet-200/20 bg-violet-950/80 p-4 shadow-2xl backdrop-blur sm:absolute sm:bottom-24 sm:right-4">
         <p className="text-xs font-black uppercase text-violet-200">IA demonstrativa</p>
-        <p className="mt-1 text-sm font-black">Aniversario informado</p>
+        <p className="mt-1 text-sm font-black">Aniversário informado</p>
       </div>
     </div>
   );
@@ -289,11 +289,11 @@ function PhonePreview() {
       <div className="rounded-[22px] bg-[#FDFBF7] p-4 text-slate-900">
         <div className="rounded-2xl bg-[#1B4332] p-5 text-center text-white">
           <CalendarCheck className="mx-auto mb-2 h-7 w-7" />
-          <p className="font-serif-bistro text-xl font-bold">Bistro Monte Verde</p>
+          <p className="font-serif-bistro text-xl font-bold">Bistrô Monte Verde</p>
         </div>
         <div className="mt-4 space-y-3">
           <div className="rounded-lg bg-white p-3 shadow-sm">
-            <p className="text-xs font-black text-slate-400">Horario escolhido</p>
+            <p className="text-xs font-black text-slate-400">Horário escolhido</p>
             <p className="font-black">20:30 - 4 pessoas</p>
           </div>
           <div className="grid grid-cols-3 gap-2 text-center text-xs font-black">
@@ -302,7 +302,7 @@ function PhonePreview() {
             <span className="rounded-lg bg-[#1B4332] p-2 text-white">20:30</span>
           </div>
           <div className="rounded-lg bg-[#C06C58] py-3 text-center text-xs font-black text-white">
-            Enviar solicitacao
+            Enviar solicitação
           </div>
         </div>
       </div>
@@ -329,7 +329,7 @@ function PanelPreview() {
       <div className="mt-4 space-y-2">
         <PanelPill icon={Clock} text="Mariana - 20:30 pendente" tone="pending" />
         <PanelPill icon={CheckCircle2} text="Lucas - 20:00 confirmada" tone="confirmed" />
-        <PanelPill icon={History} text="Historico separado" tone="history" />
+        <PanelPill icon={History} text="Histórico separado" tone="history" />
       </div>
     </div>
   );
@@ -346,7 +346,7 @@ function TrackingMini() {
         <span className="status-pill shrink-0 bg-emerald-100 text-emerald-700">Confirmada</span>
       </div>
       <div className="grid gap-3 text-sm">
-        <InfoLine icon={Clock} label="Horario" value="20:30" />
+        <InfoLine icon={Clock} label="Horário" value="20:30" />
         <InfoLine icon={Users} label="Pessoas" value="4 pessoas" />
         <InfoLine icon={Table2} label="Status" value="Mesa preparada" />
       </div>
