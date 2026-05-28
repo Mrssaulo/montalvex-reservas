@@ -53,7 +53,7 @@ export function RealReservationForm({
   const days = useMemo(() => buildCalendarDays(visibleMonth), [visibleMonth]);
 
   return (
-    <form action={action} className="space-y-4 p-5">
+    <form action={action} className="space-y-4 p-4 sm:p-5">
       {error ? (
         <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm font-bold text-red-800">
           {error}
@@ -61,7 +61,7 @@ export function RealReservationForm({
       ) : null}
 
       <div className="rounded-2xl border border-[#E8E2D4] bg-[#F5F1E8] p-4 transition duration-300 hover:-translate-y-0.5 hover:shadow-md">
-        <div className="flex items-start gap-3">
+        <div className="flex min-w-0 items-start gap-3">
           <CalendarCheck className="mt-0.5 h-5 w-5 shrink-0" style={{ color: primary }} />
           <p className="text-sm leading-6 text-[#6B7280]">
             Escolha data e horário. Sua solicitação será analisada pela equipe conforme disponibilidade do salão.
@@ -97,7 +97,7 @@ export function RealReservationForm({
         </Field>
       </div>
 
-      <div className="grid items-start gap-3 sm:grid-cols-2">
+      <div className="grid min-w-0 items-start gap-3 sm:grid-cols-2">
         <Field label="Pessoas" icon={Users}>
           <input
             required
@@ -115,10 +115,10 @@ export function RealReservationForm({
           <button
             type="button"
             onClick={() => setCalendarOpen((current) => !current)}
-            className="flex min-h-10 w-full items-center justify-between gap-3 rounded-xl border border-[#E8E2D4] bg-[#FDFBF7] px-3 py-2 text-left text-sm font-black transition duration-200 hover:-translate-y-0.5 hover:bg-[#F5F1E8] hover:shadow-sm"
+            className="flex min-h-10 w-full min-w-0 items-center justify-between gap-3 rounded-xl border border-[#E8E2D4] bg-[#FDFBF7] px-3 py-2 text-left text-sm font-black transition duration-200 hover:-translate-y-0.5 hover:bg-[#F5F1E8] hover:shadow-sm"
             aria-expanded={calendarOpen}
           >
-            <span>{formatDisplayDate(selectedDate)}</span>
+            <span className="min-w-0 break-words">{formatDisplayDate(selectedDate)}</span>
             <CalendarDays className="h-4 w-4" style={{ color: primary }} />
           </button>
         </Field>
@@ -206,7 +206,7 @@ function CalendarPicker({
   const canGoBack = formatDate(addMonths(visibleMonth, -1)) >= formatDate(monthStart(today));
 
   return (
-    <div className="animate-fade-in rounded-2xl border border-[#E8E2D4] bg-white p-4 shadow-xl">
+    <div className="animate-fade-in min-w-0 rounded-2xl border border-[#E8E2D4] bg-white p-4 shadow-xl">
       <div className="mb-3 flex items-center justify-between gap-2">
         <button
           type="button"
@@ -296,7 +296,7 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div className="block rounded-2xl border border-[#E8E2D4] bg-white p-4 card-shadow transition duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-within:-translate-y-0.5 focus-within:ring-2 focus-within:ring-emerald-900/20">
+    <div className="block min-w-0 rounded-2xl border border-[#E8E2D4] bg-white p-4 card-shadow transition duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-within:-translate-y-0.5 focus-within:ring-2 focus-within:ring-emerald-900/20">
       <span className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-[#6B7280]">
         {Icon ? <Icon className="h-3.5 w-3.5" /> : null}
         {label}

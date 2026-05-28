@@ -33,7 +33,7 @@ const navItems = [
 const heroBullets = [
   "Link próprio para reservas",
   "Protocolo para o cliente acompanhar",
-  "Painel para confirmar, recusar e organizar",
+  "Painel com status, capacidade e histórico",
 ];
 
 const problemCards = [
@@ -55,7 +55,7 @@ const afterItems = [
   "Link próprio de reserva",
   "Protocolo para acompanhar",
   "Painel da equipe",
-  "Status claro",
+  "Capacidade do salão visível",
   "Histórico organizado",
 ];
 
@@ -109,14 +109,14 @@ const faqs = [
 
 export default function LandingClient() {
   return (
-    <main className="min-h-screen max-w-[100vw] overflow-x-hidden bg-[#07110d] text-white">
+    <main className="min-h-screen max-w-[100vw] overflow-x-hidden bg-[#07110d] text-white [&_*]:min-w-0">
       <Header />
 
       <section className="relative max-w-[100vw] overflow-hidden border-b border-white/10 bg-[#07110d]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.22),transparent_30%),radial-gradient(circle_at_78%_12%,rgba(194,65,12,0.16),transparent_26%),linear-gradient(135deg,#07110d_0%,#0b1814_42%,#12100d_100%)]" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.12] [background-image:linear-gradient(rgba(255,255,255,0.13)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.13)_1px,transparent_1px)] [background-size:42px_42px]" />
 
-        <div className="relative mx-auto grid w-full max-w-[100vw] gap-12 overflow-hidden px-4 pb-16 pt-12 sm:max-w-7xl sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:pb-24 lg:pt-20">
+        <div className="mobile-gutter relative grid gap-12 overflow-hidden pb-16 pt-12 sm:max-w-7xl sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:pb-24 lg:pt-20">
           <div className="min-w-0">
             <p className="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border border-emerald-200/20 bg-emerald-200/10 px-4 py-2 text-xs font-black uppercase tracking-wide text-emerald-100 shadow-lg shadow-emerald-950/20">
               <span className="pulse-dot" />
@@ -131,9 +131,9 @@ export default function LandingClient() {
 
             <div className="mt-7 grid max-w-2xl gap-3">
               {heroBullets.map((item) => (
-                <div key={item} className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 text-sm font-bold text-slate-100 shadow-lg shadow-black/10 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-emerald-200/30 hover:bg-white/[0.11]">
+                <div key={item} className="group flex min-w-0 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 text-sm font-bold text-slate-100 shadow-lg shadow-black/10 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-emerald-200/30 hover:bg-white/[0.11]">
                   <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-300 transition group-hover:scale-110" />
-                  {item}
+                  <span className="min-w-0 break-words">{item}</span>
                 </div>
               ))}
             </div>
@@ -149,7 +149,7 @@ export default function LandingClient() {
             <div className="mt-8 grid gap-3 text-center sm:grid-cols-3">
               <HeroMetric value="8" label="reservas hoje" />
               <HeroMetric value="28" label="pessoas previstas" />
-              <HeroMetric value="20:30" label="próxima chegada" />
+              <HeroMetric value="16" label="mesas totais" />
             </div>
           </div>
 
@@ -257,7 +257,7 @@ export default function LandingClient() {
         <div className="mx-auto max-w-7xl">
           <SectionIntro
             eyebrow="IA nos planos avançados"
-            title="IA para apoiar a operação, não substituir sua equipe."
+            title="IA demonstrativa para apoiar a operação, não substituir sua equipe."
             text="Nos planos com IA, o sistema pode apoiar a equipe com resumos, alertas e sugestões para preparar melhor o salão. A IA Operacional fica mais útil porque analisa reservas, capacidade e pendências do salão."
           />
           <div className="mt-9 grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
@@ -372,7 +372,14 @@ function Header() {
           ))}
         </nav>
 
-        <WhatsappButton label="Solicitar proposta" className="min-h-10 max-w-[128px] shrink-0 whitespace-nowrap px-2.5 text-[11px] sm:max-w-none sm:px-4 sm:text-sm" />
+        <a
+          href={whatsappHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="cta-glow hidden min-h-10 shrink-0 items-center justify-center rounded-2xl bg-[#C2410C] px-4 text-sm font-black text-white shadow-xl shadow-[#C2410C]/20 transition duration-300 hover:-translate-y-1 hover:bg-[#D64A0F] sm:inline-flex"
+        >
+          Solicitar proposta
+        </a>
       </div>
     </header>
   );
@@ -423,7 +430,7 @@ function HeroMetric({ value, label }: { value: string; label: string }) {
 
 function HeroVisual() {
   return (
-    <div className="premium-card relative mx-auto w-full max-w-2xl overflow-hidden rounded-[34px] border border-white/12 bg-white/[0.08] p-3 shadow-2xl shadow-black/30 backdrop-blur sm:p-4">
+    <div className="premium-card relative mx-auto w-full max-w-full overflow-hidden rounded-[34px] border border-white/12 bg-white/[0.08] p-3 shadow-2xl shadow-black/30 backdrop-blur sm:max-w-2xl sm:p-4">
       <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-emerald-200/70 to-transparent" />
       <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-950/75 px-4 py-3 text-xs font-black text-slate-100">
         <span className="flex items-center gap-2">
@@ -468,11 +475,11 @@ function SectionIntro({ eyebrow, title, text }: { eyebrow: string; title: string
 
 function InfoCard({ icon: Icon, title, text }: { icon: LucideIcon; title: string; text: string }) {
   return (
-    <article className="group rounded-3xl border border-amber-200/70 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#C2410C]/40 hover:shadow-xl">
+    <article className="group min-w-0 rounded-2xl border border-amber-200/70 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#C2410C]/40 hover:shadow-xl">
       <span className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F7F0DF] text-[#C2410C] transition group-hover:scale-105">
         <Icon className="h-5 w-5" />
       </span>
-      <h3 className="font-black">{title}</h3>
+      <h3 className="break-words font-black">{title}</h3>
       <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
     </article>
   );
@@ -482,7 +489,7 @@ function BeforeAfterCard({ title, items, tone }: { title: string; items: string[
   const after = tone === "after";
 
   return (
-    <article className={`rounded-[30px] border p-6 shadow-2xl transition duration-300 hover:-translate-y-1 ${
+    <article className={`min-w-0 rounded-2xl border p-6 shadow-2xl transition duration-300 hover:-translate-y-1 ${
       after
         ? "border-emerald-200/20 bg-emerald-200/10 shadow-emerald-950/20"
         : "border-white/10 bg-white/[0.06] shadow-black/20"
@@ -494,9 +501,9 @@ function BeforeAfterCard({ title, items, tone }: { title: string; items: string[
       </span>
       <div className="mt-6 grid gap-3">
         {items.map((item) => (
-          <div key={item} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 text-sm font-bold">
+          <div key={item} className="flex min-w-0 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 text-sm font-bold">
             <CheckCircle2 className={`h-4 w-4 shrink-0 ${after ? "text-emerald-300" : "text-[#F7F0DF]"}`} />
-            {item}
+            <span className="min-w-0 break-words">{item}</span>
           </div>
         ))}
       </div>
@@ -530,11 +537,11 @@ function ReservationPhone({ compact = false }: { compact?: boolean }) {
 
 function PanelPreview({ compact = false }: { compact?: boolean }) {
   return (
-    <div className="min-w-0 rounded-3xl border border-slate-200 bg-white p-4 text-slate-950 shadow-xl transition duration-300 hover:-translate-y-1">
+    <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 text-slate-950 shadow-xl transition duration-300 hover:-translate-y-1">
       <div className="mb-4 flex items-center justify-between gap-3">
         <div>
-          <p className="text-xs font-black uppercase tracking-wide text-slate-500">Painel da equipe</p>
-          <p className="font-black">Reservas de hoje</p>
+          <p className="text-xs font-black uppercase tracking-wide text-slate-500">Painel operacional</p>
+          <p className="font-black">Reservas e salão</p>
         </div>
         <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">online</span>
       </div>
@@ -543,11 +550,12 @@ function PanelPreview({ compact = false }: { compact?: boolean }) {
         <MiniKpi value="3" label="pend." tone="amber" />
         {!compact ? <MiniKpi value="5" label="conf." tone="emerald" /> : null}
         {!compact ? <MiniKpi value="28" label="pessoas" tone="slate" /> : null}
-        {compact ? <MiniKpi value="20:30" label="prox." tone="sky" /> : null}
+        {compact ? <MiniKpi value="6" label="livres" tone="sky" /> : null}
       </div>
       <div className="mt-4 space-y-2">
         <PanelRow name="Mariana Costa" meta="20:30 · 4 pessoas" status="Pendente" tone="pending" />
         <PanelRow name="Lucas Martins" meta="20:00 · 2 pessoas" status="Confirmada" tone="confirmed" />
+        {!compact ? <PanelRow name="Capacidade" meta="10 mesas ocupadas · 6 livres" status="Salão" tone="confirmed" /> : null}
         {!compact ? <PanelRow name="Finalizadas" meta="Histórico organizado" status="Histórico" tone="history" /> : null}
         {!compact ? <PanelRow name="Recusadas" meta="Fora da operação ativa" status="Separado" tone="history" /> : null}
       </div>
@@ -557,13 +565,13 @@ function PanelPreview({ compact = false }: { compact?: boolean }) {
 
 function TrackingPreview() {
   return (
-    <div className="rounded-3xl border border-slate-700 bg-white p-5 text-slate-950 shadow-2xl transition duration-300 hover:-translate-y-1">
+    <div className="min-w-0 rounded-2xl border border-slate-700 bg-white p-5 text-slate-950 shadow-2xl transition duration-300 hover:-translate-y-1">
       <div className="mb-4 flex items-center justify-between border-b border-slate-200 pb-4">
         <div>
           <p className="text-xs font-black uppercase tracking-wide text-slate-500">Protocolo</p>
           <p className="font-mono text-2xl font-black text-emerald-950">MV-8F42A1</p>
         </div>
-        <span className="status-pill bg-emerald-100 text-emerald-700">Confirmada</span>
+        <span className="status-pill shrink-0 bg-emerald-100 text-emerald-700">Confirmada</span>
       </div>
       <div className="grid gap-3 text-sm">
         <InfoLine label="Horário" value="20:30" />
@@ -579,7 +587,7 @@ function PlanCard({ plan }: { plan: (typeof plans)[number] }) {
   const bullets = planBullets[plan.name] ?? plan.features;
 
   return (
-    <article className={`rounded-[30px] border p-6 shadow-xl transition duration-300 hover:-translate-y-1 hover:shadow-2xl ${
+    <article className={`min-w-0 rounded-2xl border p-6 shadow-xl transition duration-300 hover:-translate-y-1 hover:shadow-2xl ${
       plan.highlighted
         ? "border-emerald-200 bg-[#F7F0DF] text-slate-950 lg:-mt-4"
         : "border-white/12 bg-white/[0.07] text-white"
@@ -603,9 +611,9 @@ function PlanCard({ plan }: { plan: (typeof plans)[number] }) {
       </div>
       <ul className="mb-6 space-y-3 text-sm">
         {bullets.map((feature) => (
-          <li key={feature} className="flex gap-2">
+          <li key={feature} className="flex min-w-0 gap-2">
             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
-            <span>{feature}</span>
+            <span className="min-w-0 break-words">{feature}</span>
           </li>
         ))}
       </ul>
@@ -634,8 +642,8 @@ function MiniKpi({ value, label, tone = "neutral" }: { value: string; label: str
 
   return (
     <div className={`min-w-0 rounded-2xl border p-2 sm:p-3 ${classes[tone]}`}>
-      <p className="text-lg font-black sm:text-xl">{value}</p>
-      <p className="text-xs font-bold opacity-70">{label}</p>
+      <p className="break-words text-lg font-black sm:text-xl">{value}</p>
+      <p className="break-words text-xs font-bold opacity-70">{label}</p>
     </div>
   );
 }
@@ -648,13 +656,13 @@ function PanelRow({ name, meta, status, tone }: { name: string; meta: string; st
   };
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-3">
+    <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3">
       <div className="flex items-center justify-between gap-3">
-        <div>
-          <p className="font-black">{name}</p>
-          <p className="text-xs font-bold text-slate-500">{meta}</p>
+        <div className="min-w-0">
+          <p className="break-words font-black">{name}</p>
+          <p className="break-words text-xs font-bold text-slate-500">{meta}</p>
         </div>
-        <span className={`status-pill ${styles[tone]}`}>{status}</span>
+        <span className={`status-pill shrink-0 ${styles[tone]}`}>{status}</span>
       </div>
     </div>
   );
@@ -662,9 +670,9 @@ function PanelRow({ name, meta, status, tone }: { name: string; meta: string; st
 
 function InfoLine({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-4 rounded-2xl bg-slate-50 px-4 py-3">
-      <span className="font-semibold text-slate-500">{label}</span>
-      <span className="text-right font-black">{value}</span>
+    <div className="flex min-w-0 items-center justify-between gap-4 rounded-2xl bg-slate-50 px-4 py-3">
+      <span className="min-w-0 font-semibold text-slate-500">{label}</span>
+      <span className="min-w-0 break-words text-right font-black">{value}</span>
     </div>
   );
 }

@@ -64,7 +64,7 @@ export default async function TrackReservationPage({
 
   return (
     <main
-      className="relative min-h-screen overflow-hidden px-4 py-6 sm:py-10"
+      className="relative min-h-screen overflow-hidden px-3 py-6 sm:px-4 sm:py-10"
       style={{
         background: `linear-gradient(135deg, ${primary} 0%, #2D5A43 100%)`,
       }}
@@ -72,7 +72,7 @@ export default async function TrackReservationPage({
       <div className="absolute left-1/2 top-10 h-72 w-72 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
       <div className="absolute bottom-0 right-0 h-64 w-64 translate-x-1/3 rounded-full bg-black/10 blur-3xl" />
       <section
-        className="reveal-up relative mx-auto max-w-xl overflow-hidden rounded-[30px] border border-white/20 shadow-2xl shadow-black/35"
+        className="reveal-up relative mx-auto w-full max-w-xl overflow-hidden rounded-[30px] border border-white/20 shadow-2xl shadow-black/35"
         style={{ background, color: "#1F2937" }}
       >
         <header className="relative overflow-hidden" style={{ background: primary, color: background }}>
@@ -94,7 +94,7 @@ export default async function TrackReservationPage({
           </div>
         </header>
 
-        <div className="space-y-5 p-5">
+        <div className="space-y-5 p-4 sm:p-5">
           <form action={`/r/${slug}/acompanhar`} className="space-y-4">
             <div className="rounded-2xl border border-[#E8E2D4] bg-[#F5F1E8] p-4 transition duration-300 hover:-translate-y-0.5 hover:shadow-md">
               <div className="flex items-start gap-3">
@@ -179,18 +179,18 @@ function ReservationStatusCard({
   const style = STATUS_STYLES[reservation.status];
 
   return (
-    <article className="animate-fade-in rounded-2xl border border-[#E8E2D4] bg-white p-5 shadow-lg transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+    <article className="animate-fade-in min-w-0 rounded-2xl border border-[#E8E2D4] bg-white p-5 shadow-lg transition duration-300 hover:-translate-y-1 hover:shadow-xl">
       <div className="mb-4 flex items-start justify-between gap-3 border-b border-[#E8E2D4] pb-4">
-        <div>
+        <div className="min-w-0">
           <p className="text-xs font-black uppercase tracking-wide text-[#6B7280]">
             Protocolo
           </p>
-          <p className="font-mono text-lg font-black" style={{ color: primary }}>
+          <p className="break-all font-mono text-lg font-black" style={{ color: primary }}>
             #{reservationProtocol(reservation)}
           </p>
         </div>
         <span
-          className={`status-pill ${reservation.status === "pending" ? "animate-pulse" : ""}`}
+          className={`status-pill shrink-0 ${reservation.status === "pending" ? "animate-pulse" : ""}`}
           style={{ background: style.bg, color: style.text }}
         >
           {STATUS_LABELS[reservation.status]}
@@ -224,7 +224,7 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <label className="block rounded-2xl border border-[#E8E2D4] bg-white p-4 card-shadow transition duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-within:-translate-y-0.5 focus-within:ring-2 focus-within:ring-emerald-900/20">
+    <label className="block min-w-0 rounded-2xl border border-[#E8E2D4] bg-white p-4 card-shadow transition duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-within:-translate-y-0.5 focus-within:ring-2 focus-within:ring-emerald-900/20">
       <span className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-[#6B7280]">
         <Icon className="h-3.5 w-3.5" />
         {label}
@@ -244,12 +244,12 @@ function Detail({
   icon: LucideIcon;
 }) {
   return (
-    <div className="flex items-start justify-between gap-4">
-      <span className="flex items-center gap-2 text-[#6B7280]">
+    <div className="flex min-w-0 items-start justify-between gap-4">
+      <span className="flex shrink-0 items-center gap-2 text-[#6B7280]">
         <Icon className="h-3.5 w-3.5" />
         {label}
       </span>
-      <span className="max-w-[60%] text-right font-bold">{value}</span>
+      <span className="min-w-0 max-w-[60%] break-words text-right font-bold">{value}</span>
     </div>
   );
 }

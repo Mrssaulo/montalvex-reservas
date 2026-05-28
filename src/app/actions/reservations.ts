@@ -174,8 +174,16 @@ export async function updateRestaurantCapacity(
     redirectToAdminError(slug, "Pessoas por mesa inválido");
   }
 
+  if (totalSeats < totalTables) {
+    redirectToAdminError(slug, "Total de lugares deve ser maior ou igual ao total de mesas");
+  }
+
+  if (seatsPerTable > totalSeats) {
+    redirectToAdminError(slug, "Pessoas por mesa não pode ser maior que o total de lugares");
+  }
+
   const supabase = getSupabaseServerClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("restaurants")
     .update({
       total_tables: totalTables,
@@ -183,9 +191,11 @@ export async function updateRestaurantCapacity(
       seats_per_table: seatsPerTable,
     })
     .eq("id", context.restaurant.id)
-    .eq("slug", slug);
+    .eq("slug", slug)
+    .select("id,total_tables,total_seats,seats_per_table")
+    .maybeSingle();
 
-  if (error) {
+  if (error || !data) {
     console.error("[restaurants:capacity] failed to update capacity", {
       slug,
       restaurantId: context.restaurant.id,
@@ -196,6 +206,74 @@ export async function updateRestaurantCapacity(
 
   revalidatePath(`/admin/${slug}/reservas`);
   redirect(`/admin/${slug}/reservas?ok=${encodeURIComponent("Capacidade do salão atualizada")}`);
+}
+
+export async function archiveReservationFromHistory(
+  slug: string,
+  formData: FormData,
+) {
+  const reservationId = getText(formData, "reservation_id");
+  const context = await getRestaurantContextBySlug(slug);
+
+  if (!context) {
+    redirectToAdminError(slug, "Restaurante não encontrado");
+  }
+
+  if (!reservationId) {
+    redirectToAdminError(slug, "Reserva não encontrada");
+  }
+
+  const supabase = getSupabaseServerClient();
+  const { data: reservation, error: reservationError } = await supabase
+    .from("reservations")
+    .select("id,status,reservation_date")
+    .eq("id", reservationId)
+    .eq("restaurant_id", context.restaurant.id)
+    .maybeSingle();
+
+  if (reservationError || !reservation) {
+    console.error("[reservations:archive] failed to load scoped reservation", {
+      slug,
+      restaurantId: context.restaurant.id,
+      reservationId,
+      error: reservationError,
+    });
+    redirectToAdminError(slug, "Reserva não encontrada");
+  }
+
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  const isHistory =
+    reservation.status === "declined" ||
+    reservation.status === "finished" ||
+    reservation.reservation_date < today;
+
+  if (!isHistory) {
+    redirectToAdminError(slug, "Apenas reservas no histórico podem ser ocultadas");
+  }
+
+  const { error } = await supabase
+    .from("reservations")
+    .update({ archived_at: new Date().toISOString() })
+    .eq("id", reservation.id)
+    .eq("restaurant_id", context.restaurant.id);
+
+  if (error) {
+    console.error("[reservations:archive] failed to archive reservation", {
+      slug,
+      restaurantId: context.restaurant.id,
+      reservationId: reservation.id,
+      error,
+    });
+    redirectToAdminError(slug, "Não foi possível ocultar a reserva do histórico");
+  }
+
+  revalidatePath(`/admin/${slug}/reservas`);
+  redirect(`/admin/${slug}/reservas?ok=${encodeURIComponent("Reserva ocultada do histórico")}`);
 }
 
 async function insertReservationWithCode({

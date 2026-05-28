@@ -41,20 +41,20 @@ const aiCards = [
 
 export default function DemoHubPage() {
   return (
-    <main className="min-h-screen overflow-hidden bg-[#0f241d] px-5 py-10 text-white">
-      <div className="mx-auto max-w-6xl">
+    <main className="min-h-screen max-w-[100vw] overflow-hidden bg-[#0f241d] px-0 py-10 text-white sm:px-5 [&_*]:min-w-0">
+      <div className="mobile-gutter max-w-6xl">
         <Link href="/" className="mb-8 inline-flex items-center gap-2 text-sm font-bold text-emerald-50/75 transition hover:-translate-x-0.5 hover:text-white">
           <ArrowLeft className="h-4 w-4" />
           Pagina comercial
         </Link>
 
         <section className="mb-12 grid gap-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-center">
-          <div>
+          <div className="min-w-0">
             <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-200/25 bg-emerald-200/10 px-4 py-2 text-xs font-black uppercase text-emerald-100">
               <span className="pulse-dot" />
               Demonstracao comercial guiada
             </p>
-            <h1 className="max-w-3xl text-4xl font-black leading-tight md:text-6xl">
+            <h1 className="max-w-3xl break-words text-3xl font-black leading-tight sm:text-4xl md:text-6xl">
               Uma demo para mostrar o produto funcionando do pedido ao painel.
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-emerald-50/75">
@@ -85,11 +85,11 @@ export default function DemoHubPage() {
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {guidedSteps.map(([number, title, text]) => (
-              <article key={number} className="rounded-lg border border-white/10 bg-[#071A13] p-4">
+              <article key={number} className="min-w-0 rounded-lg border border-white/10 bg-[#071A13] p-4">
                 <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[#FDFBF7] text-sm font-black text-[#1B4332]">
                   {number}
                 </span>
-                <h3 className="font-black">{title}</h3>
+                <h3 className="break-words font-black">{title}</h3>
                 <p className="mt-2 text-sm leading-6 text-emerald-50/62">{text}</p>
               </article>
             ))}
@@ -172,11 +172,11 @@ export default function DemoHubPage() {
                 key={href}
                 href={href}
                 aria-label={`Abrir rota: ${title}`}
-                className="group block h-full rounded-lg border border-white/10 bg-[#071A13] p-4 transition hover:-translate-y-1 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C06C58] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f241d]"
+                className="group block h-full min-w-0 rounded-lg border border-white/10 bg-[#071A13] p-4 transition hover:-translate-y-1 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C06C58] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f241d]"
               >
                 <Icon className="mb-4 h-6 w-6 text-emerald-100" />
-                <p className="font-black">{title}</p>
-                <p className="mt-2 font-mono text-xs text-emerald-50/50">{href}</p>
+                <p className="break-words font-black">{title}</p>
+                <p className="mt-2 break-all font-mono text-xs text-emerald-50/50">{href}</p>
                 <span className="mt-4 inline-flex items-center gap-2 text-sm font-black text-[#C06C58] transition group-hover:translate-x-1">
                   Abrir rota
                   <ArrowRight className="h-4 w-4" />
@@ -192,18 +192,18 @@ export default function DemoHubPage() {
 
 function HeroDemoStack() {
   return (
-    <div className="relative min-h-[520px]">
-      <div className="absolute left-0 top-0 w-[230px] rounded-[28px] border border-white/15 bg-[#071A13] p-3 shadow-2xl shadow-black/35">
+    <div className="relative grid gap-4 overflow-hidden rounded-lg border border-white/10 bg-white/5 p-3 sm:min-h-[520px] sm:block sm:overflow-visible sm:border-0 sm:bg-transparent sm:p-0">
+      <div className="w-full rounded-[28px] border border-white/15 bg-[#071A13] p-3 shadow-2xl shadow-black/35 sm:absolute sm:left-0 sm:top-0 sm:w-[230px]">
         <PhonePreview />
       </div>
-      <div className="absolute right-0 top-16 w-[78%] rounded-2xl border border-white/12 bg-white p-4 text-slate-950 shadow-2xl shadow-black/35">
+      <div className="w-full min-w-0 rounded-2xl border border-white/12 bg-white p-4 text-slate-950 shadow-2xl shadow-black/35 sm:absolute sm:right-0 sm:top-16 sm:w-[78%]">
         <PanelPreview />
       </div>
-      <div className="floating-card absolute bottom-6 left-6 rounded-lg border border-emerald-200/20 bg-[#071A13] p-4 shadow-2xl">
+      <div className="floating-card rounded-lg border border-emerald-200/20 bg-[#071A13] p-4 shadow-2xl sm:absolute sm:bottom-6 sm:left-6">
         <p className="text-xs font-black uppercase text-emerald-200">Nova reserva</p>
         <p className="mt-1 text-sm font-black">20:30 - 4 pessoas</p>
       </div>
-      <div className="floating-card float-delay absolute bottom-24 right-4 rounded-lg border border-violet-200/20 bg-violet-950/80 p-4 shadow-2xl backdrop-blur">
+      <div className="floating-card float-delay rounded-lg border border-violet-200/20 bg-violet-950/80 p-4 shadow-2xl backdrop-blur sm:absolute sm:bottom-24 sm:right-4">
         <p className="text-xs font-black uppercase text-violet-200">IA demonstrativa</p>
         <p className="mt-1 text-sm font-black">Aniversario informado</p>
       </div>
@@ -227,14 +227,14 @@ function DemoCard({
   children: React.ReactNode;
 }) {
   return (
-    <Link href={href} className="group premium-card relative overflow-hidden rounded-lg border border-white/10 bg-white/8 p-6 transition duration-300 hover:-translate-y-1 hover:bg-white/10">
+    <Link href={href} className="group premium-card relative min-w-0 overflow-hidden rounded-lg border border-white/10 bg-white/8 p-5 transition duration-300 hover:-translate-y-1 hover:bg-white/10 sm:p-6">
       <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-        <div>
+        <div className="min-w-0">
           <div className="mb-6 flex h-13 w-13 items-center justify-center rounded-lg border border-white/10 bg-white/8 text-emerald-100">
             <Icon className="h-7 w-7" />
           </div>
           <p className="mb-2 text-xs font-black uppercase text-emerald-100/70">{eyebrow}</p>
-          <h2 className="text-2xl font-black text-white">{title}</h2>
+          <h2 className="break-words text-2xl font-black text-white">{title}</h2>
           <p className="mt-3 text-sm leading-6 text-emerald-50/70">{text}</p>
           <span className="mt-7 inline-flex items-center gap-2 font-black text-[#C06C58] transition group-hover:translate-x-1">
             Abrir
@@ -249,7 +249,7 @@ function DemoCard({
 
 function PhonePreview() {
   return (
-    <div className="mx-auto w-[220px] rounded-[28px] border border-white/15 bg-[#071A13] p-3 shadow-2xl shadow-black/30">
+    <div className="mx-auto w-full max-w-[220px] rounded-[28px] border border-white/15 bg-[#071A13] p-3 shadow-2xl shadow-black/30">
       <div className="rounded-[22px] bg-[#FDFBF7] p-4 text-slate-900">
         <div className="rounded-2xl bg-[#1B4332] p-5 text-center text-white">
           <CalendarCheck className="mx-auto mb-2 h-7 w-7" />
@@ -276,15 +276,15 @@ function PhonePreview() {
 
 function PanelPreview() {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white p-4 text-slate-950 shadow-2xl shadow-black/30">
-      <div className="mb-4 flex items-center justify-between">
-        <div>
+    <div className="min-w-0 rounded-2xl border border-white/10 bg-white p-4 text-slate-950 shadow-2xl shadow-black/30">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <div className="min-w-0">
           <p className="text-xs font-black uppercase text-slate-500">Painel</p>
           <p className="font-black">Reservas de hoje</p>
         </div>
         <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">online</span>
       </div>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <MiniKpi value="8" label="hoje" />
         <MiniKpi value="28" label="pessoas" />
         <MiniKpi value="3" label="pend." />
@@ -301,13 +301,13 @@ function PanelPreview() {
 
 function TrackingMini() {
   return (
-    <div className="rounded-lg border border-[#E8E2D4] bg-[#FDFBF7] p-5 text-[#1F2937] shadow-xl">
-      <div className="mb-4 flex items-center justify-between border-b border-[#E8E2D4] pb-4">
-        <div>
+    <div className="min-w-0 rounded-lg border border-[#E8E2D4] bg-[#FDFBF7] p-5 text-[#1F2937] shadow-xl">
+      <div className="mb-4 flex items-center justify-between gap-3 border-b border-[#E8E2D4] pb-4">
+        <div className="min-w-0">
           <p className="text-xs font-black uppercase text-[#6B7280]">Protocolo</p>
           <p className="font-mono text-lg font-black text-[#1B4332]">MV-8F42A1</p>
         </div>
-        <span className="status-pill bg-emerald-100 text-emerald-700">Confirmada</span>
+        <span className="status-pill shrink-0 bg-emerald-100 text-emerald-700">Confirmada</span>
       </div>
       <div className="grid gap-3 text-sm">
         <InfoLine icon={Clock} label="Horario" value="20:30" />
@@ -320,9 +320,9 @@ function TrackingMini() {
 
 function MiniKpi({ value, label }: { value: string; label: string }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-      <p className="text-lg font-black">{value}</p>
-      <p className="text-xs font-bold text-slate-500">{label}</p>
+    <div className="min-w-0 rounded-lg border border-slate-200 bg-slate-50 p-3">
+      <p className="break-words text-lg font-black">{value}</p>
+      <p className="break-words text-xs font-bold text-slate-500">{label}</p>
     </div>
   );
 }
@@ -335,21 +335,21 @@ function PanelPill({ icon: Icon, text, tone }: { icon: LucideIcon; text: string;
   };
 
   return (
-    <div className={`flex items-center gap-2 rounded-lg border p-3 text-sm font-black ${classes[tone]}`}>
+    <div className={`flex min-w-0 items-center gap-2 rounded-lg border p-3 text-sm font-black ${classes[tone]}`}>
       <Icon className="h-4 w-4" />
-      {text}
+      <span className="min-w-0 break-words">{text}</span>
     </div>
   );
 }
 
 function InfoLine({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-4 rounded-lg border border-[#E8E2D4] bg-white p-3">
-      <span className="inline-flex items-center gap-2 font-semibold text-[#6B7280]">
+    <div className="flex min-w-0 items-center justify-between gap-4 rounded-lg border border-[#E8E2D4] bg-white p-3">
+      <span className="inline-flex min-w-0 items-center gap-2 font-semibold text-[#6B7280]">
         <Icon className="h-4 w-4" />
         {label}
       </span>
-      <span className="text-right font-black">{value}</span>
+      <span className="min-w-0 break-words text-right font-black">{value}</span>
     </div>
   );
 }

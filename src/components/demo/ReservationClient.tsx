@@ -70,7 +70,7 @@ export default function ReservationClient() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden px-4 pb-28 pt-6 sm:py-8" style={{ background: `linear-gradient(135deg, ${bistroTheme.colors.primary} 0%, ${bistroTheme.colors.primaryLight} 100%)` }}>
+    <main className="relative min-h-screen overflow-hidden px-4 pb-32 pt-6 sm:py-8" style={{ background: `linear-gradient(135deg, ${bistroTheme.colors.primary} 0%, ${bistroTheme.colors.primaryLight} 100%)` }}>
       <div className="absolute left-1/2 top-10 h-72 w-72 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
       <div className="reveal-up relative mx-auto max-w-md overflow-hidden rounded-[28px] border border-white/20 shadow-2xl shadow-black/35" style={{ background: bistroTheme.colors.bg, color: bistroTheme.colors.text }}>
         <header className="relative overflow-hidden" style={{ background: bistroTheme.colors.primary, color: bistroTheme.colors.bg }}>
@@ -198,14 +198,14 @@ export default function ReservationClient() {
         </footer>
       </div>
 
-      <div className="fixed bottom-20 left-4 z-[60] flex flex-col items-start gap-3 sm:bottom-6 sm:left-6">
+      <div className="fixed bottom-20 left-4 right-4 z-[60] flex max-w-[calc(100vw-32px)] flex-col items-start gap-3 sm:bottom-6 sm:left-6 sm:right-auto">
           {aiOpen ? (
             <ClientAiPreview selectedPrompt={selectedPrompt} onSelect={setSelectedPrompt} onClose={() => setAiOpen(false)} />
           ) : null}
           <button
             type="button"
             onClick={() => setAiOpen((current) => !current)}
-            className="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/20 bg-slate-950 px-4 text-sm font-black text-white shadow-2xl transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
+            className="inline-flex min-h-12 max-w-full items-center gap-2 rounded-full border border-white/20 bg-slate-950 px-4 text-sm font-black text-white shadow-2xl transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
             aria-expanded={aiOpen}
           >
             <MessageSquareText className="h-4 w-4 text-violet-300" />
@@ -231,15 +231,15 @@ function ClientAiPreview({
   onClose: () => void;
 }) {
   return (
-    <aside className="animate-fade-in w-[min(340px,calc(100vw-32px))] rounded-2xl border border-white/15 bg-slate-950 p-4 text-left text-white shadow-2xl" aria-label="Prévia da IA do restaurante">
+    <aside className="animate-fade-in w-full max-w-[340px] rounded-2xl border border-white/15 bg-slate-950 p-4 text-left text-white shadow-2xl" aria-label="Prévia da IA do restaurante">
       <div className="mb-3 flex items-start justify-between gap-3">
-        <div>
+        <div className="min-w-0">
           <p className="inline-flex items-center gap-2 rounded-full bg-violet-400/12 px-3 py-1 text-[11px] font-black uppercase tracking-wide text-violet-200">
             <Zap className="h-3.5 w-3.5" />
             IA demonstrativa
           </p>
           <h3 className="mt-2 text-sm font-black">Prévia da IA</h3>
-          <p className="mt-1 text-[11px] font-semibold text-slate-400">Disponível nos planos com IA · respostas simuladas</p>
+          <p className="mt-1 break-words text-[11px] font-semibold text-slate-400">Disponível nos planos com IA · respostas simuladas</p>
         </div>
         <button type="button" onClick={onClose} className="rounded-full p-1 text-slate-300 transition hover:bg-white/10 hover:text-white" aria-label="Fechar prévia da IA">
           <X className="h-4 w-4" />
@@ -280,7 +280,7 @@ function ClientAiPreview({
 
 function ChatBubble({ children, align = "assistant" }: { children: React.ReactNode; align?: "assistant" | "user" }) {
   return (
-    <div className={`rounded-2xl px-3 py-2 text-xs leading-5 ${align === "user" ? "ml-8 bg-emerald-400 text-slate-950" : "mr-8 bg-white/10 text-slate-100"}`}>
+    <div className={`break-words rounded-2xl px-3 py-2 text-xs leading-5 ${align === "user" ? "ml-8 bg-emerald-400 text-slate-950" : "mr-8 bg-white/10 text-slate-100"}`}>
       {children}
     </div>
   );
@@ -295,11 +295,11 @@ function StepIndicator({ current }: { current: number }) {
         const number = index + 1;
         const active = number <= current;
         return (
-          <li key={label} className="flex items-center gap-2">
+          <li key={label} className="flex min-w-0 items-center gap-2">
             <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs" style={{ background: active ? bistroTheme.colors.primary : bistroTheme.colors.surfaceSoft, color: active ? bistroTheme.colors.bg : bistroTheme.colors.muted }}>
               {active && number === 3 ? <Check className="h-3.5 w-3.5" /> : number}
             </span>
-            <span style={{ color: active ? bistroTheme.colors.primary : bistroTheme.colors.muted }}>{label}</span>
+            <span className="min-w-0 break-words" style={{ color: active ? bistroTheme.colors.primary : bistroTheme.colors.muted }}>{label}</span>
           </li>
         );
       })}
@@ -309,7 +309,7 @@ function StepIndicator({ current }: { current: number }) {
 
 function Field({ label, icon: Icon, children }: { label: string; icon?: typeof Home; children: React.ReactNode }) {
   return (
-    <label className="field-card block rounded-lg border bg-white p-4 card-shadow transition hover:-translate-y-0.5 hover:shadow-lg focus-within:ring-2 focus-within:ring-emerald-900/20" style={{ borderColor: bistroTheme.colors.border }}>
+    <label className="field-card block min-w-0 rounded-lg border bg-white p-4 card-shadow transition hover:-translate-y-0.5 hover:shadow-lg focus-within:ring-2 focus-within:ring-emerald-900/20" style={{ borderColor: bistroTheme.colors.border }}>
       <span className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide" style={{ color: bistroTheme.colors.muted }}>
         {Icon ? <Icon className="h-3.5 w-3.5" /> : null}
         {label}

@@ -42,7 +42,7 @@ export default async function RealReservationPage({
 
   return (
     <main
-      className="relative min-h-screen overflow-hidden px-4 py-6 sm:py-10"
+      className="relative min-h-screen overflow-hidden px-3 py-6 sm:px-4 sm:py-10"
       style={{
         background: `linear-gradient(135deg, ${primary} 0%, #2D5A43 100%)`,
       }}
@@ -50,7 +50,7 @@ export default async function RealReservationPage({
       <div className="absolute left-1/2 top-10 h-72 w-72 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
       <div className="absolute bottom-0 right-0 h-64 w-64 translate-x-1/3 rounded-full bg-black/10 blur-3xl" />
       <section
-        className="reveal-up relative mx-auto max-w-xl overflow-hidden rounded-[30px] border border-white/20 shadow-2xl shadow-black/35"
+        className="reveal-up relative mx-auto w-full max-w-xl overflow-hidden rounded-[30px] border border-white/20 shadow-2xl shadow-black/35"
         style={{ background, color: "#1F2937" }}
       >
         <header className="relative overflow-hidden" style={{ background: primary, color: background }}>
@@ -89,7 +89,7 @@ export default async function RealReservationPage({
             <div className="border-b border-[#E8E2D4] px-5 py-4">
               <ol className="grid grid-cols-3 gap-2 text-xs font-black">
                 {["Dados", "Horário", "Confirmação"].map((label, index) => (
-                  <li key={label} className="flex items-center gap-2">
+                  <li key={label} className="flex min-w-0 items-center gap-2">
                     <span
                       className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs transition duration-200"
                       style={{
@@ -99,7 +99,7 @@ export default async function RealReservationPage({
                     >
                       {index + 1}
                     </span>
-                    <span style={{ color: index < 2 ? primary : "#6B7280" }}>{label}</span>
+                    <span className="min-w-0 break-words" style={{ color: index < 2 ? primary : "#6B7280" }}>{label}</span>
                   </li>
                 ))}
               </ol>
@@ -160,17 +160,17 @@ function SuccessView({
       </p>
 
       <div className="my-6 rounded-2xl border border-[#E8E2D4] bg-white p-5 text-left shadow-lg transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-        <div className="mb-4 flex items-center justify-between border-b border-[#E8E2D4] pb-4">
+        <div className="mb-4 flex items-center justify-between gap-3 border-b border-[#E8E2D4] pb-4">
           <span className="text-xs font-black uppercase tracking-wide text-[#6B7280]">
             Protocolo
           </span>
-          <span className="font-mono text-lg font-black" style={{ color: primary }}>
+          <span className="break-all text-right font-mono text-lg font-black" style={{ color: primary }}>
             #{protocol}
           </span>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           <span className="text-sm font-semibold text-[#6B7280]">Status</span>
-          <span className="status-pill animate-pulse bg-amber-100 text-amber-800">
+          <span className="status-pill shrink-0 animate-pulse bg-amber-100 text-amber-800">
             Aguardando confirmação
           </span>
         </div>

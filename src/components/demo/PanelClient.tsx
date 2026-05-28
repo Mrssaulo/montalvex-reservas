@@ -8,8 +8,6 @@ import {
   Check,
   Clock,
   Flag,
-  MessageSquareText,
-  Sparkles,
   Table2,
   Users,
   X,
@@ -113,29 +111,29 @@ export default function PanelClient() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl px-5 py-8">
+        <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-5">
         <section className="reveal-up mb-6 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-          <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="min-w-0 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs font-black uppercase tracking-wide text-emerald-700">Chegou no painel</p>
                 <h2 className="mt-1 text-2xl font-black">Nova solicitação recebida agora</h2>
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
                   O cliente solicitou pelo celular. A equipe controla horários, grupos e status para deixar a operação previsível no horário de pico.
                 </p>
               </div>
-              <Link href="/demo/reserva" className="inline-flex min-h-11 items-center justify-center rounded-lg border border-slate-200 px-4 text-sm font-black text-slate-700 transition hover:-translate-y-0.5 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-700">
+              <Link href="/demo/reserva" className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg border border-slate-200 px-4 text-center text-sm font-black text-slate-700 transition hover:-translate-y-0.5 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-700">
                 Voltar para experiência do cliente
               </Link>
             </div>
           </div>
 
-          <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-5 shadow-sm">
+          <div className="min-w-0 rounded-lg border border-emerald-200 bg-emerald-50 p-5 shadow-sm">
             <div className="flex items-start gap-4">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-white">
                 <Table2 className="h-5 w-5" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs font-black uppercase tracking-wide text-emerald-700">Mesa preparada</p>
                 <h2 className="mt-1 font-black text-emerald-950">
                   {nextArrival ? `${nextArrival.horario} · ${nextArrival.nome}` : "Aguardando confirmação"}
@@ -231,12 +229,12 @@ function StaffAiAssistant({
   return (
     <section className="reveal-up mb-7 overflow-hidden rounded-lg border border-violet-200 bg-gradient-to-r from-violet-50 via-white to-emerald-50 p-4 shadow-sm">
       <div className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
-        <div>
+        <div className="min-w-0">
           <div className="mb-3 flex items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-emerald-600 text-white shadow-lg">
               <Zap className="h-5 w-5" />
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <h2 className="text-sm font-black">Assistente IA da equipe</h2>
                 <span className="rounded-full bg-violet-100 px-2 py-1 text-[10px] font-black uppercase tracking-wide text-violet-700">
@@ -249,7 +247,7 @@ function StaffAiAssistant({
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex min-w-0 flex-wrap gap-2">
             {Object.keys(staffAiAnswers).map((prompt) => (
               <button
                 key={prompt}
@@ -267,7 +265,7 @@ function StaffAiAssistant({
           </div>
         </div>
 
-        <div className="rounded-lg border border-white bg-white/85 p-4 shadow-sm">
+        <div className="min-w-0 rounded-lg border border-white bg-white/85 p-4 shadow-sm">
           <div className="mb-3 flex items-center justify-between gap-3">
             <p className="inline-flex items-center gap-2 rounded-full bg-violet-50 px-3 py-1 text-[11px] font-black uppercase tracking-wide text-violet-700">
               <span className="pulse-dot" />
@@ -291,7 +289,7 @@ function StaffAiAssistant({
 
 function PanelBubble({ children, highlight = false }: { children: React.ReactNode; highlight?: boolean }) {
   return (
-    <div className={`rounded-2xl px-3 py-2 text-xs leading-5 ${highlight ? "bg-violet-600 text-white" : "bg-slate-100 text-slate-700"}`}>
+    <div className={`break-words rounded-2xl px-3 py-2 text-xs leading-5 ${highlight ? "bg-violet-600 text-white" : "bg-slate-100 text-slate-700"}`}>
       {children}
     </div>
   );
@@ -319,11 +317,11 @@ function ReservationColumn({
   return (
     <section className="reveal-up">
       <div className="mb-4 flex items-center justify-between gap-4">
-        <h2 className="flex items-center gap-2 text-lg font-black">
+        <h2 className="flex min-w-0 items-center gap-2 text-lg font-black">
           <span className={title.includes("Aguardando") ? "h-2.5 w-2.5 rounded-full bg-amber-500" : "h-2.5 w-2.5 rounded-full bg-emerald-500"} />
           {title}
         </h2>
-        <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-500 shadow-sm">
+        <span className="shrink-0 rounded-full bg-white px-3 py-1 text-xs font-black text-slate-500 shadow-sm">
           {count} {count === 1 ? "reserva" : "reservas"}
         </span>
       </div>
@@ -368,20 +366,20 @@ function ReservationCard({
   const isNew = reservation.id === receivedNowReservation.id;
 
   return (
-    <article className={`reservation-card rounded-lg border border-l-4 border-slate-200 bg-white p-5 card-shadow transition duration-300 hover:-translate-y-1 hover:shadow-xl ${accent} ${isNew ? "ring-2 ring-amber-300/70" : ""} ${feedback ? "reservation-feedback" : ""} ${exiting ? "reservation-exit" : "animate-fade-in"}`}>
+    <article className={`reservation-card min-w-0 rounded-lg border border-l-4 border-slate-200 bg-white p-5 card-shadow transition duration-300 hover:-translate-y-1 hover:shadow-xl ${accent} ${isNew ? "ring-2 ring-amber-300/70" : ""} ${feedback ? "reservation-feedback" : ""} ${exiting ? "reservation-exit" : "animate-fade-in"}`}>
       <div className="mb-3 flex items-start justify-between gap-3">
-        <div>
+        <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="font-black">{reservation.nome}</h3>
+            <h3 className="break-words font-black">{reservation.nome}</h3>
             {isNew ? (
               <span className="rounded-full bg-amber-100 px-2 py-1 text-[10px] font-black uppercase tracking-wide text-amber-800">
                 Recebida agora
               </span>
             ) : null}
           </div>
-          <p className="text-sm font-semibold text-slate-500">{reservation.telefone}</p>
+          <p className="break-all text-sm font-semibold text-slate-500">{reservation.telefone}</p>
         </div>
-        <span className="status-pill" style={{ background: status.bg, color: status.text }}>
+        <span className="status-pill shrink-0" style={{ background: status.bg, color: status.text }}>
           {status.label}
         </span>
       </div>
@@ -393,7 +391,7 @@ function ReservationCard({
       </div>
 
       {reservation.observacao ? (
-        <p className="mb-4 rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm italic text-slate-700">
+        <p className="mb-4 break-words rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm italic text-slate-700">
           “{reservation.observacao}”
         </p>
       ) : null}

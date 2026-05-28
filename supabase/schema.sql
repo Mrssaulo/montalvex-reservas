@@ -33,6 +33,7 @@ create table if not exists public.reservations (
   reservation_time time not null,
   notes text,
   status text not null default 'pending',
+  archived_at timestamptz,
   created_at timestamptz default now(),
   updated_at timestamptz default now(),
   constraint reservations_status_check check (

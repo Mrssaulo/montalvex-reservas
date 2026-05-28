@@ -12,9 +12,11 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import {
+  archiveReservationFromHistory,
   updateReservationStatus,
   updateRestaurantCapacity,
 } from "@/app/actions/reservations";
+import { ArchiveHistoryButton } from "@/components/real/ArchiveHistoryButton";
 import { AdminStatusButton } from "@/components/real/AdminStatusButton";
 import { calculateRestaurantCapacity } from "@/lib/capacity";
 import {
@@ -63,9 +65,10 @@ export default async function RealAdminReservationsPage({
   );
   const historyReservations = reservations.filter(
     (reservation) =>
-      reservation.status === "declined" ||
-      reservation.status === "finished" ||
-      reservation.reservation_date < today,
+      !reservation.archived_at &&
+      (reservation.status === "declined" ||
+        reservation.status === "finished" ||
+        reservation.reservation_date < today),
   );
   const peopleToday = activeTodayReservations
     .reduce((total, reservation) => total + reservation.people, 0);
@@ -81,10 +84,10 @@ export default async function RealAdminReservationsPage({
   const capacityAction = updateRestaurantCapacity.bind(null, slug);
 
   return (
-    <main className="min-h-screen bg-slate-100 text-slate-950">
+    <main className="min-h-screen max-w-[100vw] overflow-x-hidden bg-slate-100 text-slate-950 [&_*]:min-w-0">
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/92 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4">
-          <div className="flex items-center gap-3">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-5">
+          <div className="flex min-w-0 items-center gap-3">
             <div
               className="flex h-11 w-11 items-center justify-center rounded-lg text-white shadow-lg"
               style={{ background: primary }}
@@ -97,8 +100,8 @@ export default async function RealAdminReservationsPage({
                   .slice(0, 2)}
               </span>
             </div>
-            <div>
-              <h1 className="font-black">{restaurant.name}</h1>
+            <div className="min-w-0">
+              <h1 className="truncate font-black">{restaurant.name}</h1>
               <p className="text-xs font-semibold text-slate-500">
                 Painel de reservas do jantar
               </p>
@@ -113,28 +116,28 @@ export default async function RealAdminReservationsPage({
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl px-5 py-8">
-        <section className="mb-6 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+      <div className="mobile-gutter max-w-7xl py-8 sm:px-5">
+        <section className="mb-6 grid min-w-0 gap-4 lg:grid-cols-[1.15fr_0.85fr]">
+          <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
             <p className="text-xs font-black uppercase tracking-wide text-emerald-700">
               Resumo da operação
             </p>
-            <h2 className="mt-1 text-2xl font-black">Tudo que a recepção precisa ver antes do pico</h2>
+            <h2 className="mt-1 break-words text-2xl font-black">Tudo que a recepção precisa ver antes do pico</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
               Pendentes, confirmadas, próxima chegada, observações importantes e histórico organizado para a equipe agir rápido.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+          <div className="min-w-0 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
             <div className="flex items-start gap-4">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-white">
                 <Table2 className="h-5 w-5" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs font-black uppercase tracking-wide text-emerald-700">
                   Próxima chegada
                 </p>
-                <h2 className="mt-1 font-black text-emerald-950">
+                <h2 className="mt-1 break-words font-black text-emerald-950">
                   {nextArrival
                     ? `${toDisplayTime(nextArrival.reservation_time)} · ${nextArrival.customer_name}`
                     : "Aguardando confirmação"}
@@ -149,7 +152,7 @@ export default async function RealAdminReservationsPage({
           </div>
         </section>
 
-        <section className="mb-7 grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+        <section className="mb-7 grid min-w-0 gap-4 xl:grid-cols-[1.15fr_0.85fr]">
           <CapacityPanel capacity={capacity} />
           <CapacitySettingsForm
             action={capacityAction}
@@ -177,15 +180,15 @@ export default async function RealAdminReservationsPage({
           </div>
         ) : null}
 
-        <section className="mb-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="mb-7 grid min-w-0 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Kpi icon={Calendar} label="Reservas ativas hoje" value={activeTodayReservations.length} helper="Pendentes + confirmadas" />
           <Kpi icon={Users} label="Pessoas hoje" value={peopleToday} helper="Apenas reservas ativas" />
           <Kpi icon={Clock} label="Pendentes hoje" value={pendingToday.length} helper="Aguardando ação" tone="amber" />
           <Kpi icon={Check} label="Confirmadas hoje" value={confirmedToday.length} helper="Mesas garantidas" tone="emerald" />
         </section>
 
-        <section className="mb-7 grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+        <section className="mb-7 grid min-w-0 gap-4 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
             <div className="mb-4 flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-900 text-white">
                 <Table2 className="h-5 w-5" />
@@ -205,7 +208,7 @@ export default async function RealAdminReservationsPage({
             </p>
           </div>
 
-          <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 via-white to-emerald-50 p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+          <div className="min-w-0 rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 via-white to-emerald-50 p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
             <div className="mb-4 flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-600 text-white">
                 <Sparkles className="h-5 w-5" />
@@ -225,7 +228,7 @@ export default async function RealAdminReservationsPage({
           </div>
         </section>
 
-        <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
+        <div className="grid min-w-0 gap-6 xl:grid-cols-[1fr_1fr]">
           <ReservationColumn
             title="Aguardando confirmação"
             reservations={pendingToday}
@@ -240,7 +243,7 @@ export default async function RealAdminReservationsPage({
           />
         </div>
 
-        <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="mt-8 min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs font-black uppercase tracking-wide text-slate-500">
@@ -248,7 +251,7 @@ export default async function RealAdminReservationsPage({
               </p>
               <h2 className="text-lg font-black">Histórico</h2>
             </div>
-            <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-500 shadow-sm">
+            <span className="shrink-0 rounded-full bg-white px-3 py-1 text-xs font-black text-slate-500 shadow-sm">
               {historyReservations.length} {historyReservations.length === 1 ? "registro" : "registros"}
             </span>
           </div>
@@ -291,13 +294,13 @@ function CapacityPanel({
         : "bg-emerald-500";
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <section className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
       <div className="mb-5 grid gap-4 sm:grid-cols-[1fr_auto] sm:items-center">
         <div className="min-w-0">
           <p className="text-xs font-black uppercase tracking-wide text-emerald-700">
             Capacidade do salão
           </p>
-          <h2 className="mt-1 text-2xl font-black">
+          <h2 className="mt-1 break-words text-2xl font-black">
             Mesas, lugares e pressão operacional
           </h2>
           <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-slate-600">
@@ -366,12 +369,12 @@ function CapacitySettingsForm({
   return (
     <form
       action={action}
-      className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+      className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
     >
       <p className="text-xs font-black uppercase tracking-wide text-slate-500">
         Configuração do salão
       </p>
-      <h2 className="mt-1 text-xl font-black">Capacidade operacional</h2>
+      <h2 className="mt-1 break-words text-xl font-black">Capacidade operacional</h2>
       <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
         Ajuste mesas e lugares sem expor identificadores do restaurante no formulário.
       </p>
@@ -458,9 +461,9 @@ function CapacityStat({
   };
 
   return (
-    <div className={`rounded-xl border border-slate-200 p-3 ${classes[tone]} ${wide ? "bg-slate-50" : ""}`}>
-      <p className="text-2xl font-black tabular-nums">{value}</p>
-      <p className="mt-1 text-[11px] font-black uppercase tracking-wide opacity-70">{label}</p>
+    <div className={`min-w-0 rounded-xl border border-slate-200 p-3 ${classes[tone]} ${wide ? "bg-slate-50" : ""}`}>
+      <p className="break-words text-2xl font-black tabular-nums">{value}</p>
+      <p className="mt-1 break-words text-[11px] font-black uppercase tracking-wide opacity-70">{label}</p>
     </div>
   );
 }
@@ -485,7 +488,7 @@ function Kpi({
   };
 
   return (
-    <article className={`rounded-2xl border p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg ${toneClasses[tone]}`}>
+    <article className={`min-w-0 rounded-2xl border p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg ${toneClasses[tone]}`}>
       <div className="mb-2 flex items-center justify-between gap-4">
         <span className="text-xs font-black uppercase tracking-wide opacity-75">{label}</span>
         <Icon className="h-5 w-5 opacity-60" />
@@ -507,9 +510,9 @@ function MiniSummary({ label, value }: { label: string; value: string }) {
 
 function AiLine({ text }: { text: string }) {
   return (
-    <p className="flex gap-2 rounded-xl border border-white bg-white/80 p-3 transition duration-200 hover:-translate-y-0.5 hover:shadow-sm">
+    <p className="flex min-w-0 gap-2 rounded-xl border border-white bg-white/80 p-3 transition duration-200 hover:-translate-y-0.5 hover:shadow-sm">
       <MessageSquareText className="mt-0.5 h-4 w-4 shrink-0 text-violet-600" />
-      <span>{text}</span>
+      <span className="min-w-0 break-words">{text}</span>
     </p>
   );
 }
@@ -528,7 +531,7 @@ function ReservationColumn({
   return (
     <section>
       <div className="mb-4 flex items-center justify-between gap-4">
-        <h2 className="flex items-center gap-2 text-lg font-black">
+        <h2 className="flex min-w-0 items-center gap-2 text-lg font-black">
           <span
             className={
               title.includes("Aguardando")
@@ -538,7 +541,7 @@ function ReservationColumn({
           />
           {title}
         </h2>
-        <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-500 shadow-sm">
+        <span className="shrink-0 rounded-full bg-white px-3 py-1 text-xs font-black text-slate-500 shadow-sm">
           {reservations.length} {reservations.length === 1 ? "reserva" : "reservas"}
         </span>
       </div>
@@ -571,24 +574,30 @@ function ReservationCard({
 
   return (
     <article
-      className="rounded-2xl border border-l-4 border-slate-200 bg-white p-5 card-shadow transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+      className={`relative min-w-0 rounded-2xl border border-l-4 border-slate-200 bg-white p-5 card-shadow transition duration-300 hover:-translate-y-1 hover:shadow-xl ${compact ? "pr-12" : ""}`}
       style={{ borderLeftColor: style.border }}
     >
+      {compact ? (
+        <form action={archiveReservationFromHistory.bind(null, slug)} className="absolute right-3 top-3">
+          <input type="hidden" name="reservation_id" value={reservation.id} />
+          <ArchiveHistoryButton />
+        </form>
+      ) : null}
       <div className="mb-3 flex items-start justify-between gap-3">
-        <div>
+        <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="font-black">{reservation.customer_name}</h3>
-            <span className="font-mono text-[11px] font-black text-slate-400">
+            <h3 className="min-w-0 break-words font-black">{reservation.customer_name}</h3>
+            <span className="break-all font-mono text-[11px] font-black text-slate-400">
               #{reservationProtocol(reservation)}
             </span>
           </div>
-          <p className="mt-1 flex items-center gap-1.5 text-sm font-semibold text-slate-500">
-            <Phone className="h-3.5 w-3.5" />
-            {reservation.customer_phone}
+          <p className="mt-1 flex min-w-0 items-center gap-1.5 text-sm font-semibold text-slate-500">
+            <Phone className="h-3.5 w-3.5 shrink-0" />
+            <span className="min-w-0 break-all">{reservation.customer_phone}</span>
           </p>
         </div>
         <span
-          className={`status-pill ${reservation.status === "pending" ? "animate-pulse" : ""}`}
+          className={`status-pill shrink-0 ${reservation.status === "pending" ? "animate-pulse" : ""}`}
           style={{ background: style.bg, color: style.text }}
         >
           {STATUS_LABELS[reservation.status]}
@@ -602,7 +611,7 @@ function ReservationCard({
       </div>
 
       {reservation.notes ? (
-        <p className="mb-4 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm italic text-slate-700">
+        <p className="mb-4 break-words rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm italic text-slate-700">
           &quot;{reservation.notes}&quot;
         </p>
       ) : null}
